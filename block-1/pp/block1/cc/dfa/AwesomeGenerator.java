@@ -1,14 +1,12 @@
 package pp.block1.cc.dfa;
 
-import java.awt.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
 public class AwesomeGenerator implements Generator {
     public List<String> scan(State dfa, String text) {
-        List<String> result = new ArrayList<String>();
+        List<String> result = new ArrayList<>();
 
         while (text.length() > 0) {
             String token = nextWord(dfa, text);

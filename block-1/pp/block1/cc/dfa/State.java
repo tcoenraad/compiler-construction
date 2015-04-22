@@ -109,7 +109,7 @@ public class State {
         State lala6 = new State(6, true);
         State lala7 = new State(7, false);
         State lala8 = new State(8, false);
-        State lala9 = new State(9, true);
+        State lala9 = new State(9, false);
         State lala10 = new State(10, false);
         State lala11 = new State(11, true);
         State lala12 = new State(12, true);
@@ -129,6 +129,7 @@ public class State {
         states[6].addNext('L', states[7]);
         states[6].addNext(' ', states[6]);
         states[7].addNext('a', states[8]);
+        states[8].addNext('a', states[8]);
         states[8].addNext(' ', states[9]);
         states[8].addNext('L', states[10]);
         states[9].addNext('L', states[10]);

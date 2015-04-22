@@ -25,6 +25,8 @@ public class GeneratorTest {
         dfa = DFA_LALA;
         yields("");
         yields("LaLaLaLa", "LaLa", "LaLa");
+        yields("LaLaLaLaLaLi", "LaLa", "LaLaLaLi");
+        yields("Laaa Laaa  Laaa   LaLaLi", "Laaa Laaa  ", "Laaa   LaLaLi");
     }
 
 
