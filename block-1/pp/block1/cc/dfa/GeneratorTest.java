@@ -1,5 +1,6 @@
 package pp.block1.cc.dfa;
 
+import static pp.block1.cc.dfa.State.DFA_LALA;
 import static pp.block1.cc.dfa.State.ID6_DFA;
 
 import java.util.List;
@@ -19,7 +20,15 @@ public class GeneratorTest {
 		yields("a12345AaBbCc", "a12345", "AaBbCc");
 	}
 
-	private void yields(String word, String... tokens) {
+    @Test
+    public void testLALA() {
+        dfa = DFA_LALA;
+        yields("");
+        yields("LaLaLaLa", "LaLa", "LaLa");
+    }
+
+
+    private void yields(String word, String... tokens) {
 		List<String> result = myGen.scan(dfa, word);
 		if (result == null) {
 			Assert.fail(String.format(
