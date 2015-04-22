@@ -1,5 +1,6 @@
 package pp.block1.cc.dfa;
 
+import static pp.block1.cc.dfa.State.DFA_LALA;
 import static pp.block1.cc.dfa.State.ID6_DFA;
 
 import org.junit.Assert;
@@ -20,8 +21,25 @@ public class CheckerTest {
 		rejects("123456");
 	}
 
+    @Test
+    public void testLala() {
+        dfa = DFA_LALA;
+        accepts("La");
+        accepts("Laaa");
+        accepts("LaLa");
+        accepts("LaLaLa");
+        accepts("LaLaLaLi");
+        accepts("LaLaLa Li");
+        accepts("LaLa La Li");
+        accepts("La La La Li");
+        accepts("La  La  La  Li  ");
+        rejects("Li");
+        rejects("LaLi");
+        rejects("LaLaLi");
+        rejects("LaLaLaLii");
+    }
 
-	private void accepts(String word) {
+    private void accepts(String word) {
 		if (!myChecker.accepts(dfa, word)) {
 			Assert.fail(String.format(
 					"Word '%s' is erroneously rejected by %s", word, dfa));

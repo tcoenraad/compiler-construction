@@ -97,4 +97,47 @@ public class State {
 			}
 		}
 	}
+
+    static final public State DFA_LALA;
+    static {
+        DFA_LALA = new State(0, false);
+        State lala1 = new State(1, false);
+        State lala2 = new State(2, true);
+        State lala3 = new State(3, true);
+        State lala4 = new State(4, false);
+        State lala5 = new State(5, true);
+        State lala6 = new State(6, true);
+        State lala7 = new State(7, false);
+        State lala8 = new State(8, true);
+        State lala9 = new State(9, true);
+        State lala10 = new State(10, false);
+        State lala11 = new State(11, true);
+        State lala12 = new State(12, true);
+
+        State[] states = { DFA_LALA, lala1, lala2, lala3, lala4, lala5, lala6, lala7, lala8, lala9, lala10, lala11, lala12 };
+        states[0].addNext('L', states[1]);
+        states[1].addNext('a', states[2]);
+        states[2].addNext('a', states[2]);
+        states[2].addNext(' ', states[3]);
+        states[2].addNext('L', states[4]);
+        states[3].addNext('L', states[4]);
+        states[3].addNext(' ', states[3]);
+        states[4].addNext('a', states[5]);
+        states[5].addNext('a', states[5]);
+        states[5].addNext(' ', states[6]);
+        states[5].addNext('L', states[7]);
+        states[6].addNext('L', states[7]);
+        states[6].addNext(' ', states[6]);
+        states[7].addNext('a', states[8]);
+        states[8].addNext(' ', states[9]);
+        states[8].addNext('L', states[10]);
+        states[9].addNext('L', states[10]);
+        states[9].addNext(' ', states[9]);
+        states[10].addNext('i', states[11]);
+        states[10].addNext('a', states[8]);
+        states[11].addNext('L', states[1]);
+        states[11].addNext(' ', states[12]);
+        states[12].addNext(' ', states[12]);
+        states[12].addNext('L', states[1]);
+    }
 }
