@@ -5,42 +5,65 @@ import java.util.List;
 import java.util.Stack;
 
 public class AwesomeGenerator implements Generator {
+    private int input;
+    private int fence;
+    private List<Character> buffer;
+    private int n;
     public List<String> scan(State dfa, String text) {
         List<String> result = new ArrayList<>();
-
-        while (text.length() > 0) {
+         while (text.length() > 0) {
             String token = nextWord(dfa, text);
             result.add(token);
             text = text.substring(token.length());
         }
         return result;
     }
-
     private String nextWord(State dfa, String text) {
-        int i = 0;
-        String token = "";
+        input = 0;
+        fence = 0;
+        n=text.length();
+        buffer = new ArrayList<Character>();
+        for(int i=0; i < n; i++){
+            buffer.add(i, text.charAt(i));
+        }
         State state = dfa;
-
-        Stack<State> stack = new Stack<>();
-        // move forward until it fails
+        String token = "";
+        Stack<State> stack = new Stack<State>();
+        stack.push(null);
+        int i = 0;
         while (state != null && i < text.length()) {
-            token += text.charAt(i);
-
+            char c = nextChar();
+            token = token + c;
             if (state.isAccepting()) {
                 stack.clear();
             }
-            stack.add(state);
-
-            state = state.getNext(text.charAt(i));
+            stack.push(state);
+            state = state.getNext(c);
             i++;
         }
-
-        // and rollback to the last accepting state
-        while ((state == null || !state.isAccepting()) && stack.size() != 0) {
+        while ((state == null || !state.isAccepting()) && stack.size() > 0) {
             state = stack.pop();
-            token = token.substring(0, token.length() - 1);
-            i--;
+            token = text.substring(0, token.length() - 1);
+            rollBack();
         }
         return token;
+    }
+
+    private void rollBack(){
+        if(input!=fence){
+            input = ((input-1) % (2*n));
+        }
+    }
+
+    private char nextChar(){
+        char c = buffer.get(input);
+        input = ((input +1) %(2*n));
+        if((input % n) ==0){
+           for(int i=0; i < n; i++){
+               buffer.add(i+n, (buffer.get(i)));
+               fence = ((input+n) % (2*n));
+           }
+        }
+        return c;
     }
 }
