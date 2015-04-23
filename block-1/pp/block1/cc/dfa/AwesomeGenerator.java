@@ -7,8 +7,9 @@ import java.util.Stack;
 public class AwesomeGenerator implements Generator {
     private int input;
     private int fence;
-    private List<Character> buffer;
     private int n;
+    private List<Character> buffer;
+
     public List<String> scan(State dfa, String text) {
         List<String> result = new ArrayList<>();
          while (text.length() > 0) {
@@ -21,22 +22,27 @@ public class AwesomeGenerator implements Generator {
     private String nextWord(State dfa, String text) {
         input = 0;
         fence = 0;
-        n=text.length();
-        buffer = new ArrayList<Character>();
-        for(int i=0; i < n; i++){
-            buffer.add(i, text.charAt(i));
-        }
+        buffer = new ArrayList<>();
         State state = dfa;
         String token = "";
-        Stack<State> stack = new Stack<State>();
+
+        Stack<State> stack = new Stack<>();
         stack.push(null);
+
+        n = text.length();
+        for(int i = 0; i < n; i++){
+            buffer.add(i, text.charAt(i));
+        }
+
         int i = 0;
-        while (state != null && i < text.length()) {
+        while (state != null && i < n) {
             char c = nextChar();
             token = token + c;
+
             if (state.isAccepting()) {
                 stack.clear();
             }
+
             stack.push(state);
             state = state.getNext(c);
             i++;
@@ -50,18 +56,18 @@ public class AwesomeGenerator implements Generator {
     }
 
     private void rollBack(){
-        if(input!=fence){
-            input = ((input-1) % (2*n));
+        if (input != fence){
+            input = (input - 1) % (2*n);
         }
     }
 
     private char nextChar(){
         char c = buffer.get(input);
-        input = ((input +1) %(2*n));
-        if((input % n) ==0){
-           for(int i=0; i < n; i++){
-               buffer.add(i+n, (buffer.get(i)));
-               fence = ((input+n) % (2*n));
+        input = (input + 1) % (2*n);
+        if ((input % n) == 0){
+           for (int i = 0; i < n; i++){
+               buffer.add(i + n, buffer.get(i));
+               fence = (input + n) % (2*n);
            }
         }
         return c;
