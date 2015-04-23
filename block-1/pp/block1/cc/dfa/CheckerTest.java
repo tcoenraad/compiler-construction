@@ -33,6 +33,7 @@ public class CheckerTest {
     accepts("LaLa La Li");
     accepts("La La La Li");
     accepts("La  La  La  Li  ");
+    rejects("LaLaLa");
     rejects("Li");
     rejects("LaLi");
     rejects("LaLaLi");
