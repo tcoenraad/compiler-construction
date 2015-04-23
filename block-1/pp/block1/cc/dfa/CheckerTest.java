@@ -28,7 +28,6 @@ public class CheckerTest {
     accepts("La");
     accepts("Laaa");
     accepts("LaLa");
-    // accepts("LaLaLa"); Deze moet niet geaccepteerd worden
     accepts("LaLaLaLi");
     accepts("LaLaLa Li");
     accepts("LaLa La Li");
