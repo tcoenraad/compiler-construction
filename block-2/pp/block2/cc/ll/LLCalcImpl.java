@@ -1,58 +1,83 @@
 package pp.block2.cc.ll;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
 import pp.block2.cc.NonTerm;
 import pp.block2.cc.Symbol;
 import pp.block2.cc.Term;
 
-public class LLCalc{
+import java.util.*;
+
+public class LLCalcImpl implements LLCalc{
     public Map<Symbol, Set<Term>> first;
     public Map<NonTerm, Set<Term>> follow;
-    public Map<Rule, Set<Term>> first+;
+    public Map<Rule, Set<Term>> firstPlus;
     public Grammar g;
 
-    public LLCalc(Grammar g){
+    public LLCalcImpl(Grammar g){
         this.g = g;
         first = new HashMap<Symbol, Set<Term>>();
         follow = new HashMap<NonTerm, Set<Term>>();
-        first+ = new HashMap<Rule, Set<Term>>();
+        firstPlus = new HashMap<Rule, Set<Term>>();
         setFirst();
         setFollow();
-        setFirst+();
+        setFirstPlus();
     }
 
     private void setFirst(){
-        Set<Term> terminals = g.getTerminals.size();
-        Set<Term> nonTerminals = g.getNonTerminals.size();
-        for(int i=0; i < terminals; i++){
-            Set<Term>  terms = new HashSet<term>
-            first.put(terminals.get(i), terms.put(terminals.get(i)));
+        Term epsilon = g.getTerminal(Sentence.ENDMARK);
+        Set<Term> terminals = g.getTerminals();
+        Set<NonTerm> nonTerminals = g.getNonterminals();
+        Iterator iter =  terminals.iterator();
+        while(iter.hasNext()){
+            Set<Term> terms = new HashSet<Term>();
+            Term term = (Term) iter.next();
+            terms.add(term);
+            first.put((Symbol) term, terms);
         }
-        for(int i=0; i < nonTerminals; i++){
-            Set<Term>  terms = new HashSet<term>
-            first.put(nonTerminals.get(i), terms);
+        iter = nonTerminals.iterator();
+        while(iter.hasNext()){
+            Set<Term> terms = new HashSet<Term>();
+            first.put((Symbol) iter.next(), terms);
         }
+
         Map<Symbol, Set<Term>> firstOld = first;
-        List<Rule> rules = g.getRules();
+
         while(!firstOld.equals(first)){
+            List<Rule> rules = g.getRules();
+
             for(int i=0; i < rules.size(); i++){
-                Rule rule = rules.get(i);
-                List<Symbol> symbols = rule.getRHS()-epsilon;
-                if(symbols.length()>0){
-                    Set<Symbol> rhs = First.get(symbols.get(1));
-                    int i=1;
-                    while(First.get(symbols.get(i)).contains(epsilon)){
-                        rhs = rhs + First.get(symbols.get(i+1)) - epsilon;
-                        i++
+                Set<Term> rhs=new HashSet<Term>();
+                List<Symbol> beta = rules.get(i).getRHS();
+                //ik ga er hier vanuit dat alles in beta een terminal of nonterminal is
+                iter = first.get(beta.get(0)).iterator();
+                while(iter.hasNext()){
+                    Term t = (Term) iter.next();
+                    if(!t.equals(epsilon)){
+                        rhs.add(t);
                     }
                 }
-                if(i==symbols.length() && First.get(symbols.get(symbols.length())).contains(epsilon)){
-                    rhs = rhs + epsilon
+                int k=0;
+               while(k<beta.size()-1){
+                    iter = first.get(beta.get(k)).iterator();
+                    while(iter.hasNext()){
+                        Term t = (Term) iter.next();
+                        if(!t.equals(epsilon)){
+                            rhs.add(t);
+                        }
+                    }
+                   k++;
                 }
-                First(rule.getLHS()) =First(rule.getLHS()) + rhs;
+                if(k==beta.size()-1 && first(beta.get(k)).contains(epsilon)){
+                    rhs.add(epsilon);
+                }
+                Set<Term> terms = first(rules.get(i).getLHS());
+                iter = rhs.iterator();
+                while(iter.hasNext()){
+                    terms.add(iter.next());
+                }
+                first.remove(rules.get(i).getLHS());
+                first.put((Symbol) rules.get(i).getLHS(), terms);
+
+
             }
         }
 
@@ -65,7 +90,7 @@ public class LLCalc{
 
     }
 
-    private void setFirst+(){
+    private void setFirsPlus(){
 
     }
 
@@ -81,7 +106,7 @@ public class LLCalc{
 
     /** Returns the FIRST+-map for the grammar of this calculator instance. */
     public Map<Rule, Set<Term>> getFirstp(){
-        return first+;
+        return firstPlus;
     }
 
     /** Indicates if the grammar of this calculator instance is LL(1). */
