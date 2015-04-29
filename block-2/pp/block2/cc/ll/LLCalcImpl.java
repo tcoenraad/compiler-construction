@@ -66,13 +66,13 @@ public class LLCalcImpl implements LLCalc{
                     }
                    k++;
                 }
-                if(k==beta.size()-1 && first(beta.get(k)).contains(epsilon)){
+                if(k==beta.size()-1 && first.get(beta.get(k)).contains(epsilon)){
                     rhs.add(epsilon);
                 }
-                Set<Term> terms = first(rules.get(i).getLHS());
+                Set<Term> terms = first.get(rules.get(i).getLHS());
                 iter = rhs.iterator();
                 while(iter.hasNext()){
-                    terms.add(iter.next());
+                    terms.add((Term) iter.next());
                 }
                 first.remove(rules.get(i).getLHS());
                 first.put((Symbol) rules.get(i).getLHS(), terms);
@@ -89,9 +89,12 @@ public class LLCalcImpl implements LLCalc{
     private void setFollow(){
         Set<NonTerm> nonTerminals = g.getNonterminals();
         Map<NonTerm, Set<Term>> followOld = follow;
+        Iterator iter = nonTerminals.iterator();
+        while(iter.hasNext()){
+            follow.put((NonTerm) iter.next(), new HashSet<Term>());
+        }
         while(!follow.equals(followOld)){
             followOld = follow;
-            follow.put((Symbol) iter.next(), new HashSet<Term>());
             List<Rule> rules = g.getRules();
             for(int i=0; i < rules.size(); i++){
                 Rule rule = rules.get(i);
@@ -100,14 +103,15 @@ public class LLCalcImpl implements LLCalc{
                 List<Symbol> beta = rule.getRHS();
                 for(int j=beta.size()-1; j >=0; j--){
                     if(beta.get(j) instanceof NonTerm){
-                        follow.get(beta.get(j)) = mergeSets(follow.get(beta.get(j)), trailer);
-                        if(first.get(beta.get(j)).contains(epsilon)){
+                        NonTerm bj = (NonTerm) beta.get(j);
+                        follow.put(bj, mergeSets(follow.get(bj), listToSet(trailer)));
+                        if(first.get(bj).contains(epsilon)){
                             trailer.addAll(minusEpsilon(first.get(beta.get(i))));
                         } else{
-                            trailer = first.get(beta.get(j));
+                            trailer = setToList(first.get(bj));
                         }
                     } else{
-                        trailer = first.get(beta.get(j));
+                        trailer = setToList(first.get(beta.get(j)));
                     }
                 }
 
@@ -119,19 +123,35 @@ public class LLCalcImpl implements LLCalc{
 
 
     }
+    private Set<Term> listToSet(List<Term> l1){
+        Set<Term> t = new HashSet<Term>();
+        for(int i=0; i < l1.size(); i++){
+            t.add(l1.get(i));
+        }
+        return t;
+    }
+    private List<Term> setToList(Set<Term> t1){
+        List<Term> res = new ArrayList<Term>();
+        Iterator<Term> it = t1.iterator();
+        while(it.hasNext()){
+            res.add(it.next());
+        }
+        return res;
+    }
 
     private Set<Term> mergeSets(Set<Term> t1, Set<Term> t2){
-        Iterator it = t2.iterator();
+        Iterator<Term> it = t2.iterator();
         while(it.hasNext()){
             Term t = it.next();
             if(!t1.contains(t)){
                 t1.add(t);
             }
         }
+        return t1;
     }
 
     private List<Term> minusEpsilon(Set<Term> t1){
-        Iterator it = t1.iterator();
+        Iterator<Term> it = t1.iterator();
         List<Term> res = new ArrayList<Term>();
         while(it.hasNext()){
             Term t = it.next();
@@ -145,26 +165,25 @@ public class LLCalcImpl implements LLCalc{
     private void setFirstPlus(){
         List<Rule> rules = g.getRules();
         for(int i=0; i < rules.size(); i++){
-            Set<Term> terms = rules.get(i).getRHS();
+            List<Symbol> symbols = rules.get(i).getRHS();
             boolean noEpsilon = true;
-            Iterator i1 = terms.iterator();
-            while(i1.hasNext()){
-                Set<Term> elementsFirst = first.get(i1.next());
-                Iterator i2 = elementsFirst.iterator();
+            int j=0;
+            while(i<symbols.size()){
+                Set<Term> elementsFirst = first.get(symbols.get(j));
+                Iterator <Term> i2 = elementsFirst.iterator();
                 while(i2.hasNext()){
-                    noEpsilon = ((Term) i2.next()).equals(epsilon);
+                    noEpsilon = ( i2.next()).equals(epsilon);
                 }
                 if(noEpsilon){
-                    firstPlus(rules.get(i)) = first(rules.get(i).getRHS().get(i));
+                    firstPlus.remove(rules.get(i));
+                    firstPlus.put(rules.get(i), first.get(rules.get(i).getRHS().get(i)));
                 } else{
-                    Set<Term> t1 =  first(rules.get(i).getRHS().get(i));
-                    Set<Term> t2 = follow(rules.get(i).getLHS());
-                    Iterator i3 = t2.iterator();
-                    while(i3.hasNext()){
-                        t1.add(i3.next());
-                    }
-                    firstPlus(rules.get(i)) = t1;
+                    Set<Term> t1 =  first.get(rules.get(i).getRHS().get(i));
+                    Set<Term> t2 = follow.get(rules.get(i).getLHS());
+                    t1 = mergeSets(t1, t2);
+                    firstPlus.put(rules.get(i), t1);
                 }
+                j++;
             }
         }
     }
@@ -185,7 +204,9 @@ public class LLCalcImpl implements LLCalc{
     }
 
     /** Indicates if the grammar of this calculator instance is LL(1). */
-    public boolean isLL1();
+    public boolean isLL1(){
+        return true;
+    }
 
 
 }
