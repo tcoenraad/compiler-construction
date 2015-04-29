@@ -16,7 +16,7 @@ import pp.block2.cc.Term;
 import pp.block2.cc.ll.Grammar;
 import pp.block2.cc.ll.Grammars;
 import pp.block2.cc.ll.LLCalc;
-import pp.block2.cc.ll.MyLLCalc;
+import pp.block2.cc.ll.LLCalcImpl;
 import pp.block2.cc.ll.Sentence;
 
 public class LLCalcTest {
@@ -52,7 +52,7 @@ public class LLCalcTest {
 
 	/** Creates an LL1-calculator for a given grammar. */
 	private LLCalc createCalc(Grammar g) {
-		return ... // your implementation of LLCalc
+		return new LLCalcImpl(g);
 	}
 
 	@SuppressWarnings("unchecked")

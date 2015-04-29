@@ -1,18 +1,17 @@
 package pp.block2.cc.ll;
 
 
-import pp.block2.cc.AST;
 import pp.block2.cc.NonTerm;
-import pp.block2.cc.ParseException;
 import pp.block2.cc.Parser;
-import pp.block2.cc.Symbol;
-import pp.block2.cc.Term;
+
+import java.util.List;
+import java.util.Map;
 
 /** Generic table-driven LL(1)-parser. */
 public class GenericLLParser implements Parser {
 	public GenericLLParser(Grammar g) {
 		this.g = g;
-		this.calc = new MyLLCalc(g); // here use your own class
+		this.calc = new LLCalcImpl(g); // here use your own class
 	}
 
 	private final Grammar g;
