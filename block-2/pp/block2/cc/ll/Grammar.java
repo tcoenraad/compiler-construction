@@ -61,7 +61,9 @@ public class Grammar {
 						termList.add(null);
 					}
 					Term oldTerm = termList.set(tokenType, term);
-					assert oldTerm == null;
+					assert oldTerm == null || oldTerm.equals(term):
+						String.format("Duplicate token '%s' and '%s' with type %d", 
+								oldTerm, term, tokenType); 
 				}
 			}
 		}
