@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import pp.block2.cc.NonTerm;
@@ -20,32 +21,53 @@ import pp.block2.cc.ll.AwesomeLLCalc;
 import pp.block2.cc.ll.Sentence;
 
 public class LLCalcTest {
+    private Grammar g;
+    private LLCalc calc;
+    private NonTerm subj;
+    private NonTerm obj;
+    private NonTerm sent;
+    private NonTerm mod;
+    private Term adj;
+    private Term noun;
+    private Term verb;
+    private Term end;
+
+    @Before
+    public void setup() {
+        g = Grammars.makeSentence();
+        calc = createCalc(g);
+
+        subj = g.getNonterminal("Subject");
+        obj = g.getNonterminal("Object");
+        sent = g.getNonterminal("Sentence");
+        mod = g.getNonterminal("Modifier");
+
+        adj = g.getTerminal(Sentence.ADJECTIVE);
+        noun = g.getTerminal(Sentence.NOUN);
+        verb = g.getTerminal(Sentence.VERB);
+        end = g.getTerminal(Sentence.ENDMARK);
+    }
+
     /** Tests the LL-calculator for the Sentence grammar. */
     @Test
-    public void testSentence() {
-        Grammar g = Grammars.makeSentence();
-        LLCalc calc = createCalc(g);
-        NonTerm subj = g.getNonterminal("Subject");
-        NonTerm obj = g.getNonterminal("Object");
-        NonTerm sent = g.getNonterminal("Sentence");
-        NonTerm mod = g.getNonterminal("Modifier");
-        // FIRST sets
-        Term adj = g.getTerminal(Sentence.ADJECTIVE);
-        Term noun = g.getTerminal(Sentence.NOUN);
-        Term verb = g.getTerminal(Sentence.VERB);
-        Term end = g.getTerminal(Sentence.ENDMARK);
+    public void testFirst() {
         assertEquals(set(adj, noun), calc.getFirst().get(sent));
         assertEquals(set(adj, noun), calc.getFirst().get(subj));
         assertEquals(set(adj, noun), calc.getFirst().get(obj));
         assertEquals(set(adj), calc.getFirst().get(mod));
-        // FOLLOW sets
+    }
+
+    @Test
+    public void testFollow() {
         assertEquals(set(Symbol.EOF), calc.getFollow().get(sent));
         assertEquals(set(verb), calc.getFollow().get(subj));
         assertEquals(set(end), calc.getFollow().get(obj));
         assertEquals(set(noun, adj), calc.getFollow().get(mod));
-        // is-LL1-test
+    }
+
+    @Test
+    public void testLL1() {
         assertTrue(calc.isLL1());
-        // Without this (recursive) rule, the grammar is LL-1
         g.addRule(mod, mod, mod);
         calc = createCalc(g);
         assertFalse(calc.isLL1());
