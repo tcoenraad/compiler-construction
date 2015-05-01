@@ -49,7 +49,7 @@ public class AwesomeLLCalc implements LLCalc {
                 rhs.remove(Symbol.EMPTY);
 
                 int i = 0;
-                while (first.get(beta.get(i)).contains(Symbol.EMPTY) && i < beta.size() - 1) {
+                while (i < beta.size() - 1 && first.get(beta.get(i)).contains(Symbol.EMPTY)) {
                     rhs.addAll(first.get(beta.get(i + 1)));
                     rhs.remove(Symbol.EMPTY);
                     i++;
