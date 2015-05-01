@@ -3,7 +3,6 @@ package pp.block2.cc.ll;
 import pp.block2.cc.NonTerm;
 import pp.block2.cc.Symbol;
 import pp.block2.cc.Term;
-import sun.jvm.hotspot.debugger.cdbg.Sym;
 
 import java.util.*;
 
@@ -36,8 +35,7 @@ public class AwesomeLLCalc implements LLCalc {
             first.put(t, set);
         }
         for (NonTerm t : grammar.getNonterminals()) {
-            Set<Term> set = new HashSet<>();
-            first.put(t, set);
+            first.put(t, new HashSet<>());
         }
 
         boolean diff = true;
@@ -71,8 +69,7 @@ public class AwesomeLLCalc implements LLCalc {
         follow = new HashMap<>();
 
         for (NonTerm t : grammar.getNonterminals()) {
-            Set<Term> set = new HashSet<>();
-            follow.put(t, set);
+            follow.put(t, new HashSet<>());
         }
 
         Set<Term> eofSet = new HashSet<>();
@@ -137,9 +134,7 @@ public class AwesomeLLCalc implements LLCalc {
         for (NonTerm nt : grammar.getNonterminals()) {
             for (Rule r : grammar.getRules(nt)) {
                 for (Rule r2 : grammar.getRules(nt)) {
-                    if (r == r2) {
-                        continue;
-                    } else {
+                    if (r != r2) {
                         Set<Term> intersection = new HashSet<>(firstp.get(r));
                         intersection.retainAll(firstp.get(r2));
                         if (!intersection.isEmpty()) {
