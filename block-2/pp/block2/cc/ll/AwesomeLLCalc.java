@@ -94,10 +94,10 @@ public class AwesomeLLCalc implements LLCalc {
                             trailer.addAll(first.get(beta.get(i)));
                             trailer.remove(Symbol.EMPTY);
                         } else {
-                            trailer = first.get(beta.get(i));
+                            trailer = new HashSet<>(first.get(beta.get(i)));
                         }
                     } else {
-                        trailer = first.get(beta.get(i));
+                        trailer = new HashSet<>(first.get(beta.get(i)));
                     }
                 }
             }
@@ -107,7 +107,7 @@ public class AwesomeLLCalc implements LLCalc {
     public void calcFirstp() {
         firstp = new HashMap<>();
         for (Rule r : grammar.getRules()) {
-            Set<Term> firstSymbols = first.get(r.getRHS().get(0));
+            Set<Term> firstSymbols = new HashSet<>(first.get(r.getRHS().get(0)));
             firstp.put(r, firstSymbols);
             if (firstSymbols.contains(Symbol.EMPTY)) {
                 firstp.get(r).addAll(follow.get(r.getLHS()));
