@@ -44,7 +44,8 @@ public class AwesomeLLCalc implements LLCalc {
 
             for (Rule r : grammar.getRules()) {
                 List<Symbol> beta = r.getRHS();
-                Set<Term> rhs = first.get(beta.get(0));
+
+                Set<Term> rhs = new HashSet<>(first.get(beta.get(0)));
                 rhs.remove(Symbol.EMPTY);
 
                 int i = 0;
