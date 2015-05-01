@@ -36,7 +36,10 @@ public class Grammar {
 	private final NonTerm start;
 
 	/** Adds a rule to this grammar, consisting of a given LHS and
-	 * a sequence of RHS symbols. */
+	 * a sequence of RHS symbols.
+	 * For an empty RHS, just leave the RHS sequence empty
+	 * (as in <code>addRule(elsePart)</code> for elsePart -> epsilon).
+	 */
 	public void addRule(NonTerm lhs, Symbol... rhs) {
 		addRule(new Rule(lhs, rhs));
 	}
@@ -61,9 +64,9 @@ public class Grammar {
 						termList.add(null);
 					}
 					Term oldTerm = termList.set(tokenType, term);
-					assert oldTerm == null || oldTerm.equals(term):
-						String.format("Duplicate token '%s' and '%s' with type %d", 
-								oldTerm, term, tokenType); 
+					assert oldTerm == null || oldTerm.equals(term) : String
+							.format("Duplicate token '%s' and '%s' with type %d",
+									oldTerm, term, tokenType);
 				}
 			}
 		}
