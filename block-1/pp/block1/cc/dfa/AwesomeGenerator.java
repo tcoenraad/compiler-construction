@@ -19,7 +19,6 @@ public class AwesomeGenerator implements Generator {
         String token = "";
 
         Stack<State> stack = new Stack<>();
-        stack.push(null);
 
         int i = 0;
         while (state != null && i < text.length()) {
