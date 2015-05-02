@@ -91,6 +91,7 @@ public class AwesomeLLCalc implements LLCalc {
                         follow.get(beta.get(i)).addAll(trailer);
                         diff = diff || oldLength < follow.get(beta.get(i)).size();
                         if (first.get(beta.get(i)).contains(Symbol.EMPTY)) {
+                            trailer = new HashSet<>(trailer);
                             trailer.addAll(first.get(beta.get(i)));
                             trailer.remove(Symbol.EMPTY);
                         } else {
