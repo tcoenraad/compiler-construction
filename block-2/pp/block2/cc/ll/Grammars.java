@@ -71,10 +71,6 @@ public class Grammars {
 		Term a = fact.getTerminal(CC4.A);
 		Term b = fact.getTerminal(CC4.B);
 		Term c = fact.getTerminal(CC4.C);
-//		Term iffie = fact.getTerminal(If.IF);
-//		Term cond = fact.getTerminal(If.COND);
-//		Term then = fact.getTerminal(If.THEN);
-//		Term elsie = fact.getTerminal(If.ELSE);
 		Term empty = Symbol.EMPTY;
 		// Build the context free grammar
 		Grammar g = new Grammar(l);

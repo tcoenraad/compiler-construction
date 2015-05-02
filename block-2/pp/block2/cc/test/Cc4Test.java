@@ -15,7 +15,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by Jip on 2-5-2015.
  */
-public class Cc4Test {
+public class CC4Test {
     private Grammar g;
     private LLCalc calc;
     private NonTerm l;
@@ -30,7 +30,7 @@ public class Cc4Test {
     private Term epsilon;
     private Term eof;
 
-    /** Tests the LL-calculator for the Sentence grammar. */
+    /** Tests the LL-calculator for the CC4 grammar. */
     @Before
     public void setup() {
         g = Grammars.makeCC4();
@@ -51,7 +51,7 @@ public class Cc4Test {
 
     @Test
     public void testFirst() {
-                assertEquals(set(a, b, c), calc.getFirst().get(l));
+        assertEquals(set(a, b, c), calc.getFirst().get(l));
         assertEquals(set(a, c), calc.getFirst().get(r));
         assertEquals(set(b, epsilon), calc.getFirst().get(r2));
         assertEquals(set(b), calc.getFirst().get(q));
