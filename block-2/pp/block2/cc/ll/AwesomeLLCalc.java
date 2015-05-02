@@ -82,7 +82,7 @@ public class AwesomeLLCalc implements LLCalc {
             diff = false;
 
             for (Rule r : grammar.getRules()) {
-                Set<Term> trailer = follow.get(r.getLHS());
+                Set<Term> trailer = new HashSet<>(follow.get(r.getLHS()));
 
                 List<Symbol> beta = r.getRHS();
                 for (int i = beta.size() - 1; i >= 0; i--) {
@@ -91,7 +91,6 @@ public class AwesomeLLCalc implements LLCalc {
                         follow.get(beta.get(i)).addAll(trailer);
                         diff = diff || oldLength < follow.get(beta.get(i)).size();
                         if (first.get(beta.get(i)).contains(Symbol.EMPTY)) {
-                            trailer = new HashSet<>(trailer);
                             trailer.addAll(first.get(beta.get(i)));
                             trailer.remove(Symbol.EMPTY);
                         } else {
