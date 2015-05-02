@@ -3,9 +3,9 @@
  */
 package pp.block2.cc.ll;
 
+import pp.block2.cc.NonTerm;
 import pp.block2.cc.Symbol;
 import pp.block2.cc.SymbolFactory;
-import pp.block2.cc.NonTerm;
 import pp.block2.cc.Term;
 
 /**
@@ -58,5 +58,36 @@ public class Grammars {
         g.addRule(elsePart, empty);
         return g;
     }
+
+	public static Grammar makeCC4() {
+		// Define the non-terminals
+		NonTerm l = new NonTerm("L");
+		NonTerm r = new NonTerm("R");
+		NonTerm q = new NonTerm("Q");
+		NonTerm r2 = new NonTerm("R2");
+		NonTerm q2 = new NonTerm("Q2");
+		// Define the terminals, using the CC4.g4 lexer grammar
+		SymbolFactory fact = new SymbolFactory(CC4.class);
+		Term a = fact.getTerminal(CC4.A);
+		Term b = fact.getTerminal(CC4.B);
+		Term c = fact.getTerminal(CC4.C);
+//		Term iffie = fact.getTerminal(If.IF);
+//		Term cond = fact.getTerminal(If.COND);
+//		Term then = fact.getTerminal(If.THEN);
+//		Term elsie = fact.getTerminal(If.ELSE);
+		Term empty = Symbol.EMPTY;
+		// Build the context free grammar
+		Grammar g = new Grammar(l);
+		g.addRule(l, r, a);
+		g.addRule(l, q, b, a);
+		g.addRule(r, a, b, a, r2);
+		g.addRule(r, c, a, b, a, r2);
+		g.addRule(q, b, q2);
+		g.addRule(r2, b, c, r2);
+		g.addRule(r2, empty);
+		g.addRule(q2, b, c);
+		g.addRule(q2, c);
+		return g;
+	}
 
 }
