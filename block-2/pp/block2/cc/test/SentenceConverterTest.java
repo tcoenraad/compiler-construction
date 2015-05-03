@@ -1,21 +1,21 @@
 package pp.block2.cc.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Lexer;
 import org.junit.Test;
-
 import pp.block2.cc.AST;
 import pp.block2.cc.ParseException;
 import pp.block2.cc.Parser;
+import pp.block2.cc.antlr.SentenceConverter;
 import pp.block2.cc.ll.Sentence;
 import pp.block2.cc.ll.SentenceParser;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class SentenceConverterTest {
 	@Test
@@ -26,6 +26,7 @@ public class SentenceConverterTest {
 		parser2 = new SentenceConverter();
 		compare("students love students.");
 		compare("all undergraduate students love all compilers.");
+		compare("all undergraduate students love all undergraduate compilers.");
 		fails("all undergraduate students love all compilers");
 		fails("undergraduate students love love.");
 		fails("all undergraduate students all compilers.");
