@@ -8,14 +8,16 @@ import java.util.*;
 
 /** Generic table-driven LL(1)-parser. */
 public class GenericLLParser implements Parser {
+
+	private final Grammar g;
+	private final LLCalc calc;
+
 	public GenericLLParser(Grammar g) {
 		this.g = g;
 		this.calc = new AwesomeLLCalc(g);
 		getLL1Table();
 	}
 
-	private final Grammar g;
-	private final LLCalc calc;
 
 	private Map<NonTerm, List<Rule>> getLL1Table() {
 		if (ll1Table == null) {
@@ -28,27 +30,29 @@ public class GenericLLParser implements Parser {
 	private Map<NonTerm, List<Rule>> calcLL1Table() {
 		ll1Table = new HashMap<>();
 		Map<Rule, Set<Term>> firstp = calc.getFirstp();
-		int numberOfTerms = g.getTerminals().size();
-		for(NonTerm nt : g.getNonterminals()){
-			for(Term t :g.getTerminals()){
-				ll1Table.put(nt, new ArrayList<Rule>());
-			}
-		}
-		for(Rule p: g.getRules()){
-			for(Symbol w:firstp.get(p)){
-				if(w instanceof Term){
-					List<Rule> l = ll1Table.get(p.getLHS());
-					for(int i=l.size(); i <= ((Term) w).getTokenType(); i++){
-						l.add(i, null);
-					}
-					l.set(((Term)w).getTokenType(), p);
-				}
 
+		for (NonTerm nt : g.getNonterminals()) {
+			for (int i = 0; i < g.getTerminals().size(); i++) {
+                ArrayList<Rule> list = new ArrayList<>();
+				ll1Table.put(nt, list);
+                for (int j = 0; j < g.getTerminals().size() + 1; j++) {
+                    list.add(j, null);
+                }
 			}
-			if(p.getRHS().contains(Symbol.EOF)){
-				List<Rule> l = ll1Table.get(p.getLHS());
-				l.set(numberOfTerms, p);
-			}
+
+            for (Rule p : g.getRules(nt)) {
+                for (Symbol w : firstp.get(p)) {
+                    if (w instanceof Term) {
+                        List<Rule> l = ll1Table.get(p.getLHS());
+                        l.set(((Term) w).getTokenType(), p);
+                    }
+
+                }
+                if (p.getRHS().contains(Symbol.EOF)) {
+                    List<Rule> l = ll1Table.get(p.getLHS());
+                    l.set(l.size() - 1, p);
+                }
+            }
 		}
 		return ll1Table;
 	}
@@ -58,42 +62,41 @@ public class GenericLLParser implements Parser {
 
 	@Override
 	public AST parse(Lexer lexer) throws ParseException {
-		AST result =null;
-		AST current = null;
+		AST tree = null;
+		AST currentBranch = null;
 		Token word = lexer.nextToken();
 		Stack<Symbol> stack = new Stack<>();
 		stack.push(Symbol.EOF);
 		stack.push(g.getStart());
 		Symbol focus = stack.lastElement();
-		while(true){
-			if(focus.equals(Symbol.EOF) && word.getText().equals("<EOF>")){
-				return result;
+		while (true){
+			if (focus.equals(Symbol.EOF) && word.getText().equals("<EOF>")){
+				return tree;
 			} else if(focus instanceof Term || focus.equals(Symbol.EOF)) {
 				if (((Term) focus).getTokenType() == word.getType() || word.equals("<EOF>")) {
 					Symbol s = stack.pop();
-					current.addChild(new AST((Term) s, word));
+					currentBranch.addChild(new AST((Term) s, word)); // adding branch
 					word = lexer.nextToken();
-					current = goUp(current, result);
+					currentBranch = goUp(currentBranch, tree);
 				} else if (focus.equals(Symbol.EMPTY)){
-					Symbol s = stack.pop();
-					current = goOneUp(current, result);
-					current = goUp(current, result);
-				}else{
+					stack.pop();
+					currentBranch = goUp(currentBranch, tree);
+				} else {
 					throw new ParseException("Error while looking for symbol at top of stack");
 				}
-			}else{
-				if(ll1Table.get((NonTerm) focus).get(word.getType())!=null){
-					List<Symbol> l = ll1Table.get((NonTerm) focus).get(word.getType()).getRHS();
+			} else {
+				if (ll1Table.get(focus).get(word.getType()) != null){
+					List<Symbol> l = ll1Table.get(focus).get(word.getType()).getRHS();
 					Symbol s = stack.pop();
-					if(result ==null){
-						result = new AST((NonTerm) s);
-						current = result;
-					} else{
-						int i=current.getChildren().size();
-						current.addChild(new AST((NonTerm) s));
-						current = current.getChildren().get(i);
+					if (tree == null){
+						tree = new AST((NonTerm) s);
+						currentBranch = tree;
+					} else {
+						int childrenLength = currentBranch.getChildren().size();
+						currentBranch.addChild(new AST((NonTerm) s)); // adding branch
+						currentBranch = currentBranch.getChildren().get(childrenLength); // switching branch
 					}
-					for(int i = l.size()-1; i >=0; i-- ){
+					for (int i = l.size() - 1; i >= 0; i--) {
 						stack.add(l.get(i));
 					}
 				} else{
@@ -105,65 +108,50 @@ public class GenericLLParser implements Parser {
 		}
 	}
 
-	private AST goUp(AST current, AST result) {
-		if(current.equals(result)){
-			return current;
-		}else if(current.isTerminal()){
-			return goUp(goOneUp(current, result), result);
-		} else if(finishedRule(current)){
-			return goUp(goOneUp(current, result), result);
+	private AST goUp(AST currentBranch, AST tree) {
+		if(currentBranch.equals(tree)){
+			return currentBranch;
+		} else if (currentBranch.isTerminal()){
+			return goUp(goOneUp(currentBranch, tree), tree);
+		} else if (finishedRule(currentBranch)){
+			return goUp(goOneUp(currentBranch, tree), tree);
 		} else{
-			return current;
+			return currentBranch;
 		}
 	}
 
-	private boolean finishedRule(AST current){
-		boolean result = false;
-		boolean empty=false;
-		boolean workInProgress =false;
-		if(current.isTerminal() || current.getSymbol().equals(Symbol.EMPTY)){
-			result = true;
-		} else if(current.getSymbol() instanceof NonTerm){
-			List<Rule> rules = g.getRules((NonTerm) current.getSymbol());
-			for(int i=0; !result && i < rules.size(); i++){
-				result = !(rules.get(i).getRHS().contains(Symbol.EMPTY)) && current.getChildren().size()!=0 && current.getChildren().size() == rules.get(i).getRHS().size();
-				if(result){
-					int lengte = current.getChildren().size();
-					for(int j=0; result && j < current.getChildren().size(); j++){
-
-						result = rules.get(i).getRHS().get(0).equals(Symbol.EMPTY) || current.getChildren().get(j).getSymbol().equals(rules.get(i).getRHS().get(j)) &&
-								(current.getChildren().get(j).isTerminal()?true: finishedRule(current.getChildren().get(j)));
-						workInProgress = true;
-					}
-
-				}
-				if(current.getChildren().size()==0){
-					empty = rules.get(i).getRHS().get(0).equals(Symbol.EMPTY);
-				}
+	private boolean finishedRule(AST currentBranch) {
+		boolean finishedRule = false;
+		if (currentBranch.isTerminal() || currentBranch.getSymbol().equals(Symbol.EMPTY)){
+			finishedRule = true;
+		} else {
+			List<Rule> rules = g.getRules((NonTerm) currentBranch.getSymbol());
+			for (int i = 0; !finishedRule && i < rules.size(); i++) {
+                Rule rule = rules.get(i);
+				if (currentBranch.getChildren().size() != rule.getRHS().size()) {
+                    continue;
+                }
+                for (int j = 0; j < currentBranch.getChildren().size(); j++) {
+                    finishedRule = currentBranch.getChildren().get(j).getSymbol().equals(rule.getRHS().get(j)) && // symbol on current branch and rule match
+                            (currentBranch.getChildren().get(j).isTerminal() ||
+                                    finishedRule(currentBranch.getChildren().get(j)));
+                }
 			}
-		} else{
-			result = true;
 		}
-		return result || (!workInProgress&&empty);
-
-
-
+		return finishedRule;
 	}
 
-	private AST goOneUp(AST cur, AST res){
-		if(res.equals(cur)){
-			return res;
+	private AST goOneUp(AST currentBranch, AST tree){
+		if (tree.equals(currentBranch)){
+			return tree;
 		}
-		if(res.getChildren()!=null){
-			for(int i=res.getChildren().size()-1; i>=0; i--){
-				if(res.getChildren() != null && res.getChildren().get(i)!=null && res.getChildren().get(i).equals(cur)){
-					return res;
-				} else if(goOneUp(cur, res.getChildren().get(i))!= null) {
-					return goOneUp(cur, res.getChildren().get(i));
-				}
-
-			}
-		}
+        for(int i = tree.getChildren().size() - 1; i >= 0; i--) {
+            if (tree.getChildren().get(i).equals(currentBranch)){
+                return tree;
+            } else {
+                return goOneUp(currentBranch, tree.getChildren().get(i));
+            }
+        }
 		return null;
 	}
 }
