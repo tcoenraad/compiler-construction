@@ -17,8 +17,7 @@ public class GenericLLParser implements Parser {
 		this.calc = new AwesomeLLCalc(g);
 		getLL1Table();
 	}
-
-
+    
 	private Map<NonTerm, List<Rule>> getLL1Table() {
 		if (ll1Table == null) {
 			ll1Table = calcLL1Table();
