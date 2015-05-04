@@ -121,9 +121,8 @@ public class GenericLLParser implements Parser {
 	/** Constructs the {@link #ll1Table}. */
 	private Map<NonTerm, List<Rule>> calcLL1Table() {
         Map<NonTerm, List<Rule>> ll1Table = new HashMap<>();
-        for (NonTerm nonTerm : g.getNonterminals()) {
-            ll1Table.put(nonTerm, g.getRules(nonTerm));
-        }
+        g.getNonterminals().stream().forEach(nonTerm ->
+                ll1Table.put(nonTerm, g.getRules(nonTerm)));
         return ll1Table;
     }
 
