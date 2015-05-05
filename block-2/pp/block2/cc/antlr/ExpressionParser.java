@@ -90,6 +90,21 @@ public class ExpressionParser extends Parser {
 			super.copyFrom(ctx);
 		}
 	}
+	public static class MinusContext extends ExpressionContext {
+		public TerminalNode MINUS() { return getToken(ExpressionParser.MINUS, 0); }
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
+		}
+		public MinusContext(ExpressionContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ExpressionListener ) ((ExpressionListener)listener).enterMinus(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ExpressionListener ) ((ExpressionListener)listener).exitMinus(this);
+		}
+	}
 	public static class NumberContext extends ExpressionContext {
 		public TerminalNode NUMBER() { return getToken(ExpressionParser.NUMBER, 0); }
 		public NumberContext(ExpressionContext ctx) { copyFrom(ctx); }
@@ -102,7 +117,7 @@ public class ExpressionParser extends Parser {
 			if ( listener instanceof ExpressionListener ) ((ExpressionListener)listener).exitNumber(this);
 		}
 	}
-	public static class MinusContext extends ExpressionContext {
+	public static class SubtractionContext extends ExpressionContext {
 		public List<ExpressionContext> expression() {
 			return getRuleContexts(ExpressionContext.class);
 		}
@@ -110,47 +125,14 @@ public class ExpressionParser extends Parser {
 			return getRuleContext(ExpressionContext.class,i);
 		}
 		public TerminalNode MINUS() { return getToken(ExpressionParser.MINUS, 0); }
-		public MinusContext(ExpressionContext ctx) { copyFrom(ctx); }
+		public SubtractionContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ExpressionListener ) ((ExpressionListener)listener).enterMinus(this);
+			if ( listener instanceof ExpressionListener ) ((ExpressionListener)listener).enterSubtraction(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ExpressionListener ) ((ExpressionListener)listener).exitMinus(this);
-		}
-	}
-	public static class TimesContext extends ExpressionContext {
-		public List<ExpressionContext> expression() {
-			return getRuleContexts(ExpressionContext.class);
-		}
-		public ExpressionContext expression(int i) {
-			return getRuleContext(ExpressionContext.class,i);
-		}
-		public TerminalNode TIMES() { return getToken(ExpressionParser.TIMES, 0); }
-		public TimesContext(ExpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ExpressionListener ) ((ExpressionListener)listener).enterTimes(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ExpressionListener ) ((ExpressionListener)listener).exitTimes(this);
-		}
-	}
-	public static class UnaryContext extends ExpressionContext {
-		public TerminalNode MINUS() { return getToken(ExpressionParser.MINUS, 0); }
-		public ExpressionContext expression() {
-			return getRuleContext(ExpressionContext.class,0);
-		}
-		public UnaryContext(ExpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ExpressionListener ) ((ExpressionListener)listener).enterUnary(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ExpressionListener ) ((ExpressionListener)listener).exitUnary(this);
+			if ( listener instanceof ExpressionListener ) ((ExpressionListener)listener).exitSubtraction(this);
 		}
 	}
 	public static class PowerContext extends ExpressionContext {
@@ -171,6 +153,24 @@ public class ExpressionParser extends Parser {
 			if ( listener instanceof ExpressionListener ) ((ExpressionListener)listener).exitPower(this);
 		}
 	}
+	public static class MultiplicationContext extends ExpressionContext {
+		public List<ExpressionContext> expression() {
+			return getRuleContexts(ExpressionContext.class);
+		}
+		public ExpressionContext expression(int i) {
+			return getRuleContext(ExpressionContext.class,i);
+		}
+		public TerminalNode TIMES() { return getToken(ExpressionParser.TIMES, 0); }
+		public MultiplicationContext(ExpressionContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ExpressionListener ) ((ExpressionListener)listener).enterMultiplication(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ExpressionListener ) ((ExpressionListener)listener).exitMultiplication(this);
+		}
+	}
 	public static class ParenthesisContext extends ExpressionContext {
 		public TerminalNode LPAR() { return getToken(ExpressionParser.LPAR, 0); }
 		public ExpressionContext expression() {
@@ -187,7 +187,7 @@ public class ExpressionParser extends Parser {
 			if ( listener instanceof ExpressionListener ) ((ExpressionListener)listener).exitParenthesis(this);
 		}
 	}
-	public static class PlusContext extends ExpressionContext {
+	public static class AdditionContext extends ExpressionContext {
 		public List<ExpressionContext> expression() {
 			return getRuleContexts(ExpressionContext.class);
 		}
@@ -195,14 +195,14 @@ public class ExpressionParser extends Parser {
 			return getRuleContext(ExpressionContext.class,i);
 		}
 		public TerminalNode PLUS() { return getToken(ExpressionParser.PLUS, 0); }
-		public PlusContext(ExpressionContext ctx) { copyFrom(ctx); }
+		public AdditionContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ExpressionListener ) ((ExpressionListener)listener).enterPlus(this);
+			if ( listener instanceof ExpressionListener ) ((ExpressionListener)listener).enterAddition(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ExpressionListener ) ((ExpressionListener)listener).exitPlus(this);
+			if ( listener instanceof ExpressionListener ) ((ExpressionListener)listener).exitAddition(this);
 		}
 	}
 
@@ -225,7 +225,7 @@ public class ExpressionParser extends Parser {
 			switch (_input.LA(1)) {
 			case MINUS:
 				{
-				_localctx = new UnaryContext(_localctx);
+				_localctx = new MinusContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
 
@@ -285,7 +285,7 @@ public class ExpressionParser extends Parser {
 						break;
 					case 2:
 						{
-						_localctx = new TimesContext(new ExpressionContext(_parentctx, _parentState));
+						_localctx = new MultiplicationContext(new ExpressionContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(15);
 						if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
@@ -297,7 +297,7 @@ public class ExpressionParser extends Parser {
 						break;
 					case 3:
 						{
-						_localctx = new PlusContext(new ExpressionContext(_parentctx, _parentState));
+						_localctx = new AdditionContext(new ExpressionContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(18);
 						if (!(precpred(_ctx, 3))) throw new FailedPredicateException(this, "precpred(_ctx, 3)");
@@ -309,7 +309,7 @@ public class ExpressionParser extends Parser {
 						break;
 					case 4:
 						{
-						_localctx = new MinusContext(new ExpressionContext(_parentctx, _parentState));
+						_localctx = new SubtractionContext(new ExpressionContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(21);
 						if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");

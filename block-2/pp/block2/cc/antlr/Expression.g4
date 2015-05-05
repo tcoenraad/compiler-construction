@@ -5,10 +5,10 @@ grammar Expression;
 expression :
 LPAR expression RPAR # parenthesis
 | <assoc=right> expression POWER expression # power
-| MINUS expression # unary
-| expression TIMES expression # times
-| expression PLUS expression # plus
-| expression MINUS expression # minus
+| MINUS expression # minus
+| expression TIMES expression # multiplication
+| expression PLUS expression # addition
+| expression MINUS expression # subtraction
 | NUMBER # number;
 
 NUMBER : [0-9]+;

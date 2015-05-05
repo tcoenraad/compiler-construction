@@ -9,18 +9,6 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface ExpressionListener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by the {@code number}
-	 * labeled alternative in {@link ExpressionParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterNumber(@NotNull ExpressionParser.NumberContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code number}
-	 * labeled alternative in {@link ExpressionParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitNumber(@NotNull ExpressionParser.NumberContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code minus}
 	 * labeled alternative in {@link ExpressionParser#expression}.
 	 * @param ctx the parse tree
@@ -33,29 +21,29 @@ public interface ExpressionListener extends ParseTreeListener {
 	 */
 	void exitMinus(@NotNull ExpressionParser.MinusContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code times}
+	 * Enter a parse tree produced by the {@code number}
 	 * labeled alternative in {@link ExpressionParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterTimes(@NotNull ExpressionParser.TimesContext ctx);
+	void enterNumber(@NotNull ExpressionParser.NumberContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code times}
+	 * Exit a parse tree produced by the {@code number}
 	 * labeled alternative in {@link ExpressionParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitTimes(@NotNull ExpressionParser.TimesContext ctx);
+	void exitNumber(@NotNull ExpressionParser.NumberContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code unary}
+	 * Enter a parse tree produced by the {@code subtraction}
 	 * labeled alternative in {@link ExpressionParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterUnary(@NotNull ExpressionParser.UnaryContext ctx);
+	void enterSubtraction(@NotNull ExpressionParser.SubtractionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code unary}
+	 * Exit a parse tree produced by the {@code subtraction}
 	 * labeled alternative in {@link ExpressionParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitUnary(@NotNull ExpressionParser.UnaryContext ctx);
+	void exitSubtraction(@NotNull ExpressionParser.SubtractionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code power}
 	 * labeled alternative in {@link ExpressionParser#expression}.
@@ -69,6 +57,18 @@ public interface ExpressionListener extends ParseTreeListener {
 	 */
 	void exitPower(@NotNull ExpressionParser.PowerContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code multiplication}
+	 * labeled alternative in {@link ExpressionParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterMultiplication(@NotNull ExpressionParser.MultiplicationContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code multiplication}
+	 * labeled alternative in {@link ExpressionParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitMultiplication(@NotNull ExpressionParser.MultiplicationContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code parenthesis}
 	 * labeled alternative in {@link ExpressionParser#expression}.
 	 * @param ctx the parse tree
@@ -81,15 +81,15 @@ public interface ExpressionListener extends ParseTreeListener {
 	 */
 	void exitParenthesis(@NotNull ExpressionParser.ParenthesisContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code plus}
+	 * Enter a parse tree produced by the {@code addition}
 	 * labeled alternative in {@link ExpressionParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterPlus(@NotNull ExpressionParser.PlusContext ctx);
+	void enterAddition(@NotNull ExpressionParser.AdditionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code plus}
+	 * Exit a parse tree produced by the {@code addition}
 	 * labeled alternative in {@link ExpressionParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitPlus(@NotNull ExpressionParser.PlusContext ctx);
+	void exitAddition(@NotNull ExpressionParser.AdditionContext ctx);
 }

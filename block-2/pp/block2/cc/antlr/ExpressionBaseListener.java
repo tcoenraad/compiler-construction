@@ -17,18 +17,6 @@ public class ExpressionBaseListener implements ExpressionListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNumber(@NotNull ExpressionParser.NumberContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitNumber(@NotNull ExpressionParser.NumberContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterMinus(@NotNull ExpressionParser.MinusContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -41,25 +29,25 @@ public class ExpressionBaseListener implements ExpressionListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTimes(@NotNull ExpressionParser.TimesContext ctx) { }
+	@Override public void enterNumber(@NotNull ExpressionParser.NumberContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitTimes(@NotNull ExpressionParser.TimesContext ctx) { }
+	@Override public void exitNumber(@NotNull ExpressionParser.NumberContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterUnary(@NotNull ExpressionParser.UnaryContext ctx) { }
+	@Override public void enterSubtraction(@NotNull ExpressionParser.SubtractionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitUnary(@NotNull ExpressionParser.UnaryContext ctx) { }
+	@Override public void exitSubtraction(@NotNull ExpressionParser.SubtractionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -77,6 +65,18 @@ public class ExpressionBaseListener implements ExpressionListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterMultiplication(@NotNull ExpressionParser.MultiplicationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMultiplication(@NotNull ExpressionParser.MultiplicationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterParenthesis(@NotNull ExpressionParser.ParenthesisContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -89,13 +89,13 @@ public class ExpressionBaseListener implements ExpressionListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPlus(@NotNull ExpressionParser.PlusContext ctx) { }
+	@Override public void enterAddition(@NotNull ExpressionParser.AdditionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPlus(@NotNull ExpressionParser.PlusContext ctx) { }
+	@Override public void exitAddition(@NotNull ExpressionParser.AdditionContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

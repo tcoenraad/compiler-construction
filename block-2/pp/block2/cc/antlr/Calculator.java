@@ -36,23 +36,23 @@ public class Calculator extends ExpressionBaseListener {
         values.put(tree, value);
     }
     @Override
-    public void exitUnary(ExpressionParser.UnaryContext tree) {
+    public void exitMinus(ExpressionParser.MinusContext tree) {
         BigInteger value = BigInteger.ZERO.subtract(values.get(tree.getChild(1)));
         values.put(tree, value);
     }
     @Override
-    public void exitTimes(ExpressionParser.TimesContext tree) {
+    public void exitMultiplication(ExpressionParser.MultiplicationContext tree) {
         BigInteger value = values.get(tree.getChild(0)).multiply(values.get(tree.getChild(2)));
         values.put(tree, value);
     }
     @Override
-    public void exitPlus(ExpressionParser.PlusContext tree) {
+    public void exitAddition(ExpressionParser.AdditionContext tree) {
         BigInteger value = values.get(tree.getChild(0)).add(values.get(tree.getChild(2)));
         values.put(tree, value);
     }
 
     @Override
-    public void exitMinus(ExpressionParser.MinusContext tree) {
+    public void exitSubtraction(ExpressionParser.SubtractionContext tree) {
         BigInteger value = values.get(tree.getChild(0)).subtract(values.get(tree.getChild(2)));
         values.put(tree, value);
     }
