@@ -1,0 +1,10 @@
+T__0=1
+NOUN=2
+VERB=3
+ADJECTIVE=4
+ENDMARK=5
+WS=6
+TYPO=7
+','=1
+'love'=3
+'.'=5

@@ -1,0 +1,12 @@
+IF=1
+THEN=2
+COND=3
+ELSE=4
+ASSIGN=5
+WS=6
+TYPO=7
+'if'=1
+'then'=2
+'cond'=3
+'else'=4
+'assign'=5
