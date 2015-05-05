@@ -27,32 +27,38 @@ public class Calculator extends ExpressionBaseListener {
 
     @Override
     public void exitParenthesis(ExpressionParser.ParenthesisContext tree) {
+        if (values.get(tree.getChild(1)) == null) { return; }
         BigInteger value = values.get(tree.getChild(1));
         values.put(tree, value);
     }
     @Override
     public void exitPower(ExpressionParser.PowerContext tree) {
+        if (values.get(tree.getChild(2)) == null) { return; }
         BigInteger value = values.get(tree.getChild(0)).pow(values.get(tree.getChild(2)).intValue());
         values.put(tree, value);
     }
     @Override
     public void exitMinus(ExpressionParser.MinusContext tree) {
+        if (values.get(tree.getChild(1)) == null) { return; }
         BigInteger value = BigInteger.ZERO.subtract(values.get(tree.getChild(1)));
         values.put(tree, value);
     }
     @Override
     public void exitMultiplication(ExpressionParser.MultiplicationContext tree) {
+        if (values.get(tree.getChild(2)) == null) { return; }
         BigInteger value = values.get(tree.getChild(0)).multiply(values.get(tree.getChild(2)));
         values.put(tree, value);
     }
     @Override
     public void exitAddition(ExpressionParser.AdditionContext tree) {
+        if (values.get(tree.getChild(2)) == null) { return; }
         BigInteger value = values.get(tree.getChild(0)).add(values.get(tree.getChild(2)));
         values.put(tree, value);
     }
 
     @Override
     public void exitSubtraction(ExpressionParser.SubtractionContext tree) {
+        if (values.get(tree.getChild(2)) == null) { return; }
         BigInteger value = values.get(tree.getChild(0)).subtract(values.get(tree.getChild(2)));
         values.put(tree, value);
     }
