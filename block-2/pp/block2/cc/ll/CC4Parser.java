@@ -33,7 +33,6 @@ public class CC4Parser implements Parser {
         return parseL(); // L == start symbol
     }
 
-
     private AST parseL() throws ParseException {
         AST tree = new AST(L);
         Token next = peek();
