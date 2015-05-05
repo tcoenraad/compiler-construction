@@ -61,6 +61,7 @@ public class CalculatorTest {
         Assert.assertEquals(35, calculator.evaluate("30+5").intValue());
 
         Assert.assertEquals(null, calculator.evaluate("35+"));
+        Assert.assertEquals(null, calculator.evaluate("+"));
     }
 
     @Test
@@ -68,6 +69,7 @@ public class CalculatorTest {
         Assert.assertEquals(35, calculator.evaluate("40-5").intValue());
 
         Assert.assertEquals(null, calculator.evaluate("35-"));
+        Assert.assertEquals(null, calculator.evaluate("-"));
     }
 
     @Test
@@ -78,7 +80,7 @@ public class CalculatorTest {
     @Test
     public void testUnknownCharacters() {
         Assert.assertEquals(35, calculator.evaluate("35 ").intValue());
-        
+
         Assert.assertEquals(null, calculator.evaluate("_"));
         Assert.assertEquals(null, calculator.evaluate("a"));
     }
