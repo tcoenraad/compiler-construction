@@ -19,6 +19,8 @@ public class CalculatorTest {
         Assert.assertEquals(35, calculator.evaluate("(2+3)*7").intValue());
         Assert.assertEquals(23, calculator.evaluate("2+(3*7)").intValue());
         Assert.assertEquals(23, calculator.evaluate("2+3*7").intValue());
+        Assert.assertEquals(35, calculator.evaluate("(35)").intValue());
+        Assert.assertEquals(35, calculator.evaluate("((35))").intValue());
 
         Assert.assertEquals(null, calculator.evaluate("2+3*7)"));
         Assert.assertEquals(null, calculator.evaluate("2+(3*7"));
@@ -31,6 +33,7 @@ public class CalculatorTest {
         Assert.assertEquals(-35, calculator.evaluate("-35").intValue());
 
         Assert.assertEquals(null, calculator.evaluate("35-"));
+        Assert.assertEquals(null, calculator.evaluate("35--"));
         Assert.assertEquals(null, calculator.evaluate("-"));
     }
 
@@ -42,6 +45,7 @@ public class CalculatorTest {
         Assert.assertEquals(64, calculator.evaluate("(2^3)^2").intValue());
 
         Assert.assertEquals(null, calculator.evaluate("2^"));
+        Assert.assertEquals(null, calculator.evaluate("2^^"));
         Assert.assertEquals(null, calculator.evaluate("^"));
     }
 
@@ -52,7 +56,8 @@ public class CalculatorTest {
         Assert.assertEquals(-35, calculator.evaluate("5*-7").intValue());
         Assert.assertEquals(-35, calculator.evaluate("-5*7").intValue());
 
-        Assert.assertEquals(null, calculator.evaluate("-5*7*"));
+        Assert.assertEquals(null, calculator.evaluate("35*"));
+        Assert.assertEquals(null, calculator.evaluate("35**"));
         Assert.assertEquals(null, calculator.evaluate("*"));
     }
 
@@ -61,6 +66,7 @@ public class CalculatorTest {
         Assert.assertEquals(35, calculator.evaluate("30+5").intValue());
 
         Assert.assertEquals(null, calculator.evaluate("35+"));
+        Assert.assertEquals(null, calculator.evaluate("35++"));
         Assert.assertEquals(null, calculator.evaluate("+"));
     }
 
@@ -69,6 +75,7 @@ public class CalculatorTest {
         Assert.assertEquals(35, calculator.evaluate("40-5").intValue());
 
         Assert.assertEquals(null, calculator.evaluate("35-"));
+        Assert.assertEquals(null, calculator.evaluate("35--"));
         Assert.assertEquals(null, calculator.evaluate("-"));
     }
 
