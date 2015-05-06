@@ -4,10 +4,7 @@ import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Token;
 import pp.block2.cc.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /** Generic table-driven LL(1)-parser. */
 public class GenericLLParser implements Parser {
@@ -46,15 +43,13 @@ public class GenericLLParser implements Parser {
             if (((Term) symb).getTokenType() != peek().getType()) {
                 throw new ParseException("Could not parse Term");
             }
-            return new AST((Term) symb, tokens.get(next().getType()));
+            return new AST((Term) symb, next());
         } else {
-            for (Map.Entry<Rule, Set<Term>> entry : calc.getFirstp().entrySet()) {
-                if (!entry.getKey().getLHS().equals(symb) && !entry.getValue().contains(peek())) {
-                    continue;
-                }
-                return parse(entry.getKey());
+            Rule rule = lookup((NonTerm) symb);
+            if (rule == null) {
+                throw new ParseException("Could not parse NonTerm");
             }
-            throw new ParseException("Could not parse NonTerm");
+            return parse(rule);
         }
 	}
 
@@ -100,6 +95,7 @@ public class GenericLLParser implements Parser {
 	 */
 	private Rule lookup(NonTerm nt) throws ParseException {
 		Token next = peek();
+        getLL1Table();
 		Rule result = getLL1Table().get(nt).get(next.getType());
 		if (result == null) {
 			throw new ParseException(String.format(
@@ -120,9 +116,27 @@ public class GenericLLParser implements Parser {
 
 	/** Constructs the {@link #ll1Table}. */
 	private Map<NonTerm, List<Rule>> calcLL1Table() {
-        Map<NonTerm, List<Rule>> ll1Table = new HashMap<>();
-        g.getNonterminals().stream().forEach(nonTerm ->
-                ll1Table.put(nonTerm, g.getRules(nonTerm)));
+        ll1Table = new HashMap<>();
+        Map<Rule, Set<Term>> firstp = calc.getFirstp();
+        int numberOfTerms = g.getTerminals().size();
+        for (NonTerm nt : g.getNonterminals()){
+            List<Rule> rules = new ArrayList<Rule>();
+            for(int i = 0; i < numberOfTerms; i++){
+                rules.add(i, null);
+            }
+            ll1Table.put(nt, rules);
+        }
+        for (Rule rule : g.getRules()){
+            for (Symbol symbol : firstp.get(rule)){
+                if (symbol instanceof Term){
+                    ll1Table.get(rule.getLHS()).set(((Term) symbol).getTokenType(), rule);
+                }
+            }
+            if (rule.getRHS().contains(Symbol.EOF)) {
+                List<Rule> l = ll1Table.get(rule.getLHS());
+                l.add(numberOfTerms, rule);
+            }
+        }
         return ll1Table;
     }
 
