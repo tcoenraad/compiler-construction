@@ -17,12 +17,9 @@ public class SentenceConverter extends SentenceBaseListener implements Parser {
     private Stack<AST> stack;
     private SymbolFactory factory;
 
-    public SentenceConverter() {
-        this.stack = new Stack<>();
-    }
-
     @Override
     public AST parse(Lexer lexer) throws ParseException {
+        this.stack = new Stack<>();
         factory = new SymbolFactory(lexer.getClass());
 
         SentenceParser parser = new SentenceParser(new CommonTokenStream(lexer));
