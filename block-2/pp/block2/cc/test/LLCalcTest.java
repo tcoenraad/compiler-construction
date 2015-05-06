@@ -1,24 +1,15 @@
 package pp.block2.cc.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import pp.block2.cc.NonTerm;
 import pp.block2.cc.Symbol;
 import pp.block2.cc.Term;
-import pp.block2.cc.ll.Grammar;
-import pp.block2.cc.ll.Grammars;
-import pp.block2.cc.ll.LLCalc;
-import pp.block2.cc.ll.AwesomeLLCalc;
-import pp.block2.cc.ll.Sentence;
+import pp.block2.cc.ll.*;
+
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 public class LLCalcTest {
     private Grammar g;
@@ -51,18 +42,28 @@ public class LLCalcTest {
     /** Tests the LL-calculator for the Sentence grammar. */
     @Test
     public void testFirst() {
-        assertEquals(set(adj, noun), calc.getFirst().get(sent));
-        assertEquals(set(adj, noun), calc.getFirst().get(subj));
-        assertEquals(set(adj, noun), calc.getFirst().get(obj));
-        assertEquals(set(adj), calc.getFirst().get(mod));
+        Map<Symbol, Set<Term>> first = calc.getFirst();
+        assertEquals(set(adj, noun), first.get(sent));
+        assertEquals(set(adj, noun), first.get(subj));
+        assertEquals(set(adj, noun), first.get(obj));
+        assertEquals(set(adj), first.get(mod));
     }
 
     @Test
     public void testFollow() {
-        assertEquals(set(Symbol.EOF), calc.getFollow().get(sent));
-        assertEquals(set(verb), calc.getFollow().get(subj));
-        assertEquals(set(end), calc.getFollow().get(obj));
-        assertEquals(set(noun, adj), calc.getFollow().get(mod));
+        Map<NonTerm, Set<Term>> follow = calc.getFollow();
+        assertEquals(set(Symbol.EOF), follow.get(sent));
+        assertEquals(set(verb), follow.get(subj));
+        assertEquals(set(end), follow.get(obj));
+        assertEquals(set(noun, adj), follow.get(mod));
+    }
+
+    @Test
+    public void testFirstp() {
+        Map<Rule, Set<Term>> firstp = calc.getFirstp();
+        List<Rule> subjRules = g.getRules(subj);
+        assertEquals(set(noun), firstp.get(subjRules.get(0)));
+        assertEquals(set(adj), firstp.get(subjRules.get(1)));
     }
 
     @Test
@@ -75,7 +76,7 @@ public class LLCalcTest {
 
     /** Creates an LL1-calculator for a given grammar. */
     private LLCalc createCalc(Grammar g) {
-        return new AwesomeLLCalc(g); // your implementation of LLCalc
+        return new AwesomeLLCalc(g); // your implementation of LLCalc (Ex. 2-CC.5)
     }
 
     @SuppressWarnings("unchecked")
