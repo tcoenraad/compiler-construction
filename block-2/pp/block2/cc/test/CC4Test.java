@@ -51,16 +51,17 @@ public class CC4Test {
 
     @Test
     public void testFirst() {
-        assertEquals(set(a, b, c), calc.getFirst().get(l));
-        assertEquals(set(a, c), calc.getFirst().get(r));
-        assertEquals(set(b, epsilon), calc.getFirst().get(r2));
-        assertEquals(set(b), calc.getFirst().get(q));
-        assertEquals(set(b, c), calc.getFirst().get(q2));
-        assertEquals(set(a), calc.getFirst().get(a));
-        assertEquals(set(b), calc.getFirst().get(b));
-        assertEquals(set(c), calc.getFirst().get(c));
-        assertEquals(set(eof), calc.getFirst().get(eof));
-        assertEquals(set(epsilon), calc.getFirst().get(epsilon));
+        Map<Symbol, Set<Term>> first = calc.getFirst();
+        assertEquals(set(a, b, c), first.get(l));
+        assertEquals(set(a, c), first.get(r));
+        assertEquals(set(b, epsilon), first.get(r2));
+        assertEquals(set(b), first.get(q));
+        assertEquals(set(b, c), first.get(q2));
+        assertEquals(set(a), first.get(a));
+        assertEquals(set(b), first.get(b));
+        assertEquals(set(c), first.get(c));
+        assertEquals(set(eof), first.get(eof));
+        assertEquals(set(epsilon), first.get(epsilon));
     }
 
     @Test
@@ -90,7 +91,6 @@ public class CC4Test {
         List<Rule> q2Rules = g.getRules(q2);
         assertEquals(set(b), firstp.get(q2Rules.get(0)));
         assertEquals(set(c), firstp.get(q2Rules.get(1)));
-
     }
 
     @Test

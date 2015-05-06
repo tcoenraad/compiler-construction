@@ -75,7 +75,6 @@ public class CC4Parser implements Parser {
                 break;
             default:
                 throw unparsable(R);
-
         }
         return tree;
     }
