@@ -108,6 +108,12 @@ public class AwesomeLLCalc implements LLCalc {
         firstp = new HashMap<>();
         for (Rule r : grammar.getRules()) {
             Set<Term> firstSymbols = new HashSet<>(first.get(r.getRHS().get(0)));
+            int i = 1;
+            while (i < r.getRHS().size() - 1 && first.get(r.getRHS().get(i)).contains(Symbol.EMPTY)) {
+                firstSymbols.addAll(first.get(r.getRHS().get(i)));
+                i++;
+            }
+
             firstp.put(r, firstSymbols);
             if (firstSymbols.contains(Symbol.EMPTY)) {
                 firstp.get(r).addAll(follow.get(r.getLHS()));
