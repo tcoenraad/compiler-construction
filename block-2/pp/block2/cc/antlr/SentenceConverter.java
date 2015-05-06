@@ -14,8 +14,11 @@ public class SentenceConverter extends SentenceBaseListener implements Parser {
     private AST result;
     private String errorMessage;
 
-    private Stack<AST> stack;
+    /** Factory needed to create terminals of the {@link Sentence}
+     * grammar. See {@link pp.block2.cc.ll.SentenceParser} for
+     * example usage. */
     private SymbolFactory factory;
+    private Stack<AST> stack;
 
     @Override
     public AST parse(Lexer lexer) throws ParseException {
@@ -31,6 +34,10 @@ public class SentenceConverter extends SentenceBaseListener implements Parser {
         return result;
 
     }
+
+    // From here on overwrite the listener methods
+    // Use an appropriate ParseTreeProperty to
+    // store the correspondence from nodes to ASTs
     @Override
     public void enterSentence(SentenceParser.SentenceContext ctx) {
         result = new AST(new NonTerm("Sentence"));

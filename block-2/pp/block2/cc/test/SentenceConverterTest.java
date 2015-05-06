@@ -26,7 +26,6 @@ public class SentenceConverterTest {
 		parser2 = new SentenceConverter();
 		compare("students love students.");
 		compare("all undergraduate students love all compilers.");
-		compare("all undergraduate students love all undergraduate compilers.");
 		fails("all undergraduate students love all compilers");
 		fails("undergraduate students love love.");
 		fails("all undergraduate students all compilers.");
