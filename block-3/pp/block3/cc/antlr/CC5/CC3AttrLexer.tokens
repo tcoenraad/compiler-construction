@@ -1,0 +1,16 @@
+POWER=1
+PLUS=2
+MINUS=3
+EQUAL=4
+LPAR=5
+RPAR=6
+NUM=7
+BOOL=8
+STR=9
+WS=10
+'^'=1
+'+'=2
+'-'=3
+'='=4
+'('=5
+')'=6
