@@ -17,8 +17,7 @@ public class CC3AttrParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		POWER=1, PLUS=2, MINUS=3, EQUAL=4, LPAR=5, RPAR=6, NUM=7, BOOL=8, STR=9, 
-		WS=10;
+		POWER=1, PLUS=2, EQUAL=3, LPAR=4, RPAR=5, NUM=6, BOOL=7, STR=8, WS=9;
 	public static final int
 		RULE_term = 0;
 	public static final String[] ruleNames = {
@@ -26,11 +25,11 @@ public class CC3AttrParser extends Parser {
 	};
 
 	private static final String[] _LITERAL_NAMES = {
-		null, "'^'", "'+'", "'-'", "'='", "'('", "')'"
+		null, "'^'", "'+'", "'='", "'('", "')'"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
-		null, "POWER", "PLUS", "MINUS", "EQUAL", "LPAR", "RPAR", "NUM", "BOOL", 
-		"STR", "WS"
+		null, "POWER", "PLUS", "EQUAL", "LPAR", "RPAR", "NUM", "BOOL", "STR", 
+		"WS"
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
@@ -190,10 +189,8 @@ public class CC3AttrParser extends Parser {
 						((TermContext)_localctx).t1 = term(8);
 						 if (((TermContext)_localctx).t1.type != Type.NUM) {
 						                     ((TermContext)_localctx).type =  Type.ERR;
-						                   } else if (((TermContext)_localctx).t0.type == Type.NUM) {
-						                     ((TermContext)_localctx).type =  Type.NUM;
-						                   } else if (((TermContext)_localctx).t0.type == Type.STR) {
-						                     ((TermContext)_localctx).type =  Type.STR;
+						                   } else if (((TermContext)_localctx).t0.type == Type.NUM || (((TermContext)_localctx).t0.type == Type.STR)) {
+						                     ((TermContext)_localctx).type =  ((TermContext)_localctx).t0.type;
 						                   } else {
 						                     ((TermContext)_localctx).type =  Type.ERR;
 						                   }
@@ -280,17 +277,17 @@ public class CC3AttrParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\f\'\4\2\t\2\3\2\3"+
-		"\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\5\2\21\n\2\3\2\3\2\3\2\3\2"+
-		"\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\7\2\"\n\2\f\2\16\2%\13\2"+
-		"\3\2\2\3\2\3\2\2\2+\2\20\3\2\2\2\4\5\b\2\1\2\5\6\7\7\2\2\6\7\5\2\2\2\7"+
-		"\b\7\b\2\2\b\t\b\2\1\2\t\21\3\2\2\2\n\13\7\t\2\2\13\21\b\2\1\2\f\r\7\n"+
-		"\2\2\r\21\b\2\1\2\16\17\7\13\2\2\17\21\b\2\1\2\20\4\3\2\2\2\20\n\3\2\2"+
-		"\2\20\f\3\2\2\2\20\16\3\2\2\2\21#\3\2\2\2\22\23\f\t\2\2\23\24\7\3\2\2"+
-		"\24\25\5\2\2\n\25\26\b\2\1\2\26\"\3\2\2\2\27\30\f\b\2\2\30\31\7\4\2\2"+
-		"\31\32\5\2\2\t\32\33\b\2\1\2\33\"\3\2\2\2\34\35\f\7\2\2\35\36\7\6\2\2"+
-		"\36\37\5\2\2\b\37 \b\2\1\2 \"\3\2\2\2!\22\3\2\2\2!\27\3\2\2\2!\34\3\2"+
-		"\2\2\"%\3\2\2\2#!\3\2\2\2#$\3\2\2\2$\3\3\2\2\2%#\3\2\2\2\5\20!#";
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\13\'\4\2\t\2\3\2"+
+		"\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\5\2\21\n\2\3\2\3\2\3\2\3"+
+		"\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\7\2\"\n\2\f\2\16\2%\13"+
+		"\2\3\2\2\3\2\3\2\2\2+\2\20\3\2\2\2\4\5\b\2\1\2\5\6\7\6\2\2\6\7\5\2\2\2"+
+		"\7\b\7\7\2\2\b\t\b\2\1\2\t\21\3\2\2\2\n\13\7\b\2\2\13\21\b\2\1\2\f\r\7"+
+		"\t\2\2\r\21\b\2\1\2\16\17\7\n\2\2\17\21\b\2\1\2\20\4\3\2\2\2\20\n\3\2"+
+		"\2\2\20\f\3\2\2\2\20\16\3\2\2\2\21#\3\2\2\2\22\23\f\t\2\2\23\24\7\3\2"+
+		"\2\24\25\5\2\2\n\25\26\b\2\1\2\26\"\3\2\2\2\27\30\f\b\2\2\30\31\7\4\2"+
+		"\2\31\32\5\2\2\t\32\33\b\2\1\2\33\"\3\2\2\2\34\35\f\7\2\2\35\36\7\5\2"+
+		"\2\36\37\5\2\2\b\37 \b\2\1\2 \"\3\2\2\2!\22\3\2\2\2!\27\3\2\2\2!\34\3"+
+		"\2\2\2\"%\3\2\2\2#!\3\2\2\2#$\3\2\2\2$\3\3\2\2\2%#\3\2\2\2\5\20!#";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

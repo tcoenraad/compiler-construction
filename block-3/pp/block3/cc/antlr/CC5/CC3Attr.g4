@@ -6,10 +6,8 @@ term returns [ Type type ]
      : t0=term POWER t1=term
        { if ($t1.type != Type.NUM) {
            $type = Type.ERR;
-         } else if ($t0.type == Type.NUM) {
-           $type = Type.NUM;
-         } else if ($t0.type == Type.STR) {
-           $type = Type.STR;
+         } else if ($t0.type == Type.NUM || ($t0.type == Type.STR)) {
+           $type = $t0.type;
          } else {
            $type = Type.ERR;
          }
