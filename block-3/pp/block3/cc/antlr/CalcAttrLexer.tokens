@@ -1,0 +1,12 @@
+TIMES=1
+PLUS=2
+MINUS=3
+LPAR=4
+RPAR=5
+NUMBER=6
+WS=7
+'*'=1
+'+'=2
+'-'=3
+'('=4
+')'=5
