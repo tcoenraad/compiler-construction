@@ -9,7 +9,9 @@ import CalcVocab;
 }
 
 expr returns [ int val ]
-     : e0=expr TIMES e1=expr
+     : MINUS e=expr
+       { $val = - $e.val; }
+     | e0=expr TIMES e1=expr
        { $val = $e0.val * $e1.val; }
      | e0=expr PLUS e1=expr
        { $val = $e0.val + $e1.val; }
