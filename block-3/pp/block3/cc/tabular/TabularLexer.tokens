@@ -1,0 +1,14 @@
+T__0=1
+T__1=2
+T__2=3
+T__3=4
+T__4=5
+TABLE_OPTIONS=6
+COMMENT=7
+TEXT=8
+WS=9
+'\\begin{tabular}{'=1
+'}'=2
+'\\end{tabular}'=3
+'&'=4
+'\\\\'=5
