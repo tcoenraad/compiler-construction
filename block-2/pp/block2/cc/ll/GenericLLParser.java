@@ -117,14 +117,15 @@ public class GenericLLParser implements Parser {
     private Map<NonTerm, List<Rule>> calcLL1Table() {
         ll1Table = new HashMap<>();
         Map<Rule, Set<Term>> firstp = calc.getFirstp();
-        int numberOfTerms = g.getTerminals().size();
-        for (NonTerm nt : g.getNonterminals()){
+
+        for (NonTerm nonTerm : g.getNonterminals()) {
             List<Rule> rules = new ArrayList<Rule>();
-            for(int i = 0; i < numberOfTerms; i++){
+            for(int i = 0; i < g.getTerminals().size(); i++){
                 rules.add(i, null);
             }
-            ll1Table.put(nt, rules);
+            ll1Table.put(nonTerm, rules);
         }
+
         for (Rule rule : g.getRules()){
             for (Symbol symbol : firstp.get(rule)){
                 if (symbol instanceof Term){
@@ -132,8 +133,7 @@ public class GenericLLParser implements Parser {
                 }
             }
             if (rule.getRHS().contains(Symbol.EOF)) {
-                List<Rule> l = ll1Table.get(rule.getLHS());
-                l.add(numberOfTerms, rule);
+                ll1Table.get(rule.getLHS()).add(rule);
             }
         }
         return ll1Table;
