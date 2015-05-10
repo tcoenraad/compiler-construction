@@ -101,7 +101,7 @@ public class LaTeXTable2HTML extends TabularBaseListener {
                 try {
                     writer = new PrintWriter(args[1]);
                 } catch (FileNotFoundException e) {
-                    System.err.println("Error while writing HTML file");
+                    System.err.println("Error occurred while writing HTML file");
                 }
                 writer.print(latexTable2HTML.getHTML());
                 writer.close();
