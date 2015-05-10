@@ -1,20 +1,20 @@
 package pp.block3.cc.test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
+import pp.block3.cc.symbol.AwesomeSymbolTable;
 import pp.block3.cc.symbol.SymbolTable;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class SymbolTableTest {
 	private SymbolTable table;
 
 	@Before
 	public void initTable() {
-		table = // construct an instance of your implementation
+		table = new AwesomeSymbolTable(); // construct an instance of your implementation
 	}
 
 	@Test
