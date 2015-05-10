@@ -29,8 +29,8 @@ public class DeclUseTest {
         testDeclUse(new ArrayList<>(errors), "(U:aap (D:aap U:aap) U:aap (U:aap))");
     }
 
-    private void testDeclUse(List<String> expected, String language) {
-        ParseTree tree = parseDeclUse(language);
+    private void testDeclUse(List<String> expected, String input) {
+        ParseTree tree = parseDeclUse(input);
         walker.walk(declUse, tree);
         assertEquals(expected, declUse.getErrors());
     }
@@ -42,5 +42,4 @@ public class DeclUseTest {
         DeclUseParser parser = new DeclUseParser(tokens);
         return parser.program();
     }
-
 }
