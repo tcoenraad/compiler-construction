@@ -107,7 +107,7 @@ public class LaTeXTable2HTML extends TabularBaseListener {
                 writer.close();
             }
         } else {
-            errors.stream().forEach(error -> System.out.println(error));
+            errors.stream().forEach(System.err::println);
         }
     }
 }
