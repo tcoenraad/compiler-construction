@@ -1,0 +1,215 @@
+package pp.iloc.model;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import pp.iloc.model.Operand.Type;
+import pp.iloc.parse.FormatException;
+
+/** ILOC program.
+ * @author Arend Rensink
+ */
+public class Program {
+	/** Indexed list of all instructions in the program. */
+	private final List<Instr> instrList;
+
+	/**
+	 * Indexed list of all operations in the program.
+	 * This is the flattened list of instructions.
+	 */
+	private final List<Op> opList;
+
+	/** Mapping from labels defined in the program to corresponding
+	 * index locations.
+	 */
+	private final Map<Label, Integer> labelMap;
+
+	/** Creates a program with an initially empty instruction list. */
+	public Program() {
+		this.instrList = new ArrayList<>();
+		this.opList = new ArrayList<>();
+		this.labelMap = new LinkedHashMap<>();
+	}
+
+	/** Adds an instruction to the instruction list of this program.
+	 * @throws IllegalArgumentException if the instruction has a known label 
+	 */
+	public void addInstr(Instr instr) {
+		if (instr.hasLabel()) {
+			Label label = instr.getLabel();
+			Integer loc = this.labelMap.get(label);
+			if (loc != null) {
+				throw new IllegalArgumentException(String.format(
+						"Label %s already occurred at location %d", label, loc));
+			}
+			this.labelMap.put(label, this.opList.size());
+		}
+		instr.setLine(this.opList.size());
+		this.instrList.add(instr);
+		for (Op op : instr) {
+			this.opList.add(op);
+		}
+	}
+
+	/** Returns the current list of instructions of this program. */
+	public List<Instr> getInstr() {
+		return Collections.unmodifiableList(this.instrList);
+	}
+
+	/** Returns the operation at a given line number. */
+	public Op getOpAt(int line) {
+		return this.opList.get(line);
+	}
+
+	/** Returns the size of the program, in number of operations. */
+	public int size() {
+		return this.opList.size();
+	}
+
+	/**
+	 * Returns the location at which a label (given as a string) is defined, if any.
+	 * @return the location of an instruction with the label, or {@code -1}
+	 * if the label is undefined
+	 */
+	public int getLine(String label) {
+		return getLine(new Label(label));
+	}
+
+	/**
+	 * Returns the location at which a given label is defined, if any.
+	 * @return the location of an instruction with the label, or {@code -1}
+	 * if the label is undefined
+	 */
+	public int getLine(Label label) {
+		Integer result = this.labelMap.get(label);
+		return result == null ? -1 : result;
+	}
+
+	/**
+	 * Checks for internal consistency, in particular whether
+	 * all used labels are defined.
+	 */
+	public void check() throws FormatException {
+		List<String> messages = new ArrayList<>();
+		for (Instr instr : getInstr()) {
+			for (Op op : instr) {
+				messages.addAll(checkOpnds(op.getLine(), op.getOpnds()));
+			}
+		}
+		if (!messages.isEmpty()) {
+			throw new FormatException(messages);
+		}
+	}
+
+	private List<String> checkOpnds(int loc, List<Operand> opnds) {
+		List<String> result = new ArrayList<>();
+		for (Operand opnd : opnds) {
+			if (opnd instanceof Label) {
+				if (getLine((Label) opnd) < 0) {
+					result.add(String.format("Line %d: Undefined label '%s'",
+							loc, opnd));
+				}
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Returns a mapping from registers to line numbers
+	 * in which they appear.
+	 */
+	public Map<String, Set<Integer>> getRegMap() {
+		Map<String, Set<Integer>> result = new LinkedHashMap<>();
+		for (Op op : this.opList) {
+			for (Operand opnd : op.getOpnds()) {
+				if (opnd.getType() == Type.REG) {
+					Set<Integer> ops = result.get(((Reg) opnd).getName());
+					if (ops == null) {
+						result.put(((Reg) opnd).getName(),
+								ops = new LinkedHashSet<>());
+					}
+					ops.add(op.getLine());
+				}
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Returns a mapping from (symbolic) variables to line numbers
+	 * in which they appear.
+	 */
+	public Map<String, Set<Integer>> getSymbMap() {
+		Map<String, Set<Integer>> result = new LinkedHashMap<>();
+		for (Op op : this.opList) {
+			for (Operand opnd : op.getOpnds()) {
+				if (opnd instanceof Num && !((Num) opnd).isLit()) {
+					Set<Integer> ops = result.get(((Num) opnd).getName());
+					if (ops == null) {
+						result.put(((Num) opnd).getName(),
+								ops = new LinkedHashSet<>());
+					}
+					ops.add(op.getLine());
+				}
+			}
+		}
+		return result;
+	}
+
+	/** Returns a line-by-line printout of this program. */
+	@Override
+	public String toString() {
+		StringBuilder result = new StringBuilder();
+		for (Instr instr : getInstr()) {
+			result.append(instr.toString());
+			result.append('\n');
+		}
+		return result.toString();
+	}
+
+	@Override
+	public int hashCode() {
+		return this.instrList.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof Program)) {
+			return false;
+		}
+		Program other = (Program) obj;
+		if (!this.instrList.equals(other.instrList)) {
+			return false;
+		}
+		return true;
+	}
+
+	/** Returns a string consisting of this program in a nice layout.
+	 */
+	public String prettyPrint() {
+		StringBuilder result = new StringBuilder();
+		int labelSize = 0;
+		int sourceSize = 0;
+		int targetSize = 0;
+		for (Instr i : getInstr()) {
+			labelSize = Math.max(labelSize, i.toLabelString().length());
+			if (i instanceof Op) {
+				Op op = (Op) i;
+				sourceSize = Math.max(sourceSize, op.toSourceString().length());
+				targetSize = Math.max(targetSize, op.toTargetString().length());
+			}
+		}
+		for (Instr i : getInstr()) {
+			result.append(i.prettyPrint(labelSize, sourceSize, targetSize));
+		}
+		return result.toString();
+	}
+}
