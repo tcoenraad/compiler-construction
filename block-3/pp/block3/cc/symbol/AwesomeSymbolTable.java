@@ -1,16 +1,15 @@
 package pp.block3.cc.symbol;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
+import java.util.Stack;
 
 public class AwesomeSymbolTable implements SymbolTable {
-    private List<Set<String>> symbolList;
+    private Stack<Set<String>> symbolList;
 
     public AwesomeSymbolTable() {
-        symbolList = new ArrayList<>();
-        symbolList.add(new HashSet<>());
+        symbolList = new Stack<>();
+        symbolList.push(new HashSet<>());
     }
 
     public int getLevel() {
@@ -19,7 +18,7 @@ public class AwesomeSymbolTable implements SymbolTable {
 
     @Override
     public void openScope() {
-        symbolList.add(new HashSet<>());
+        symbolList.push(new HashSet<>());
     }
 
     @Override
@@ -27,12 +26,12 @@ public class AwesomeSymbolTable implements SymbolTable {
         if (getLevel() == 0) {
             throw new RuntimeException("Cannot close outer scope");
         }
-        symbolList.remove(getLevel());
+        symbolList.pop();
     }
 
     @Override
     public boolean add(String id) {
-        return symbolList.get(getLevel()).add(id);
+        return symbolList.peek().add(id);
     }
 
     @Override
