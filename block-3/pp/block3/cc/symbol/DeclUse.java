@@ -25,7 +25,12 @@ public class DeclUse extends DeclUseBaseListener {
 
     @Override
     public void enterDecl(DeclUseParser.DeclContext ctx) {
-        symbolTable.add(ctx.getText().substring(2));
+        String symbol = ctx.getText().substring(2);
+        if (symbolTable.contains(symbol)) {
+            errors.add(String.format("Error on line %s, pos %s", ctx.ID().getSymbol().getLine(), ctx.ID().getSymbol().getCharPositionInLine()));
+        } else {
+            symbolTable.add(symbol);
+        }
     }
 
 

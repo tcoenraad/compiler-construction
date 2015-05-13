@@ -18,10 +18,20 @@ public class DeclUseTest {
     private final ParseTreeWalker walker = new ParseTreeWalker();
 
     @Test
-    public void test() {
+    public void testValidInput() {
         testDeclUse(new ArrayList<>(), "(D:aap (U:aap) U:aap)");
         testDeclUse(new ArrayList<>(), "(D:aap (U:aap (U:aap)) U:aap)");
+    }
 
+    @Test
+    public void testDoubleDeclaration() {
+        List<String> errors = new ArrayList<>();
+        errors.add("Error on line 1, pos 10");
+        testDeclUse(new ArrayList<>(errors), "(D: aap D:aap)");
+    }
+
+    @Test
+    public void testUseBeforeDeclaration() {
         List<String> errors = new ArrayList<>();
         errors.add("Error on line 1, pos 3");
         errors.add("Error on line 1, pos 23");
