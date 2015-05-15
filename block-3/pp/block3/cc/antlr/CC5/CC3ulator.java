@@ -10,16 +10,15 @@ public class CC3ulator extends CC3BaseListener {
     /** Map storing the val attribute for all parse tree nodes. */
     private ParseTreeProperty<Type> types;
 
+    /** Initialises the calculator before using it to walk a tree. */
+    public void init() {
+        types = new ParseTreeProperty<>();
+    }
 
-	/** Initialises the calculator before using it to walk a tree. */
-	public void init() {
-		types = new ParseTreeProperty<>();
-	}
-
-	@Override
-	public void exitPar(ParContext ctx) {
-		set(ctx, val(ctx.term()));
-	}
+    @Override
+    public void exitPar(ParContext ctx) {
+        set(ctx, val(ctx.term()));
+    }
 
     @Override
     public void exitHat(HatContext ctx) {
@@ -33,22 +32,22 @@ public class CC3ulator extends CC3BaseListener {
     }
 
     @Override
-	public void exitPlus(PlusContext ctx) {
+    public void exitPlus(PlusContext ctx) {
         if(val(ctx.term(0)) == val(ctx.term(1))){
             set(ctx, val(ctx.term(0)));
         } else{
             set(ctx, Type.ERR);
         }
-	}
+    }
 
     @Override
-	public void exitEqual(EqualContext ctx) {
+    public void exitEqual(EqualContext ctx) {
         if(val(ctx.term(0)) == val(ctx.term(1))){
             set(ctx, Type.BOOL);
         } else{
             set(ctx, Type.ERR);
         }
-	}
+    }
 
     @Override
     public void exitNumber(NumberContext ctx) {
@@ -64,13 +63,13 @@ public class CC3ulator extends CC3BaseListener {
         set(ctx, Type.STR);
     }
 
-	/** Sets the type attribute of a given node. */
-	private void set(ParseTree node, Type type) {
-		types.put(node, type);
-	}
+    /** Sets the type attribute of a given node. */
+    private void set(ParseTree node, Type type) {
+        types.put(node, type);
+    }
 
-	/** Retrieves the type attribute of a given node. */
-	public Type val(ParseTree node) {
-		return types.get(node);
-	}
+    /** Retrieves the type attribute of a given node. */
+    public Type val(ParseTree node) {
+        return types.get(node);
+    }
 }

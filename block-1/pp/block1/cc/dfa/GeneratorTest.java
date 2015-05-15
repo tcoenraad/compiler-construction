@@ -10,37 +10,35 @@ import org.junit.Test;
 
 /** Test class for Checker implementation. */
 public class GeneratorTest {
-  private Generator myGen = new AwesomeGenerator(); // instantiate your Generator implementation
+    private Generator myGen = new AwesomeGenerator(); // instantiate your Generator implementation
 
-  @Test
-  public void testID6() {
-    dfa = ID6_DFA;
-    yields("");
-    yields("a12345", "a12345");
-    yields("a12345AaBbCc", "a12345", "AaBbCc");
-  }
-
-  @Test
-  public void testLALA() {
-    dfa = DFA_LALA;
-    yields("");
-    yields("LaLaLaLa", "LaLa", "LaLa");
-    yields("LaLaLaLaLaLi", "LaLa", "LaLaLaLi");
-    yields("Laaa Laaa  Laaa   LaLaLi", "Laaa Laaa  ", "Laaa   LaLaLi");
-  }
-
-
-  private void yields(String word, String... tokens) {
-    List<String> result = myGen.scan(dfa, word);
-    if (result == null) {
-      Assert.fail(String.format(
-          "Word '%s' is erroneously rejected by %s", word, dfa));
+    @Test
+    public void testID6() {
+        dfa = ID6_DFA;
+        yields("");
+        yields("a12345", "a12345");
+        yields("a12345AaBbCc", "a12345", "AaBbCc");
     }
-    Assert.assertEquals(tokens.length, result.size());
-    for (int i = 0; i < tokens.length; i++) {
-      Assert.assertEquals(tokens[i], result.get(i));
-    }
-  }
 
-  private State dfa;
+    @Test
+    public void testLALA() {
+        dfa = DFA_LALA;
+        yields("");
+        yields("LaLaLaLa", "LaLa", "LaLa");
+        yields("LaLaLaLaLaLi", "LaLa", "LaLaLaLi");
+        yields("Laaa Laaa  Laaa   LaLaLi", "Laaa Laaa  ", "Laaa   LaLaLi");
+    }
+
+    private void yields(String word, String... tokens) {
+        List<String> result = myGen.scan(dfa, word);
+        if (result == null) {
+            Assert.fail(String.format("Word '%s' is erroneously rejected by %s", word, dfa));
+        }
+        Assert.assertEquals(tokens.length, result.size());
+        for (int i = 0; i < tokens.length; i++) {
+            Assert.assertEquals(tokens[i], result.get(i));
+        }
+    }
+
+    private State dfa;
 }
