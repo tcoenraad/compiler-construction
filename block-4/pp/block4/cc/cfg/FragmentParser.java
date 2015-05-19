@@ -1,4 +1,4 @@
-// Generated from Fragment.g4 by ANTLR 4.4
+// Generated from /Users/twancoenraad/Code/compiler-construction/block-4/pp/block4/cc/cfg/Fragment.g4 by ANTLR 4.5
 package pp.block4.cc.cfg;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class FragmentParser extends Parser {
-	static { RuntimeMetaData.checkVersion("4.4", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.5", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -22,24 +22,59 @@ public class FragmentParser extends Parser {
 		RCURLY=19, LPAR=20, RPAR=21, IN=22, PRINT=23, BOOL=24, INT=25, WHILE=26, 
 		IF=27, ELSE=28, TRUE=29, FALSE=30, BREAK=31, CONTINUE=32, ID=33, NUM=34, 
 		STRING=35, WS=36;
-	public static final String[] tokenNames = {
-		"<INVALID>", "'.'", "';'", "','", "'['", "']'", "'='", "'!'", "'||'", 
-		"'&&'", "'|'", "'&'", "'+'", "'-'", "'<'", "'>'", "'=='", "'!='", "'{'", 
-		"'}'", "'('", "')'", "'in'", "'printf'", "'boolean'", "'int'", "'while'", 
-		"'if'", "'else'", "'true'", "'false'", "'break'", "'continue'", "ID", 
-		"NUM", "STRING", "WS"
-	};
 	public static final int
 		RULE_program = 0, RULE_stat = 1, RULE_target = 2, RULE_expr = 3, RULE_type = 4;
 	public static final String[] ruleNames = {
 		"program", "stat", "target", "expr", "type"
 	};
 
-	@Override
-	public String getGrammarFileName() { return "Fragment.g4"; }
+	private static final String[] _LITERAL_NAMES = {
+		null, "'.'", "';'", "','", "'['", "']'", "'='", "'!'", "'||'", "'&&'", 
+		"'|'", "'&'", "'+'", "'-'", "'<'", "'>'", "'=='", "'!='", "'{'", "'}'", 
+		"'('", "')'", "'in'", "'printf'", "'boolean'", "'int'", "'while'", "'if'", 
+		"'else'", "'true'", "'false'", "'break'", "'continue'"
+	};
+	private static final String[] _SYMBOLIC_NAMES = {
+		null, "DOT", "SEMI", "COMMA", "LSQ", "RSQ", "ASSIGN", "NOT", "OR", "AND", 
+		"BIT_OR", "BIT_AND", "PLUS", "MINUS", "LT", "GT", "EQ", "NE", "LCURLY", 
+		"RCURLY", "LPAR", "RPAR", "IN", "PRINT", "BOOL", "INT", "WHILE", "IF", 
+		"ELSE", "TRUE", "FALSE", "BREAK", "CONTINUE", "ID", "NUM", "STRING", "WS"
+	};
+	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
+
+	/**
+	 * @deprecated Use {@link #VOCABULARY} instead.
+	 */
+	@Deprecated
+	public static final String[] tokenNames;
+	static {
+		tokenNames = new String[_SYMBOLIC_NAMES.length];
+		for (int i = 0; i < tokenNames.length; i++) {
+			tokenNames[i] = VOCABULARY.getLiteralName(i);
+			if (tokenNames[i] == null) {
+				tokenNames[i] = VOCABULARY.getSymbolicName(i);
+			}
+
+			if (tokenNames[i] == null) {
+				tokenNames[i] = "<INVALID>";
+			}
+		}
+	}
 
 	@Override
-	public String[] getTokenNames() { return tokenNames; }
+	@Deprecated
+	public String[] getTokenNames() {
+		return tokenNames;
+	}
+
+	@Override
+	@NotNull
+	public Vocabulary getVocabulary() {
+		return VOCABULARY;
+	}
+
+	@Override
+	public String getGrammarFileName() { return "Fragment.g4"; }
 
 	@Override
 	public String[] getRuleNames() { return ruleNames; }
@@ -55,11 +90,11 @@ public class FragmentParser extends Parser {
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 	public static class ProgramContext extends ParserRuleContext {
-		public StatContext stat(int i) {
-			return getRuleContext(StatContext.class,i);
-		}
 		public List<StatContext> stat() {
 			return getRuleContexts(StatContext.class);
+		}
+		public StatContext stat(int i) {
+			return getRuleContext(StatContext.class,i);
 		}
 		public ProgramContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -88,7 +123,8 @@ public class FragmentParser extends Parser {
 			do {
 				{
 				{
-				setState(10); stat();
+				setState(10); 
+				stat();
 				}
 				}
 				setState(13); 
@@ -120,19 +156,19 @@ public class FragmentParser extends Parser {
 		}
 	}
 	public static class IfStatContext extends StatContext {
-		public TerminalNode ELSE() { return getToken(FragmentParser.ELSE, 0); }
 		public TerminalNode IF() { return getToken(FragmentParser.IF, 0); }
+		public TerminalNode LPAR() { return getToken(FragmentParser.LPAR, 0); }
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
+		}
+		public TerminalNode RPAR() { return getToken(FragmentParser.RPAR, 0); }
+		public List<StatContext> stat() {
+			return getRuleContexts(StatContext.class);
 		}
 		public StatContext stat(int i) {
 			return getRuleContext(StatContext.class,i);
 		}
-		public List<StatContext> stat() {
-			return getRuleContexts(StatContext.class);
-		}
-		public TerminalNode LPAR() { return getToken(FragmentParser.LPAR, 0); }
-		public TerminalNode RPAR() { return getToken(FragmentParser.RPAR, 0); }
+		public TerminalNode ELSE() { return getToken(FragmentParser.ELSE, 0); }
 		public IfStatContext(StatContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -144,13 +180,13 @@ public class FragmentParser extends Parser {
 		}
 	}
 	public static class BlockStatContext extends StatContext {
-		public TerminalNode RCURLY() { return getToken(FragmentParser.RCURLY, 0); }
 		public TerminalNode LCURLY() { return getToken(FragmentParser.LCURLY, 0); }
-		public StatContext stat(int i) {
-			return getRuleContext(StatContext.class,i);
-		}
+		public TerminalNode RCURLY() { return getToken(FragmentParser.RCURLY, 0); }
 		public List<StatContext> stat() {
 			return getRuleContexts(StatContext.class);
+		}
+		public StatContext stat(int i) {
+			return getRuleContext(StatContext.class,i);
 		}
 		public BlockStatContext(StatContext ctx) { copyFrom(ctx); }
 		@Override
@@ -176,15 +212,15 @@ public class FragmentParser extends Parser {
 		}
 	}
 	public static class DeclContext extends StatContext {
+		public TypeContext type() {
+			return getRuleContext(TypeContext.class,0);
+		}
 		public TerminalNode ID() { return getToken(FragmentParser.ID, 0); }
 		public TerminalNode ASSIGN() { return getToken(FragmentParser.ASSIGN, 0); }
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
 		public TerminalNode SEMI() { return getToken(FragmentParser.SEMI, 0); }
-		public TypeContext type() {
-			return getRuleContext(TypeContext.class,0);
-		}
 		public DeclContext(StatContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -196,18 +232,18 @@ public class FragmentParser extends Parser {
 		}
 	}
 	public static class PrintStatContext extends StatContext {
-		public List<TerminalNode> ID() { return getTokens(FragmentParser.ID); }
 		public TerminalNode PRINT() { return getToken(FragmentParser.PRINT, 0); }
+		public TerminalNode LPAR() { return getToken(FragmentParser.LPAR, 0); }
+		public TerminalNode STRING() { return getToken(FragmentParser.STRING, 0); }
+		public TerminalNode RPAR() { return getToken(FragmentParser.RPAR, 0); }
 		public TerminalNode SEMI() { return getToken(FragmentParser.SEMI, 0); }
 		public List<TerminalNode> COMMA() { return getTokens(FragmentParser.COMMA); }
-		public TerminalNode STRING() { return getToken(FragmentParser.STRING, 0); }
-		public TerminalNode ID(int i) {
-			return getToken(FragmentParser.ID, i);
-		}
-		public TerminalNode LPAR() { return getToken(FragmentParser.LPAR, 0); }
-		public TerminalNode RPAR() { return getToken(FragmentParser.RPAR, 0); }
 		public TerminalNode COMMA(int i) {
 			return getToken(FragmentParser.COMMA, i);
+		}
+		public List<TerminalNode> ID() { return getTokens(FragmentParser.ID); }
+		public TerminalNode ID(int i) {
+			return getToken(FragmentParser.ID, i);
 		}
 		public PrintStatContext(StatContext ctx) { copyFrom(ctx); }
 		@Override
@@ -252,15 +288,15 @@ public class FragmentParser extends Parser {
 		}
 	}
 	public static class WhileStatContext extends StatContext {
+		public TerminalNode WHILE() { return getToken(FragmentParser.WHILE, 0); }
+		public TerminalNode LPAR() { return getToken(FragmentParser.LPAR, 0); }
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
+		public TerminalNode RPAR() { return getToken(FragmentParser.RPAR, 0); }
 		public StatContext stat() {
 			return getRuleContext(StatContext.class,0);
 		}
-		public TerminalNode LPAR() { return getToken(FragmentParser.LPAR, 0); }
-		public TerminalNode RPAR() { return getToken(FragmentParser.RPAR, 0); }
-		public TerminalNode WHILE() { return getToken(FragmentParser.WHILE, 0); }
 		public WhileStatContext(StatContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -284,38 +320,54 @@ public class FragmentParser extends Parser {
 				_localctx = new DeclContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(15); type();
-				setState(16); match(ID);
-				setState(17); match(ASSIGN);
-				setState(18); expr(0);
-				setState(19); match(SEMI);
+				setState(15); 
+				type();
+				setState(16); 
+				match(ID);
+				setState(17); 
+				match(ASSIGN);
+				setState(18); 
+				expr(0);
+				setState(19); 
+				match(SEMI);
 				}
 				break;
 			case ID:
 				_localctx = new AssignStatContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(21); target();
-				setState(22); match(ASSIGN);
-				setState(23); expr(0);
-				setState(24); match(SEMI);
+				setState(21); 
+				target();
+				setState(22); 
+				match(ASSIGN);
+				setState(23); 
+				expr(0);
+				setState(24); 
+				match(SEMI);
 				}
 				break;
 			case IF:
 				_localctx = new IfStatContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(26); match(IF);
-				setState(27); match(LPAR);
-				setState(28); expr(0);
-				setState(29); match(RPAR);
-				setState(30); stat();
+				setState(26); 
+				match(IF);
+				setState(27); 
+				match(LPAR);
+				setState(28); 
+				expr(0);
+				setState(29); 
+				match(RPAR);
+				setState(30); 
+				stat();
 				setState(33);
 				switch ( getInterpreter().adaptivePredict(_input,1,_ctx) ) {
 				case 1:
 					{
-					setState(31); match(ELSE);
-					setState(32); stat();
+					setState(31); 
+					match(ELSE);
+					setState(32); 
+					stat();
 					}
 					break;
 				}
@@ -325,73 +377,92 @@ public class FragmentParser extends Parser {
 				_localctx = new WhileStatContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(35); match(WHILE);
-				setState(36); match(LPAR);
-				setState(37); expr(0);
-				setState(38); match(RPAR);
-				setState(39); stat();
+				setState(35); 
+				match(WHILE);
+				setState(36); 
+				match(LPAR);
+				setState(37); 
+				expr(0);
+				setState(38); 
+				match(RPAR);
+				setState(39); 
+				stat();
 				}
 				break;
 			case LCURLY:
 				_localctx = new BlockStatContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(41); match(LCURLY);
+				setState(41); 
+				match(LCURLY);
 				setState(45);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LCURLY) | (1L << PRINT) | (1L << BOOL) | (1L << INT) | (1L << WHILE) | (1L << IF) | (1L << BREAK) | (1L << CONTINUE) | (1L << ID))) != 0)) {
 					{
 					{
-					setState(42); stat();
+					setState(42); 
+					stat();
 					}
 					}
 					setState(47);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
-				setState(48); match(RCURLY);
+				setState(48); 
+				match(RCURLY);
 				}
 				break;
 			case PRINT:
 				_localctx = new PrintStatContext(_localctx);
 				enterOuterAlt(_localctx, 6);
 				{
-				setState(49); match(PRINT);
-				setState(50); match(LPAR);
-				setState(51); match(STRING);
+				setState(49); 
+				match(PRINT);
+				setState(50); 
+				match(LPAR);
+				setState(51); 
+				match(STRING);
 				setState(56);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				while (_la==COMMA) {
 					{
 					{
-					setState(52); match(COMMA);
-					setState(53); match(ID);
+					setState(52); 
+					match(COMMA);
+					setState(53); 
+					match(ID);
 					}
 					}
 					setState(58);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
-				setState(59); match(RPAR);
-				setState(60); match(SEMI);
+				setState(59); 
+				match(RPAR);
+				setState(60); 
+				match(SEMI);
 				}
 				break;
 			case BREAK:
 				_localctx = new BreakStatContext(_localctx);
 				enterOuterAlt(_localctx, 7);
 				{
-				setState(61); match(BREAK);
-				setState(62); match(SEMI);
+				setState(61); 
+				match(BREAK);
+				setState(62); 
+				match(SEMI);
 				}
 				break;
 			case CONTINUE:
 				_localctx = new ContStatContext(_localctx);
 				enterOuterAlt(_localctx, 8);
 				{
-				setState(63); match(CONTINUE);
-				setState(64); match(SEMI);
+				setState(63); 
+				match(CONTINUE);
+				setState(64); 
+				match(SEMI);
 				}
 				break;
 			default:
@@ -434,11 +505,11 @@ public class FragmentParser extends Parser {
 	}
 	public static class ArrayTargetContext extends TargetContext {
 		public TerminalNode ID() { return getToken(FragmentParser.ID, 0); }
+		public TerminalNode LSQ() { return getToken(FragmentParser.LSQ, 0); }
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
 		public TerminalNode RSQ() { return getToken(FragmentParser.RSQ, 0); }
-		public TerminalNode LSQ() { return getToken(FragmentParser.LSQ, 0); }
 		public ArrayTargetContext(TargetContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -460,17 +531,22 @@ public class FragmentParser extends Parser {
 				_localctx = new IdTargetContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(67); match(ID);
+				setState(67); 
+				match(ID);
 				}
 				break;
 			case 2:
 				_localctx = new ArrayTargetContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(68); match(ID);
-				setState(69); match(LSQ);
-				setState(70); expr(0);
-				setState(71); match(RSQ);
+				setState(68); 
+				match(ID);
+				setState(69); 
+				match(LSQ);
+				setState(70); 
+				expr(0);
+				setState(71); 
+				match(RSQ);
 				}
 				break;
 			}
@@ -499,11 +575,11 @@ public class FragmentParser extends Parser {
 	}
 	public static class ArrayExprContext extends ExprContext {
 		public TerminalNode ID() { return getToken(FragmentParser.ID, 0); }
+		public TerminalNode LSQ() { return getToken(FragmentParser.LSQ, 0); }
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
 		public TerminalNode RSQ() { return getToken(FragmentParser.RSQ, 0); }
-		public TerminalNode LSQ() { return getToken(FragmentParser.LSQ, 0); }
 		public ArrayExprContext(ExprContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -515,9 +591,9 @@ public class FragmentParser extends Parser {
 		}
 	}
 	public static class InExprContext extends ExprContext {
+		public TerminalNode IN() { return getToken(FragmentParser.IN, 0); }
 		public TerminalNode LPAR() { return getToken(FragmentParser.LPAR, 0); }
 		public TerminalNode RPAR() { return getToken(FragmentParser.RPAR, 0); }
-		public TerminalNode IN() { return getToken(FragmentParser.IN, 0); }
 		public InExprContext(ExprContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -547,11 +623,11 @@ public class FragmentParser extends Parser {
 		}
 	}
 	public static class FieldExprContext extends ExprContext {
-		public TerminalNode DOT() { return getToken(FragmentParser.DOT, 0); }
-		public TerminalNode ID() { return getToken(FragmentParser.ID, 0); }
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
+		public TerminalNode DOT() { return getToken(FragmentParser.DOT, 0); }
+		public TerminalNode ID() { return getToken(FragmentParser.ID, 0); }
 		public FieldExprContext(ExprContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -563,10 +639,10 @@ public class FragmentParser extends Parser {
 		}
 	}
 	public static class ParExprContext extends ExprContext {
+		public TerminalNode LPAR() { return getToken(FragmentParser.LPAR, 0); }
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
-		public TerminalNode LPAR() { return getToken(FragmentParser.LPAR, 0); }
 		public TerminalNode RPAR() { return getToken(FragmentParser.RPAR, 0); }
 		public ParExprContext(ExprContext ctx) { copyFrom(ctx); }
 		@Override
@@ -670,9 +746,9 @@ public class FragmentParser extends Parser {
 		}
 	}
 	public static class ConstExprContext extends ExprContext {
-		public TerminalNode FALSE() { return getToken(FragmentParser.FALSE, 0); }
 		public TerminalNode NUM() { return getToken(FragmentParser.NUM, 0); }
 		public TerminalNode TRUE() { return getToken(FragmentParser.TRUE, 0); }
+		public TerminalNode FALSE() { return getToken(FragmentParser.FALSE, 0); }
 		public ConstExprContext(ExprContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -738,8 +814,10 @@ public class FragmentParser extends Parser {
 				_ctx = _localctx;
 				_prevctx = _localctx;
 
-				setState(76); match(NOT);
-				setState(77); expr(13);
+				setState(76); 
+				match(NOT);
+				setState(77); 
+				expr(13);
 				}
 				break;
 			case 2:
@@ -747,9 +825,12 @@ public class FragmentParser extends Parser {
 				_localctx = new ParExprContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(78); match(LPAR);
-				setState(79); expr(0);
-				setState(80); match(RPAR);
+				setState(78); 
+				match(LPAR);
+				setState(79); 
+				expr(0);
+				setState(80); 
+				match(RPAR);
 				}
 				break;
 			case 3:
@@ -770,9 +851,12 @@ public class FragmentParser extends Parser {
 				_localctx = new InExprContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(83); match(IN);
-				setState(84); match(LPAR);
-				setState(85); match(RPAR);
+				setState(83); 
+				match(IN);
+				setState(84); 
+				match(LPAR);
+				setState(85); 
+				match(RPAR);
 				}
 				break;
 			case 5:
@@ -780,10 +864,14 @@ public class FragmentParser extends Parser {
 				_localctx = new ArrayExprContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(86); match(ID);
-				setState(87); match(LSQ);
-				setState(88); expr(0);
-				setState(89); match(RSQ);
+				setState(86); 
+				match(ID);
+				setState(87); 
+				match(LSQ);
+				setState(88); 
+				expr(0);
+				setState(89); 
+				match(RSQ);
 				}
 				break;
 			case 6:
@@ -791,7 +879,8 @@ public class FragmentParser extends Parser {
 				_localctx = new IdExprContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(91); match(ID);
+				setState(91); 
+				match(ID);
 				}
 				break;
 			}
@@ -818,7 +907,8 @@ public class FragmentParser extends Parser {
 						_errHandler.recoverInline(this);
 						}
 						consume();
-						setState(96); expr(13);
+						setState(96); 
+						expr(13);
 						}
 						break;
 					case 2:
@@ -827,8 +917,10 @@ public class FragmentParser extends Parser {
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(97);
 						if (!(precpred(_ctx, 11))) throw new FailedPredicateException(this, "precpred(_ctx, 11)");
-						setState(98); match(BIT_AND);
-						setState(99); expr(12);
+						setState(98); 
+						match(BIT_AND);
+						setState(99); 
+						expr(12);
 						}
 						break;
 					case 3:
@@ -837,8 +929,10 @@ public class FragmentParser extends Parser {
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(100);
 						if (!(precpred(_ctx, 10))) throw new FailedPredicateException(this, "precpred(_ctx, 10)");
-						setState(101); match(BIT_OR);
-						setState(102); expr(11);
+						setState(101); 
+						match(BIT_OR);
+						setState(102); 
+						expr(11);
 						}
 						break;
 					case 4:
@@ -847,8 +941,10 @@ public class FragmentParser extends Parser {
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(103);
 						if (!(precpred(_ctx, 9))) throw new FailedPredicateException(this, "precpred(_ctx, 9)");
-						setState(104); match(AND);
-						setState(105); expr(10);
+						setState(104); 
+						match(AND);
+						setState(105); 
+						expr(10);
 						}
 						break;
 					case 5:
@@ -857,8 +953,10 @@ public class FragmentParser extends Parser {
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(106);
 						if (!(precpred(_ctx, 8))) throw new FailedPredicateException(this, "precpred(_ctx, 8)");
-						setState(107); match(OR);
-						setState(108); expr(9);
+						setState(107); 
+						match(OR);
+						setState(108); 
+						expr(9);
 						}
 						break;
 					case 6:
@@ -873,7 +971,8 @@ public class FragmentParser extends Parser {
 						_errHandler.recoverInline(this);
 						}
 						consume();
-						setState(111); expr(8);
+						setState(111); 
+						expr(8);
 						}
 						break;
 					case 7:
@@ -882,8 +981,10 @@ public class FragmentParser extends Parser {
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(112);
 						if (!(precpred(_ctx, 6))) throw new FailedPredicateException(this, "precpred(_ctx, 6)");
-						setState(113); match(DOT);
-						setState(114); match(ID);
+						setState(113); 
+						match(DOT);
+						setState(114); 
+						match(ID);
 						}
 						break;
 					}
@@ -907,8 +1008,8 @@ public class FragmentParser extends Parser {
 	}
 
 	public static class TypeContext extends ParserRuleContext {
-		public TerminalNode BOOL() { return getToken(FragmentParser.BOOL, 0); }
 		public TerminalNode INT() { return getToken(FragmentParser.INT, 0); }
+		public TerminalNode BOOL() { return getToken(FragmentParser.BOOL, 0); }
 		public TypeContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -951,19 +1052,27 @@ public class FragmentParser extends Parser {
 
 	public boolean sempred(RuleContext _localctx, int ruleIndex, int predIndex) {
 		switch (ruleIndex) {
-		case 3: return expr_sempred((ExprContext)_localctx, predIndex);
+		case 3: 
+			return expr_sempred((ExprContext)_localctx, predIndex);
 		}
 		return true;
 	}
 	private boolean expr_sempred(ExprContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 0: return precpred(_ctx, 12);
-		case 1: return precpred(_ctx, 11);
-		case 2: return precpred(_ctx, 10);
-		case 3: return precpred(_ctx, 9);
-		case 4: return precpred(_ctx, 8);
-		case 5: return precpred(_ctx, 7);
-		case 6: return precpred(_ctx, 6);
+		case 0: 
+			return precpred(_ctx, 12);
+		case 1: 
+			return precpred(_ctx, 11);
+		case 2: 
+			return precpred(_ctx, 10);
+		case 3: 
+			return precpred(_ctx, 9);
+		case 4: 
+			return precpred(_ctx, 8);
+		case 5: 
+			return precpred(_ctx, 7);
+		case 6: 
+			return precpred(_ctx, 6);
 		}
 		return true;
 	}
