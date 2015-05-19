@@ -1,0 +1,10 @@
+int x = in();
+int i = 0;
+boolean found = false;
+while (!found && i < a.length) {
+    found = (a[i] == x);
+    if (!found) {
+        i = i + 1;
+    }
+}
+printf("Index: %d%n", i);
