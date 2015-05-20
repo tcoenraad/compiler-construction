@@ -1,0 +1,13 @@
+start:  loadAI r_arp, @z => r_z
+        loadAI r_arp, @n => r_n //Mag maximaal 45 zijn
+        loadI 1 => r_x
+        loadI 1 => r_y
+        loadI 1 => r_1
+while:  cmp_GT r_n, r_1 => r_cmp
+        cbr r_cmp -> body, end
+body:   add r_x, r_y => r_z
+        i2i  r_y => r_x
+        i2i  r_z => r_y
+        sub r_n, r_1 => r_n
+        jumpI -> while
+end:    storeAI r_z => r_arp,@z
