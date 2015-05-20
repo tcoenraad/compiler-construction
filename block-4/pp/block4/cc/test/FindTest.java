@@ -1,19 +1,18 @@
 package pp.block4.cc.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-
 import org.junit.Test;
-
 import pp.iloc.Assembler;
 import pp.iloc.Simulator;
 import pp.iloc.eval.Machine;
 import pp.iloc.model.Program;
 import pp.iloc.parse.FormatException;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 @SuppressWarnings("javadoc")
 public class FindTest {
@@ -22,7 +21,7 @@ public class FindTest {
 
 	@Test(timeout = 1000)
 	public void simulate() {
-		Program p = assemble("pp/block4/cc/iloc/find");
+		Program p = assemble("block-4/pp/block4/cc/iloc/find");
 		if (SHOW) {
 			System.out.println(p.prettyPrint());
 		}
