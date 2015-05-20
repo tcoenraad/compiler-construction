@@ -11,6 +11,10 @@ import pp.iloc.model.Reg;
  * @author Arend Rensink
  */
 public class Machine {
+	/** Size of an integer values (in bytes). */
+	public static final int INT_SIZE = 4;
+	/** Size of an integer values (in bits). */
+	public static final int BYTE_SIZE = 8;
 	/** Mapping from register names to register numbers. */
 	private final Map<String, Integer> registers;
 	/** Mapping from symbolic constants to actual values. */
@@ -28,13 +32,14 @@ public class Machine {
 	}
 
 	/** Reserves a memory segment of given length.
+	 * @param length (in bytes) of the segment to be reserved
 	 * @return the base address of the allocated block
 	 * @see #alloc(String, int)
 	 */
 	public int alloc(int length) {
 		int result = this.memory.size();
 		for (int i = 0; i < length; i++) {
-			this.memory.set(result + i, 0);
+			this.memory.set(result + i, (byte) 0);
 		}
 		return result;
 	}
@@ -52,13 +57,13 @@ public class Machine {
 		return alloc(num.getName(), length);
 	}
 
-	/** Reserves a memory segment of a given length,
+	/** Reserves a memory segment of a given length (in bytes),
 	 * assigns the base address to a symbolic constant,
 	 * and returns the base address.
 	 * The reserved memory is guaranteed to be unshared and
 	 * initialized to 0.
 	 * @param cst the name for the start address of the allocated memory
-	 * @param length the base address of the allocated block
+	 * @param length length (in bytes) of the segment to be reserved
 	 * @return the allocated start address
 	 * @throws IllegalArgumentException if the symbolic name is known
 	 */
@@ -73,7 +78,7 @@ public class Machine {
 	}
 
 	/** Initializes a memory segment of a length sufficient to
-	 * accommodate a given initial value,
+	 * accommodate a given list of initial values,
 	 * assigns the start address to a symbolic name,
 	 * and returns the start address.
 	 * The reserved memory is guaranteed to be unshared.
@@ -90,7 +95,7 @@ public class Machine {
 		int result = this.memory.size();
 		setNum(cst, result);
 		for (int i = 0; i < vals.length; i++) {
-			this.memory.set(result + i, vals[i]);
+			store(vals[i], result + INT_SIZE * i);
 		}
 		return result;
 	}
@@ -157,14 +162,28 @@ public class Machine {
 		return result;
 	}
 
-	/** Returns the value at a given memory location. */
+	/** Returns the integer value starting at a given memory location.
+	 * The value is computed from the four successive bytes starting
+	 * at that location (most significant first).
+	 */
 	public int load(int loc) {
-		return this.memory.get(loc);
+		int result = 0;
+		for (int i = 0; i < INT_SIZE; i++) {
+			result <<= BYTE_SIZE;
+			result += 0xFF & this.memory.get(loc + i);
+		}
+		return result;
 	}
 
-	/** Stores a value at a given memory location. */
+	/** Stores an integer value in memory, starting at a given location.
+	 * The value is stored at the four successive bytes starting
+	 * at that location (most significant first).
+	 */
 	public void store(int val, int loc) {
-		this.memory.set(loc, val);
+		for (int i = INT_SIZE; i > 0; i--) {
+			this.memory.set(loc + i - 1, (byte) val);
+			val >>= BYTE_SIZE;
+		}
 	}
 
 	/** Returns the current program counter value. */
