@@ -1,4 +1,4 @@
-// Generated from ILOC.g4 by ANTLR 4.4
+// Generated from C:/Users/Jip/Documents/compiler-construction/block-4/pp/iloc/parse\ILOC.g4 by ANTLR 4.5
 package pp.iloc.parse;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -17,13 +17,25 @@ public class ILOCBaseListener implements ILOCListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSources(@NotNull ILOCParser.SourcesContext ctx) { }
+	@Override public void enterProgram(@NotNull ILOCParser.ProgramContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSources(@NotNull ILOCParser.SourcesContext ctx) { }
+	@Override public void exitProgram(@NotNull ILOCParser.ProgramContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterSingleInstr(@NotNull ILOCParser.SingleInstrContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSingleInstr(@NotNull ILOCParser.SingleInstrContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -65,37 +77,25 @@ public class ILOCBaseListener implements ILOCListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterOpCode(@NotNull ILOCParser.OpCodeContext ctx) { }
+	@Override public void enterSources(@NotNull ILOCParser.SourcesContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitOpCode(@NotNull ILOCParser.OpCodeContext ctx) { }
+	@Override public void exitSources(@NotNull ILOCParser.SourcesContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterProgram(@NotNull ILOCParser.ProgramContext ctx) { }
+	@Override public void enterTargets(@NotNull ILOCParser.TargetsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitProgram(@NotNull ILOCParser.ProgramContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterSingleInstr(@NotNull ILOCParser.SingleInstrContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitSingleInstr(@NotNull ILOCParser.SingleInstrContext ctx) { }
+	@Override public void exitTargets(@NotNull ILOCParser.TargetsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -113,13 +113,13 @@ public class ILOCBaseListener implements ILOCListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTargets(@NotNull ILOCParser.TargetsContext ctx) { }
+	@Override public void enterOpCode(@NotNull ILOCParser.OpCodeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitTargets(@NotNull ILOCParser.TargetsContext ctx) { }
+	@Override public void exitOpCode(@NotNull ILOCParser.OpCodeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

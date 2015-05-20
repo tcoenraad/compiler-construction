@@ -1,4 +1,4 @@
-// Generated from ILOC.g4 by ANTLR 4.4
+// Generated from C:/Users/Jip/Documents/compiler-construction/block-4/pp/iloc/parse\ILOC.g4 by ANTLR 4.5
 package pp.iloc.parse;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class ILOCParser extends Parser {
-	static { RuntimeMetaData.checkVersion("4.4", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.5", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -19,10 +19,6 @@ public class ILOCParser extends Parser {
 	public static final int
 		T__0=1, MINUS=2, COMMA=3, SEMI=4, LSQ=5, RSQ=6, DARROW=7, ARROW=8, ID=9, 
 		SYMB=10, NUM=11, STR=12, COMMENT=13, WS=14;
-	public static final String[] tokenNames = {
-		"<INVALID>", "':'", "'-'", "','", "';'", "'['", "']'", "'=>'", "'->'", 
-		"ID", "SYMB", "NUM", "STR", "COMMENT", "WS"
-	};
 	public static final int
 		RULE_program = 0, RULE_instr = 1, RULE_op = 2, RULE_sources = 3, RULE_targets = 4, 
 		RULE_label = 5, RULE_opCode = 6, RULE_operand = 7;
@@ -30,11 +26,48 @@ public class ILOCParser extends Parser {
 		"program", "instr", "op", "sources", "targets", "label", "opCode", "operand"
 	};
 
-	@Override
-	public String getGrammarFileName() { return "ILOC.g4"; }
+	private static final String[] _LITERAL_NAMES = {
+		null, "':'", "'-'", "','", "';'", "'['", "']'", "'=>'", "'->'"
+	};
+	private static final String[] _SYMBOLIC_NAMES = {
+		null, null, "MINUS", "COMMA", "SEMI", "LSQ", "RSQ", "DARROW", "ARROW", 
+		"ID", "SYMB", "NUM", "STR", "COMMENT", "WS"
+	};
+	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
+
+	/**
+	 * @deprecated Use {@link #VOCABULARY} instead.
+	 */
+	@Deprecated
+	public static final String[] tokenNames;
+	static {
+		tokenNames = new String[_SYMBOLIC_NAMES.length];
+		for (int i = 0; i < tokenNames.length; i++) {
+			tokenNames[i] = VOCABULARY.getLiteralName(i);
+			if (tokenNames[i] == null) {
+				tokenNames[i] = VOCABULARY.getSymbolicName(i);
+			}
+
+			if (tokenNames[i] == null) {
+				tokenNames[i] = "<INVALID>";
+			}
+		}
+	}
 
 	@Override
-	public String[] getTokenNames() { return tokenNames; }
+	@Deprecated
+	public String[] getTokenNames() {
+		return tokenNames;
+	}
+
+	@Override
+	@NotNull
+	public Vocabulary getVocabulary() {
+		return VOCABULARY;
+	}
+
+	@Override
+	public String getGrammarFileName() { return "ILOC.g4"; }
 
 	@Override
 	public String[] getRuleNames() { return ruleNames; }
@@ -50,11 +83,11 @@ public class ILOCParser extends Parser {
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 	public static class ProgramContext extends ParserRuleContext {
-		public InstrContext instr(int i) {
-			return getRuleContext(InstrContext.class,i);
-		}
 		public List<InstrContext> instr() {
 			return getRuleContexts(InstrContext.class);
+		}
+		public InstrContext instr(int i) {
+			return getRuleContext(InstrContext.class,i);
 		}
 		public ProgramContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -83,7 +116,8 @@ public class ILOCParser extends Parser {
 			do {
 				{
 				{
-				setState(16); instr();
+				setState(16); 
+				instr();
 				}
 				}
 				setState(19); 
@@ -115,17 +149,17 @@ public class ILOCParser extends Parser {
 		}
 	}
 	public static class InstrListContext extends InstrContext {
-		public OpContext op(int i) {
-			return getRuleContext(OpContext.class,i);
-		}
-		public List<OpContext> op() {
-			return getRuleContexts(OpContext.class);
-		}
+		public TerminalNode LSQ() { return getToken(ILOCParser.LSQ, 0); }
 		public TerminalNode RSQ() { return getToken(ILOCParser.RSQ, 0); }
 		public LabelContext label() {
 			return getRuleContext(LabelContext.class,0);
 		}
-		public TerminalNode LSQ() { return getToken(ILOCParser.LSQ, 0); }
+		public List<OpContext> op() {
+			return getRuleContexts(OpContext.class);
+		}
+		public OpContext op(int i) {
+			return getRuleContext(OpContext.class,i);
+		}
 		public InstrListContext(InstrContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -169,12 +203,15 @@ public class ILOCParser extends Parser {
 				switch ( getInterpreter().adaptivePredict(_input,1,_ctx) ) {
 				case 1:
 					{
-					setState(21); label();
-					setState(22); match(T__0);
+					setState(21); 
+					label();
+					setState(22); 
+					match(T__0);
 					}
 					break;
 				}
-				setState(26); op();
+				setState(26); 
+				op();
 				}
 				break;
 			case 2:
@@ -185,26 +222,31 @@ public class ILOCParser extends Parser {
 				_la = _input.LA(1);
 				if (_la==ID) {
 					{
-					setState(27); label();
-					setState(28); match(T__0);
+					setState(27); 
+					label();
+					setState(28); 
+					match(T__0);
 					}
 				}
 
-				setState(32); match(LSQ);
+				setState(32); 
+				match(LSQ);
 				setState(34); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				do {
 					{
 					{
-					setState(33); op();
+					setState(33); 
+					op();
 					}
 					}
 					setState(36); 
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				} while ( _la==ID || _la==COMMENT );
-				setState(38); match(RSQ);
+				setState(38); 
+				match(RSQ);
 				}
 				break;
 			}
@@ -244,19 +286,19 @@ public class ILOCParser extends Parser {
 		}
 	}
 	public static class RealOpContext extends OpContext {
-		public TerminalNode COMMENT() { return getToken(ILOCParser.COMMENT, 0); }
-		public TargetsContext targets() {
-			return getRuleContext(TargetsContext.class,0);
+		public OpCodeContext opCode() {
+			return getRuleContext(OpCodeContext.class,0);
 		}
 		public SourcesContext sources() {
 			return getRuleContext(SourcesContext.class,0);
 		}
-		public TerminalNode SEMI() { return getToken(ILOCParser.SEMI, 0); }
-		public TerminalNode DARROW() { return getToken(ILOCParser.DARROW, 0); }
-		public OpCodeContext opCode() {
-			return getRuleContext(OpCodeContext.class,0);
+		public TargetsContext targets() {
+			return getRuleContext(TargetsContext.class,0);
 		}
+		public TerminalNode SEMI() { return getToken(ILOCParser.SEMI, 0); }
+		public TerminalNode COMMENT() { return getToken(ILOCParser.COMMENT, 0); }
 		public TerminalNode ARROW() { return getToken(ILOCParser.ARROW, 0); }
+		public TerminalNode DARROW() { return getToken(ILOCParser.DARROW, 0); }
 		public RealOpContext(OpContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -279,15 +321,18 @@ public class ILOCParser extends Parser {
 				_localctx = new CommentContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(42); match(COMMENT);
+				setState(42); 
+				match(COMMENT);
 				}
 				break;
 			case ID:
 				_localctx = new RealOpContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(43); opCode();
-				setState(44); sources();
+				setState(43); 
+				opCode();
+				setState(44); 
+				sources();
 				setState(47);
 				_la = _input.LA(1);
 				if (_la==DARROW || _la==ARROW) {
@@ -298,7 +343,8 @@ public class ILOCParser extends Parser {
 					_errHandler.recoverInline(this);
 					}
 					consume();
-					setState(46); targets();
+					setState(46); 
+					targets();
 					}
 				}
 
@@ -306,7 +352,8 @@ public class ILOCParser extends Parser {
 				_la = _input.LA(1);
 				if (_la==SEMI) {
 					{
-					setState(49); match(SEMI);
+					setState(49); 
+					match(SEMI);
 					}
 				}
 
@@ -314,7 +361,8 @@ public class ILOCParser extends Parser {
 				switch ( getInterpreter().adaptivePredict(_input,7,_ctx) ) {
 				case 1:
 					{
-					setState(52); match(COMMENT);
+					setState(52); 
+					match(COMMENT);
 					}
 					break;
 				}
@@ -336,13 +384,13 @@ public class ILOCParser extends Parser {
 	}
 
 	public static class SourcesContext extends ParserRuleContext {
-		public List<TerminalNode> COMMA() { return getTokens(ILOCParser.COMMA); }
 		public List<OperandContext> operand() {
 			return getRuleContexts(OperandContext.class);
 		}
 		public OperandContext operand(int i) {
 			return getRuleContext(OperandContext.class,i);
 		}
+		public List<TerminalNode> COMMA() { return getTokens(ILOCParser.COMMA); }
 		public TerminalNode COMMA(int i) {
 			return getToken(ILOCParser.COMMA, i);
 		}
@@ -371,15 +419,18 @@ public class ILOCParser extends Parser {
 			switch ( getInterpreter().adaptivePredict(_input,10,_ctx) ) {
 			case 1:
 				{
-				setState(57); operand();
+				setState(57); 
+				operand();
 				setState(62);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				while (_la==COMMA) {
 					{
 					{
-					setState(58); match(COMMA);
-					setState(59); operand();
+					setState(58); 
+					match(COMMA);
+					setState(59); 
+					operand();
 					}
 					}
 					setState(64);
@@ -403,13 +454,13 @@ public class ILOCParser extends Parser {
 	}
 
 	public static class TargetsContext extends ParserRuleContext {
-		public List<TerminalNode> COMMA() { return getTokens(ILOCParser.COMMA); }
 		public List<OperandContext> operand() {
 			return getRuleContexts(OperandContext.class);
 		}
 		public OperandContext operand(int i) {
 			return getRuleContext(OperandContext.class,i);
 		}
+		public List<TerminalNode> COMMA() { return getTokens(ILOCParser.COMMA); }
 		public TerminalNode COMMA(int i) {
 			return getToken(ILOCParser.COMMA, i);
 		}
@@ -434,15 +485,18 @@ public class ILOCParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(67); operand();
+			setState(67); 
+			operand();
 			setState(72);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==COMMA) {
 				{
 				{
-				setState(68); match(COMMA);
-				setState(69); operand();
+				setState(68); 
+				match(COMMA);
+				setState(69); 
+				operand();
 				}
 				}
 				setState(74);
@@ -484,7 +538,8 @@ public class ILOCParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(75); match(ID);
+			setState(75); 
+			match(ID);
 			}
 		}
 		catch (RecognitionException re) {
@@ -520,7 +575,8 @@ public class ILOCParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(77); match(ID);
+			setState(77); 
+			match(ID);
 			}
 		}
 		catch (RecognitionException re) {
@@ -536,9 +592,9 @@ public class ILOCParser extends Parser {
 
 	public static class OperandContext extends ParserRuleContext {
 		public TerminalNode ID() { return getToken(ILOCParser.ID, 0); }
-		public TerminalNode STR() { return getToken(ILOCParser.STR, 0); }
 		public TerminalNode NUM() { return getToken(ILOCParser.NUM, 0); }
 		public TerminalNode SYMB() { return getToken(ILOCParser.SYMB, 0); }
+		public TerminalNode STR() { return getToken(ILOCParser.STR, 0); }
 		public OperandContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
