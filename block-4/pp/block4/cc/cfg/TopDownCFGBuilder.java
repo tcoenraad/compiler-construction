@@ -1,24 +1,34 @@
 package pp.block4.cc.cfg;
 
+import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.misc.NotNull;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeProperty;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import pp.block4.cc.ErrorListener;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.Lexer;
-import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.TokenStream;
-import pp.block4.cc.ErrorListener;
-import pp.block4.cc.cfg.FragmentParser.ProgramContext;
-
-/** Template top-down CFG builder. */
+/** Template bottom-up CFG builder. */
 public class TopDownCFGBuilder extends FragmentBaseListener {
-	/** The CFG being built. */
+	private ParseTreeProperty<Node> entries;
+	private ParseTreeProperty<Node> exits;
+
+	/**
+	 * The CFG being built.
+	 */
 	private Graph graph;
 
-	/** Builds the CFG for a program contained in a given file. */
+	public TopDownCFGBuilder() {
+		entries = new ParseTreeProperty<>();
+		exits = new ParseTreeProperty<>();
+	}
+
+	/**
+	 * Builds the CFG for a program contained in a given file.
+	 */
 	public Graph build(File file) {
 		Graph result = null;
 		ErrorListener listener = new ErrorListener();
@@ -31,7 +41,7 @@ public class TopDownCFGBuilder extends FragmentBaseListener {
 			FragmentParser parser = new FragmentParser(tokens);
 			parser.removeErrorListeners();
 			parser.addErrorListener(listener);
-			ProgramContext tree = parser.program();
+			ParseTree tree = parser.program();
 			if (listener.hasErrors()) {
 				System.out.printf("Parse errors in %s:%n", file.getPath());
 				for (String error : listener.getErrors()) {
@@ -46,21 +56,28 @@ public class TopDownCFGBuilder extends FragmentBaseListener {
 		return result;
 	}
 
-	/** Builds the CFG for a program given as an ANTLR parse tree. */
-	public Graph build(ProgramContext tree) {
-		this.graph = new Graph();
-		// Fill in
+	/**
+	 * Builds the CFG for a program given as an ANTLR parse tree.
+	 */
+	public Graph build(ParseTree tree) {
+		graph = new Graph();
+		ParseTreeWalker walker = new ParseTreeWalker();
+		walker.walk(this, tree);
+		return graph;
 	}
 
-	/** Adds a node to he CGF, based on a given parse tree node.
-	 * Gives the CFG node a meaningful ID, consisting of line number and 
+	/**
+	 * Adds a node to he CGF, based on a given parse tree node.
+	 * Gives the CFG node a meaningful ID, consisting of line number and
 	 * a further indicator.
 	 */
 	private Node addNode(ParserRuleContext node, String text) {
-		return this.graph.addNode(node.getStart().getLine() + ": " + text);
+		return graph.addNode(node.getStart().getLine() + ": " + text);
 	}
 
-	/** Main method to build and print the CFG of a simple Java program. */
+	/**
+	 * Main method to build and print the CFG of a simple Java program.
+	 */
 	public static void main(String[] args) {
 		if (args.length == 0) {
 			System.err.println("Usage: [filename]+");
@@ -72,5 +89,102 @@ public class TopDownCFGBuilder extends FragmentBaseListener {
 			System.out.println(filename);
 			System.out.println(builder.build(file));
 		}
+	}
+
+    @Override
+    public void exitAssignStat(@NotNull FragmentParser.AssignStatContext ctx) {
+        entries.get(ctx).addEdge(exits.get(ctx));
+    }
+
+	@Override
+	public void enterBlockStat(@NotNull FragmentParser.BlockStatContext ctx) {
+		Node entry = entries.get(ctx);
+		Node exit = exits.get(ctx);
+
+		Node node = entry;
+		for (FragmentParser.StatContext stat : ctx.stat()) {
+            Node childEntry = addNode(stat, stat.getText());
+            Node childExit = addNode(stat, stat.getText() + "_end");
+            entries.put(stat, childEntry);
+            exits.put(stat, childExit);
+
+			node.addEdge(childEntry);
+            node = childExit;
+		}
+		node.addEdge(exit);
+	}
+
+	@Override
+	public void enterContStat(@NotNull FragmentParser.ContStatContext ctx) {
+		// not implemented
+	}
+
+    @Override
+    public void exitDecl(@NotNull FragmentParser.DeclContext ctx) {
+        entries.get(ctx).addEdge(exits.get(ctx));
+    }
+
+    @Override
+    public void exitPrintStat(@NotNull FragmentParser.PrintStatContext ctx) {
+        entries.get(ctx).addEdge(exits.get(ctx));
+    }
+
+	@Override
+	public void enterProgram(@NotNull FragmentParser.ProgramContext ctx) {
+		Node node = new Node(-1);
+		for (FragmentParser.StatContext stat : ctx.stat()) {
+            Node childEntry = addNode(stat, stat.getText());
+            Node childExit = addNode(stat, stat.getText() + "_end");
+            entries.put(stat, childEntry);
+            exits.put(stat, childExit);
+
+            node.addEdge(childEntry);
+			node = childExit;
+		}
+	}
+
+	@Override
+	public void enterWhileStat(@NotNull FragmentParser.WhileStatContext ctx) {
+        Node entry = entries.get(ctx);
+        Node exit = exits.get(ctx);
+
+        Node childEntry = addNode(ctx.stat(), ctx.stat().getText());
+        Node childExit = addNode(ctx.stat(), ctx.stat().getText() + "_end");
+        entries.put(ctx.stat(), childEntry);
+        exits.put(ctx.stat(), childExit);
+
+        entry.addEdge(childEntry);
+        entry.addEdge(exit);
+        childExit.addEdge(entry);
+    }
+
+	@Override
+	public void enterIfStat(@NotNull FragmentParser.IfStatContext ctx) {
+        Node entry = entries.get(ctx);
+        Node exit = exits.get(ctx);
+
+        Node childIfEntry = addNode(ctx.stat(0), ctx.stat(0).getText());
+        Node childIfExit = addNode(ctx.stat(0), ctx.stat(0).getText() + "_end");
+        entries.put(ctx.stat(0), childIfEntry);
+        exits.put(ctx.stat(0), childIfExit);
+
+        if (ctx.stat(1) == null) {
+			entry.addEdge(childIfEntry);
+            childIfExit.addEdge(exit);
+		} else {
+            Node childElseEntry = addNode(ctx.stat(1), ctx.stat(1).getText());
+            Node childElseExit = addNode(ctx.stat(1), ctx.stat(1).getText() + "_end");
+            entries.put(ctx.stat(1), childElseEntry);
+            exits.put(ctx.stat(1), childElseExit);
+
+            entry.addEdge(childIfEntry);
+            childIfExit.addEdge(exit);
+			childElseExit.addEdge(exit);
+		}
+	}
+
+	@Override
+	public void enterBreakStat(@NotNull FragmentParser.BreakStatContext ctx) {
+		// not implemented
 	}
 }
