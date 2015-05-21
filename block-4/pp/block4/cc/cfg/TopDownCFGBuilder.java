@@ -13,7 +13,7 @@ import java.io.IOException;
 
 /** Template bottom-up CFG builder. */
 public class TopDownCFGBuilder extends FragmentBaseListener {
-	private ParseTreeProperty<Node> entries;
+	private ParseTreeProperty<Node> entrances;
 	private ParseTreeProperty<Node> exits;
 
 	/**
@@ -22,7 +22,7 @@ public class TopDownCFGBuilder extends FragmentBaseListener {
 	private Graph graph;
 
 	public TopDownCFGBuilder() {
-		entries = new ParseTreeProperty<>();
+		entrances = new ParseTreeProperty<>();
 		exits = new ParseTreeProperty<>();
 	}
 
@@ -93,19 +93,19 @@ public class TopDownCFGBuilder extends FragmentBaseListener {
 
     @Override
     public void exitAssignStat(@NotNull FragmentParser.AssignStatContext ctx) {
-        entries.get(ctx).addEdge(exits.get(ctx));
+        entrances.get(ctx).addEdge(exits.get(ctx));
     }
 
 	@Override
 	public void enterBlockStat(@NotNull FragmentParser.BlockStatContext ctx) {
-		Node entry = entries.get(ctx);
+		Node entrance = entrances.get(ctx);
 		Node exit = exits.get(ctx);
 
-		Node node = entry;
+		Node node = entrance;
 		for (FragmentParser.StatContext stat : ctx.stat()) {
             Node childEntry = addNode(stat, stat.getText());
             Node childExit = addNode(stat, stat.getText() + "_end");
-            entries.put(stat, childEntry);
+            entrances.put(stat, childEntry);
             exits.put(stat, childExit);
 
 			node.addEdge(childEntry);
@@ -121,12 +121,12 @@ public class TopDownCFGBuilder extends FragmentBaseListener {
 
     @Override
     public void exitDecl(@NotNull FragmentParser.DeclContext ctx) {
-        entries.get(ctx).addEdge(exits.get(ctx));
+        entrances.get(ctx).addEdge(exits.get(ctx));
     }
 
     @Override
     public void exitPrintStat(@NotNull FragmentParser.PrintStatContext ctx) {
-        entries.get(ctx).addEdge(exits.get(ctx));
+        entrances.get(ctx).addEdge(exits.get(ctx));
     }
 
 	@Override
@@ -135,7 +135,7 @@ public class TopDownCFGBuilder extends FragmentBaseListener {
 		for (FragmentParser.StatContext stat : ctx.stat()) {
             Node childEntry = addNode(stat, stat.getText());
             Node childExit = addNode(stat, stat.getText() + "_end");
-            entries.put(stat, childEntry);
+            entrances.put(stat, childEntry);
             exits.put(stat, childExit);
 
             node.addEdge(childEntry);
@@ -145,39 +145,39 @@ public class TopDownCFGBuilder extends FragmentBaseListener {
 
 	@Override
 	public void enterWhileStat(@NotNull FragmentParser.WhileStatContext ctx) {
-        Node entry = entries.get(ctx);
+        Node entrance = entrances.get(ctx);
         Node exit = exits.get(ctx);
 
         Node childEntry = addNode(ctx.stat(), ctx.stat().getText());
         Node childExit = addNode(ctx.stat(), ctx.stat().getText() + "_end");
-        entries.put(ctx.stat(), childEntry);
+        entrances.put(ctx.stat(), childEntry);
         exits.put(ctx.stat(), childExit);
 
-        entry.addEdge(childEntry);
-        entry.addEdge(exit);
-        childExit.addEdge(entry);
+        entrance.addEdge(childEntry);
+        entrance.addEdge(exit);
+        childExit.addEdge(entrance);
     }
 
 	@Override
 	public void enterIfStat(@NotNull FragmentParser.IfStatContext ctx) {
-        Node entry = entries.get(ctx);
+        Node entrance = entrances.get(ctx);
         Node exit = exits.get(ctx);
 
         Node childIfEntry = addNode(ctx.stat(0), ctx.stat(0).getText());
         Node childIfExit = addNode(ctx.stat(0), ctx.stat(0).getText() + "_end");
-        entries.put(ctx.stat(0), childIfEntry);
+        entrances.put(ctx.stat(0), childIfEntry);
         exits.put(ctx.stat(0), childIfExit);
 
         if (ctx.stat(1) == null) {
-			entry.addEdge(childIfEntry);
+			entrance.addEdge(childIfEntry);
             childIfExit.addEdge(exit);
 		} else {
             Node childElseEntry = addNode(ctx.stat(1), ctx.stat(1).getText());
             Node childElseExit = addNode(ctx.stat(1), ctx.stat(1).getText() + "_end");
-            entries.put(ctx.stat(1), childElseEntry);
+            entrances.put(ctx.stat(1), childElseEntry);
             exits.put(ctx.stat(1), childElseExit);
 
-            entry.addEdge(childIfEntry);
+            entrance.addEdge(childIfEntry);
             childIfExit.addEdge(exit);
 			childElseExit.addEdge(exit);
 		}
