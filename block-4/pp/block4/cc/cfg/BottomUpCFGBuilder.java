@@ -13,7 +13,7 @@ import java.io.IOException;
 
 /** Template bottom-up CFG builder. */
 public class BottomUpCFGBuilder extends FragmentBaseListener {
-    private ParseTreeProperty<Node> entries;
+    private ParseTreeProperty<Node> entrances;
     private ParseTreeProperty<Node> exits;
 
     /**
@@ -22,7 +22,7 @@ public class BottomUpCFGBuilder extends FragmentBaseListener {
     private Graph graph;
 
     public BottomUpCFGBuilder() {
-        entries = new ParseTreeProperty<>();
+        entrances = new ParseTreeProperty<>();
         exits = new ParseTreeProperty<>();
     }
 
@@ -94,21 +94,21 @@ public class BottomUpCFGBuilder extends FragmentBaseListener {
     @Override
     public void exitAssignStat(@NotNull FragmentParser.AssignStatContext ctx) {
         Node node = addNode(ctx, ctx.getText());
-        entries.put(ctx, node);
+        entrances.put(ctx, node);
         exits.put(ctx, node);
     }
 
     @Override
     public void exitBlockStat(@NotNull FragmentParser.BlockStatContext ctx) {
-        Node enter = addNode(ctx, ctx.getText());
+        Node entrance = addNode(ctx, ctx.getText());
         Node exit = addNode(ctx, ctx.getText() + "_end");
 
-        entries.put(ctx, enter);
+        entrances.put(ctx, entrance);
         exits.put(ctx, exit);
 
-        Node node = enter;
+        Node node = entrance;
         for (FragmentParser.StatContext stat : ctx.stat()) {
-            node.addEdge(entries.get(stat));
+            node.addEdge(entrances.get(stat));
             node = exits.get(stat);
         }
         node.addEdge(exit);
@@ -122,14 +122,14 @@ public class BottomUpCFGBuilder extends FragmentBaseListener {
     @Override
     public void exitDecl(@NotNull FragmentParser.DeclContext ctx) {
         Node node = addNode(ctx, ctx.getText());
-        entries.put(ctx, node);
+        entrances.put(ctx, node);
         exits.put(ctx, node);
     }
 
     @Override
     public void exitPrintStat(@NotNull FragmentParser.PrintStatContext ctx) {
         Node node = addNode(ctx, ctx.getText());
-        entries.put(ctx, node);
+        entrances.put(ctx, node);
         exits.put(ctx, node);
     }
 
@@ -144,29 +144,29 @@ public class BottomUpCFGBuilder extends FragmentBaseListener {
 
     @Override
     public void exitWhileStat(@NotNull FragmentParser.WhileStatContext ctx) {
-        Node enter = addNode(ctx, ctx.getText());
+        Node entrance = addNode(ctx, ctx.getText());
         Node exit = addNode(ctx, ctx.getText() + "_end");
-        entries.put(ctx, enter);
+        entrances.put(ctx, entrance);
         exits.put(ctx, exit);
 
-        enter.addEdge(entries.get(ctx.stat()));
-        enter.addEdge(exit);
-        exits.get(ctx.stat()).addEdge(enter);
+        entrance.addEdge(entrances.get(ctx.stat()));
+        entrance.addEdge(exit);
+        exits.get(ctx.stat()).addEdge(entrance);
 
     }
 
     @Override
     public void exitIfStat(@NotNull FragmentParser.IfStatContext ctx) {
-        Node enter = addNode(ctx, ctx.getText());
-        entries.put(ctx, enter);
+        Node entrance = addNode(ctx, ctx.getText());
+        entrances.put(ctx, entrance);
 
         Node exit = addNode(ctx, ctx.getText() + "_end");
         if (ctx.stat(1) == null) {
-            enter.addEdge(entries.get(ctx.stat(0)));
+            entrance.addEdge(entrances.get(ctx.stat(0)));
             exits.get(ctx.stat(0)).addEdge(exit);
         } else {
-            enter.addEdge(entries.get(ctx.stat(0)));
-            exits.get(ctx.stat(0)).addEdge(entries.get(ctx.stat(1)));
+            entrance.addEdge(entrances.get(ctx.stat(0)));
+            exits.get(ctx.stat(0)).addEdge(entrances.get(ctx.stat(1)));
             exits.get(ctx.stat(1)).addEdge(exit);
         }
 
