@@ -1,4 +1,4 @@
-while:  loadAI r_arp, @n => r_a //Dit mag max 45 zijn
+while:  loadAI r_arp, @n => r_a // can be 45 at most, otherwise there will be an integer overflow
         loadAI r_arp, @z => r_c
         loadI 1 => r_b
         cmp_GT r_a, r_b => r_cmp
@@ -7,15 +7,14 @@ body:   loadAI r_arp, @x => r_a
         loadAI r_arp, @y => r_b
         loadAI r_arp, @z => r_c
         add r_a, r_b => r_c
-        i2i  r_b => r_a
-        storeAI r_a => r_arp,@x
-        i2i  r_c => r_b
-        storeAI r_c => r_arp,@z
-        storeAI r_b => r_arp,@y
+        i2i r_b => r_a
+        storeAI r_a => r_arp, @x
+        i2i r_c => r_b
+        storeAI r_c => r_arp, @z
+        storeAI r_b => r_arp, @y
         loadAI r_arp, @n => r_a
         loadI 1 => r_b
         sub r_a, r_b => r_a
-        storeAI r_a => r_arp,@n
+        storeAI r_a => r_arp, @n
         jumpI -> while
-end:    storeAI r_c => r_arp,@z
-
+end:    storeAI r_c => r_arp, @z
