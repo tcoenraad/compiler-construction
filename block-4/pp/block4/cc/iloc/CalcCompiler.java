@@ -12,9 +12,10 @@ import pp.iloc.model.*;
 public class CalcCompiler extends CalcBaseListener {
 	/** Program under construction. */
 	private Program prog;
+
+    // Attribute maps and other fields
 	private ParseTreeProperty<Reg> registers;
     private int numberOfRegisters;
-	// Attribute maps and other fields
 
 	/** Compiles a given expression string into an ILOC program. */
 	public Program compile(String text) {
@@ -47,9 +48,8 @@ public class CalcCompiler extends CalcBaseListener {
         numberOfRegisters = 0;
 
         addNewRegister(tree);
-        emit(OpCode.loadI, new Num(0), registers.get(tree));
         new ParseTreeWalker().walk(this, tree);
-        emit(OpCode.out, new Str(""), new Reg("r_" + (numberOfRegisters-1)));
+        emit(OpCode.out, new Str(""), new Reg("r_" + (numberOfRegisters - 1)));
         return prog;
 	}
 
@@ -60,8 +60,8 @@ public class CalcCompiler extends CalcBaseListener {
     }
 
     /** Adds a new register to the list of registers. */
-    private void addNewRegister(ParseTree node){
-        registers.put(node, new Reg("r_" + numberOfRegisters));
+    private void addNewRegister(ParseTree tree){
+        registers.put(tree, new Reg("r_" + numberOfRegisters));
         numberOfRegisters++;
     }
 
@@ -73,9 +73,10 @@ public class CalcCompiler extends CalcBaseListener {
 
     @Override
     public void exitMinus(@NotNull CalcParser.MinusContext ctx) {
-        Reg expr = registers.get(ctx.expr());
         addNewRegister(ctx);
-        emit(OpCode.sub, new Reg("r_0"), expr, registers.get(ctx));
+
+        Reg expr = registers.get(ctx.expr());
+        emit(OpCode.rsubI, new Num(0), expr, registers.get(ctx));
     }
 
     @Override
@@ -86,17 +87,19 @@ public class CalcCompiler extends CalcBaseListener {
 
     @Override
     public void exitTimes(@NotNull CalcParser.TimesContext ctx) {
+        addNewRegister(ctx);
+
         Reg expr0 = registers.get(ctx.expr(0));
         Reg expr1 = registers.get(ctx.expr(1));
-        addNewRegister(ctx);
         emit(OpCode.mult, expr0, expr1, registers.get(ctx));
     }
 
     @Override
     public void exitPlus(@NotNull CalcParser.PlusContext ctx) {
+        addNewRegister(ctx);
+
         Reg expr0 = registers.get(ctx.expr(0));
         Reg expr1 = registers.get(ctx.expr(1));
-        addNewRegister(ctx);
         emit(OpCode.add, expr0, expr1, registers.get(ctx));
     }
 
