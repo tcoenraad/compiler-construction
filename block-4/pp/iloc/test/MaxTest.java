@@ -32,13 +32,15 @@ public class MaxTest {
 
     @Test(timeout = 1000)
     public void testSimulator() {
-        Program p = parse("max");
+        Program p = MaxTest.parse("max");
         Machine c = new Machine();
-        int[] a ={6, 5, 9, 3};
+        int[] a = {1, 4, 3, 2, 1};
         c.setNum("alength", a.length);
         c.init("a", a);
         c.setReg("r_arp", 0);
+
         new Simulator(p, c).run();
+
         if (SHOW) {
             System.out.println(c);
         }
@@ -48,7 +50,7 @@ public class MaxTest {
         return new HashSet<>(Arrays.asList(vals));
     }
 
-    Program parse(String filename) {
+    public static Program parse(String filename) {
         File file = new File(filename + ".iloc");
         if (!file.exists()) {
             file = new File(BASE_DIR + filename + ".iloc");
