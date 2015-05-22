@@ -1,0 +1,12 @@
+LSQ=1
+RSQ=2
+COLON=3
+SEMI=4
+ROOM=5
+FLOOR=6
+ID=7
+WS=8
+'['=1
+']'=2
+':'=3
+';'=4
