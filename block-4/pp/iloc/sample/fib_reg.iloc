@@ -1,7 +1,7 @@
 start:  loadAI r_arp, @n => r_n // can be 45 at most, otherwise there will be an integer overflow
         loadI 1 => r_x
         loadI 1 => r_y
-        loadAI r_arp, @z => r_z
+        loadI 1 => r_z
         loadI 1 => r_1
 while:  cmp_GT r_n, r_1 => r_cmp
         cbr r_cmp -> body, end
