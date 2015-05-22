@@ -15,6 +15,7 @@ import pp.block5.cc.SimplePascalCompiler;
 import pp.iloc.Simulator;
 import pp.iloc.model.Program;
 
+@SuppressWarnings("javadoc")
 public class SimpleGeneratorTest {
 	private final static String BASE_DIR = "pp/block5/cc/sample";
 	private final static String EXT = ".pascal";

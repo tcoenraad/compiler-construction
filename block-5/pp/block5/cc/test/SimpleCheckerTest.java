@@ -14,6 +14,7 @@ import pp.block5.cc.SimplePascalCompiler;
 import pp.block5.cc.simple.Result;
 import pp.block5.cc.simple.Type;
 
+@SuppressWarnings("javadoc")
 public class SimpleCheckerTest {
 	private final static String BASE_DIR = "pp/block5/cc/sample";
 	private final static String EXT = ".pascal";

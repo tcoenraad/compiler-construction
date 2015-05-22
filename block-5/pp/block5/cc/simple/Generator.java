@@ -44,6 +44,7 @@ public class Generator extends SimplePascalBaseVisitor<Op> {
 		return this.prog;
 	}
 
+	// Override the visitor methods
 	/** Constructs an operation from the parameters 
 	 * and adds it to the program under construction. */
 	private Op emit(Label label, OpCode opCode, Operand... args) {
