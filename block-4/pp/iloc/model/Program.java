@@ -40,20 +40,26 @@ public class Program {
 	 * @throws IllegalArgumentException if the instruction has a known label 
 	 */
 	public void addInstr(Instr instr) {
-		if (instr.hasLabel()) {
-			Label label = instr.getLabel();
-			Integer loc = this.labelMap.get(label);
-			if (loc != null) {
-				throw new IllegalArgumentException(String.format(
-						"Label %s already occurred at location %d", label, loc));
-			}
-			this.labelMap.put(label, this.opList.size());
-		}
+		instr.setProgram(this);
 		instr.setLine(this.opList.size());
+		if (instr.hasLabel()) {
+			registerLabel(instr);
+		}
 		this.instrList.add(instr);
 		for (Op op : instr) {
 			this.opList.add(op);
 		}
+	}
+
+	/** Registers the label of a given instruction. */
+	void registerLabel(Instr instr) {
+		Label label = instr.getLabel();
+		Integer loc = this.labelMap.get(label);
+		if (loc != null) {
+			throw new IllegalArgumentException(String.format(
+					"Label %s already occurred at location %d", label, loc));
+		}
+		this.labelMap.put(label, instr.getLine());
 	}
 
 	/** Returns the current list of instructions of this program. */
@@ -201,7 +207,7 @@ public class Program {
 		int targetSize = 0;
 		for (Instr i : getInstr()) {
 			labelSize = Math.max(labelSize, i.toLabelString().length());
-			if (i instanceof Op) {
+			if (i instanceof Op && ((Op) i).getOpCode() != OpCode.out) {
 				Op op = (Op) i;
 				sourceSize = Math.max(sourceSize, op.toSourceString().length());
 				targetSize = Math.max(targetSize, op.toTargetString().length());

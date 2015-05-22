@@ -18,6 +18,7 @@ import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.antlr.v4.runtime.tree.TerminalNode;
 
 import pp.iloc.model.Instr;
 import pp.iloc.model.Label;
@@ -176,10 +177,10 @@ public class Assembler {
 			if (code == null) {
 				this.errors.visitError(
 						opCodeTree.getStart(),
-						String.format("Unrecognized opcode '%s'",
-								opCodeTree.getText()));
+						"Unrecognized opcode '%s'", opCodeTree.getText());
 				return;
 			}
+			// collect operands
 			List<Operand> opnds = new ArrayList<>();
 			try {
 				List<Operand> sources = getSources(ctx.sources());
@@ -191,6 +192,16 @@ public class Assembler {
 			} catch (FormatException e) {
 				this.errors.visitError(opCodeTree.getStart(), e.getMessage());
 				return;
+			}
+			// check for correct arrow symbol
+			if (!code.getTargetSig().isEmpty()) {
+				String expected = code.getClaz().getArrow();
+				TerminalNode arrowToken = ctx.DARROW() == null ? ctx.ARROW() : ctx.DARROW();
+				String actual = arrowToken.getText();
+				if (!expected.equals(actual)) {
+					this.errors.visitError(arrowToken.getSymbol(),
+							"Expected '%s' but found '%s'", expected, actual);
+				}
 			}
 			Op result = new Op(code, opnds);
 			if (ctx.COMMENT() != null) {
@@ -270,6 +281,8 @@ public class Assembler {
 				result = new Num(Integer.parseInt(ctx.NUM().getText()));
 			} else if (ctx.SYMB() != null) {
 				result = new Num(ctx.SYMB().getText());
+			} else if (ctx.LAB() != null) {
+				result = new Num(new Label(ctx.LAB().getText().substring(1)));
 			} else {
 				result = new Label(ctx.ID().getText());
 			}
@@ -345,9 +358,9 @@ public class Assembler {
 		private boolean addLabel(Token token, Label label) {
 			Token oldToken = this.labelMap.put(label, token);
 			if (oldToken != null) {
-				this.errors.visitError(token, String.format(
+				this.errors.visitError(token,
 						"Label '%s' already defined at line %d", label,
-						oldToken.getLine()));
+						oldToken.getLine());
 			}
 			return oldToken == null;
 		}

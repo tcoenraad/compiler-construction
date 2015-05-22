@@ -8,4 +8,3 @@ mult r_a,r_b => r_a // r_a <- (a * 2) * b * c
 mult r_a,r_c => r_a // r_a <- (a * 2 * b) * c
 mult r_a,r_d => r_a // r_a <- (a * 2 * b * c) * d
 storeAI r_a => r_arp,@a // write r_a back to 'a'
-

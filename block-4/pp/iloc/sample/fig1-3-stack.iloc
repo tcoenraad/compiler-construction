@@ -1,0 +1,17 @@
+loadAI r_arp,@a => r_1 // r_1 <- 'a'
+loadI 2 => r_2 // r_2 <- 2
+mult r_1,r_2 => r_1 // r_1 <- a * 2
+push r_1 // stack: [a * 2]
+loadAI r_arp,@b => r_1 // r_1 <- 'b'
+pop => r_2 // r_2 <- a*2, stack: []
+mult r_1, r_2 => r_1 // r_1 <- a * 2 * b
+push r_1 // stack: [a * 2 * b]
+loadAI r_arp,@c => r_1 // r_1 <- 'c'
+loadAI r_arp,@d => r_2 // r_2 <- 'd'
+mult r_1, r_2 => r_1 // r_1 <- c * d
+push r_1 // stack: [c*d, a*2*b]
+pop => r_2 // r_2 <- c * d
+pop => r_1 // r_1 <- a * 2 * b
+mult r_1, r_2 => r_1 // r_1 <- (a * 2 * b) * (c * d)
+storeAI r_1 => r_arp,@a // write r_1 back to 'a'
+

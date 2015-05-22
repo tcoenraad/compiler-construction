@@ -20,7 +20,8 @@ public class FindTest {
 	private Assembler assembler = Assembler.instance();
 	private final static boolean SHOW = true;
 
-	@Test(timeout = 1000)
+	@Test
+	//(timeout = 1000)
 	public void simulate() {
 		Program p = assemble("pp/block4/cc/iloc/find");
 		if (SHOW) {
@@ -37,7 +38,7 @@ public class FindTest {
 		Machine vm = sim.getVM();
 		vm.clear();
 		vm.setNum("alength", 3);
-		vm.setReg("r_arp", vm.init("a", 5, 2, 15));
+		vm.init("a", 5, 2, 15);
 		sim.setIn(new ByteArrayInputStream(("" + input).getBytes()));
 		sim.run();
 		if (SHOW) {

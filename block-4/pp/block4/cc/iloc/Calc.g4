@@ -2,6 +2,12 @@ grammar Calc;
 
 @header{package pp.block4.cc.iloc;}
 
+/** Complete expression. */
+complete
+	: expr EOF
+	;
+
+/** Recursively defined expression. */
 expr : expr TIMES expr # times
      | MINUS expr      # minus
      | expr PLUS expr  # plus

@@ -22,12 +22,12 @@ public class ErrorListener extends BaseErrorListener {
 	}
 
 	/** Adds an error message during the tree visit stage. */
-	public void visitError(Token token, String msg) {
+	public void visitError(Token token, String msg, Object... args) {
 		int line = token.getLine();
 		int charPositionInLine = token.getCharPositionInLine();
-		this.errors.add(String.format("Line %d:%d - %s", line,
-				charPositionInLine,
-				msg));
+		msg = String.format(msg, args);
+		msg = String.format("Line %d:%d - %s", line, charPositionInLine, msg);
+		this.errors.add(msg);
 	}
 
 	/** Indicates if the listener has collected any errors. */
