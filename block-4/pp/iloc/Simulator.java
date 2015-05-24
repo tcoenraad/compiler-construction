@@ -1,16 +1,12 @@
 package pp.iloc;
 
+import pp.iloc.eval.Machine;
+import pp.iloc.model.*;
+
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
-
-import pp.iloc.eval.Machine;
-import pp.iloc.model.Num;
-import pp.iloc.model.Op;
-import pp.iloc.model.OpClaz;
-import pp.iloc.model.OpCode;
-import pp.iloc.model.Program;
 
 /**
  * ILOC program simulator
@@ -104,7 +100,7 @@ public class Simulator {
 			c.setReg(2, c.reg(0) - c.num(1));
 			break;
 		case rsubI:
-			c.setReg(2, c.num(1) - c.reg(0));
+			c.setReg(2, c.num(0) - c.reg(1));
 			break;
 		case multI:
 			c.setReg(2, c.reg(0) * c.num(1));
@@ -113,7 +109,7 @@ public class Simulator {
 			c.setReg(2, c.reg(0) / c.num(1));
 			break;
 		case rdivI:
-			c.setReg(2, c.num(1) / c.reg(0));
+			c.setReg(2, c.num(0) / c.reg(1));
 			break;
 		case lshift:
 			c.setReg(2, c.num(0) << c.reg(1));
