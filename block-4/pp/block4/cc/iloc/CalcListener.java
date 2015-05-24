@@ -1,4 +1,4 @@
-// Generated from C:/Users/Jip/Documents/compiler-construction/block-4/pp/block4/cc/iloc\Calc.g4 by ANTLR 4.5
+// Generated from /Users/twancoenraad/Code/compiler-construction/block-4/pp/block4/cc/iloc/Calc.g4 by ANTLR 4.5
 package pp.block4.cc.iloc;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
@@ -8,6 +8,16 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  * {@link CalcParser}.
  */
 public interface CalcListener extends ParseTreeListener {
+	/**
+	 * Enter a parse tree produced by {@link CalcParser#complete}.
+	 * @param ctx the parse tree
+	 */
+	void enterComplete(@NotNull CalcParser.CompleteContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CalcParser#complete}.
+	 * @param ctx the parse tree
+	 */
+	void exitComplete(@NotNull CalcParser.CompleteContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code par}
 	 * labeled alternative in {@link CalcParser#expr}.

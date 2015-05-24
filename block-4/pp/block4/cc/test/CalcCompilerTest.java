@@ -11,6 +11,7 @@ import pp.block4.cc.iloc.CalcCompiler;
 import pp.iloc.Simulator;
 import pp.iloc.model.Program;
 
+@SuppressWarnings("javadoc")
 public class CalcCompilerTest {
 	private final CalcCompiler compiler = new CalcCompiler();
 	@Test

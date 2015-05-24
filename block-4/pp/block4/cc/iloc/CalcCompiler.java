@@ -9,6 +9,7 @@ import pp.block4.cc.ErrorListener;
 import pp.iloc.Simulator;
 import pp.iloc.model.*;
 
+/** Compiler from Calc.g4 to ILOC. */
 public class CalcCompiler extends CalcBaseListener {
 	/** Program under construction. */
 	private Program prog;
@@ -29,7 +30,7 @@ public class CalcCompiler extends CalcBaseListener {
 		CalcParser parser = new CalcParser(tokens);
 		parser.removeErrorListeners();
 		parser.addErrorListener(listener);
-		ParseTree tree = parser.expr();
+		ParseTree tree = parser.complete();
 		if (listener.hasErrors()) {
 			System.out.printf("Parse errors in %s:%n", text);
 			for (String error : listener.getErrors()) {
@@ -103,17 +104,18 @@ public class CalcCompiler extends CalcBaseListener {
         emit(OpCode.add, expr0, expr1, registers.get(ctx));
     }
 
-    public static void main(String[] args) {
-        if (args.length == 0) {
-            System.err.println("Usage: [expr]+");
-            return;
-        }
-        CalcCompiler compiler = new CalcCompiler();
-        for (String expr : args) {
-            System.out.println("Processing " + expr);
-            Program prog = compiler.compile(expr);
-            new Simulator(prog).run();
-            System.out.println(prog.prettyPrint());
-        }
-    }
+	/** Calls the compiler, and simulates and prints the compiled program. */
+	public static void main(String[] args) {
+		if (args.length == 0) {
+			System.err.println("Usage: [expr]+");
+			return;
+		}
+		CalcCompiler compiler = new CalcCompiler();
+		for (String expr : args) {
+			System.out.println("Processing " + expr);
+			Program prog = compiler.compile(expr);
+			new Simulator(prog).run();
+			System.out.println(prog.prettyPrint());
+		}
+	}
 }

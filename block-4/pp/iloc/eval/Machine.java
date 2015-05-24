@@ -15,20 +15,47 @@ public class Machine {
 	public static final int INT_SIZE = 4;
 	/** Size of an integer values (in bits). */
 	public static final int BYTE_SIZE = 8;
+
+	/** Name of the allocation pointer register.
+	 * This is initialised to start at address 0.
+	 */
+	public static final String ARP = "r_arp";
+	/** The allocation pointer register (see {@link #ARP}). */
+	public static final Reg ARP_REG = new Reg(ARP);
+	/** Name of the stack pointer register.
+	 * This is initialised to start at the top of memory. 
+	 */
+	public static final String SP = "sp";
+	/** The stack pointer register (see {@link #SP}). */
+	public static final Reg SP_REG = new Reg(SP);
+
 	/** Mapping from register names to register numbers. */
 	private final Map<String, Integer> registers;
 	/** Mapping from symbolic constants to actual values. */
 	private final Map<String, Integer> constants;
 	/** Memory of the machine. */
 	private final Memory memory;
-
+	/** Counter of reserved memory cells. */
+	private int reserved;
+	/** Program counter. */
 	private int pc;
 
-	/** Constructs a new, initially empty machine. */
+	/** Constructs a new, initially empty machine 
+	 * with default-sized memory. */
 	public Machine() {
 		this.constants = new HashMap<>();
 		this.memory = new Memory();
 		this.registers = new HashMap<>();
+		clear();
+	}
+
+	/** Reinitialises the machine memory to a certain size (in bytes).
+	 * This also resets the stack pointer (to the top of the memory).
+	 * @param size
+	 */
+	public void setSize(int size) {
+		this.memory.setSize(size);
+		setReg(SP_REG, size);
 	}
 
 	/** Reserves a memory segment of given length.
@@ -37,24 +64,12 @@ public class Machine {
 	 * @see #alloc(String, int)
 	 */
 	public int alloc(int length) {
-		int result = this.memory.size();
+		int result = this.reserved;
 		for (int i = 0; i < length; i++) {
 			this.memory.set(result + i, (byte) 0);
 		}
+		this.reserved += length;
 		return result;
-	}
-
-	/** Reserves a memory segment of given length and
-	 * assigns the base address to a symbolic constant.
-	 * @return the base address of the allocated block
-	 * @see #alloc(String, int)
-	 */
-	public int alloc(Num num, int length) {
-		if (num.isLit()) {
-			throw new IllegalArgumentException("Can't allocate to literal '"
-					+ num + "'");
-		}
-		return alloc(num.getName(), length);
 	}
 
 	/** Reserves a memory segment of a given length (in bytes),
@@ -92,7 +107,7 @@ public class Machine {
 			throw new IllegalArgumentException("Duplicate symbolic name '"
 					+ cst + "'");
 		}
-		int result = this.memory.size();
+		int result = alloc(vals.length * INT_SIZE);
 		setNum(cst, result);
 		for (int i = 0; i < vals.length; i++) {
 			store(vals[i], result + INT_SIZE * i);
@@ -110,9 +125,9 @@ public class Machine {
 		this.registers.put(reg, val);
 	}
 
-	/** Returns the current value in a given register. */
-	public int getReg(Reg reg) {
-		return getReg(reg.getName());
+	/** Sets the value of a given register to a given number. */
+	public void setReg(Reg reg, int val) {
+		this.registers.put(reg.getName(), val);
 	}
 
 	/** Returns the current value in a register with a given name.
@@ -126,9 +141,9 @@ public class Machine {
 		return result;
 	}
 
-	/** Sets the value of a given register to a given number. */
-	public void setReg(Reg reg, int val) {
-		this.registers.put(reg.getName(), val);
+	/** Returns the current value in a given register. */
+	public int getReg(Reg reg) {
+		return getReg(reg.getName());
 	}
 
 	/** Sets the value of a given named symbolic constant.
@@ -147,6 +162,8 @@ public class Machine {
 	 * @throws IllegalArgumentException if the num is not declared 
 	 */
 	public int getNum(Num num) {
+		assert !num.isLabel() : "Label-based numeric operand '" + num
+				+ "'should not be looked up in the VM";
 		return num.isLit() ? num.getValue() : getNum(num.getName());
 	}
 
@@ -198,6 +215,9 @@ public class Machine {
 
 	/** sets the program counter to a given line number. */
 	public void setPC(int line) {
+		if (line < 0) {
+			throw new IllegalArgumentException("Trying to jump to line " + line);
+		}
 		this.pc = line;
 	}
 
@@ -207,6 +227,8 @@ public class Machine {
 		this.constants.clear();
 		this.memory.clear();
 		this.pc = 0;
+		setReg(ARP_REG, 0);
+		setReg(SP_REG, this.memory.size());
 	}
 
 	@Override

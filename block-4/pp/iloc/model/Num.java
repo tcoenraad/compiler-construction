@@ -5,11 +5,19 @@ package pp.iloc.model;
  * @author Arend Rensink
  */
 public class Num extends Operand {
+	/** Value of the numeric operand, if it is a literal. */
+	private final int value;
+	/** Name of the numeric operand, if it is a symbolic constant. */
+	private final String name;
+	/** Label wrapped in the numeric operand, if it is label-based. */
+	private final Label label;
+
 	/** Constructs a literal numeric operand. */
 	public Num(int value) {
 		super(Type.NUM);
 		this.value = value;
 		this.name = null;
+		this.label = null;
 	}
 
 	/** Constructs a symbolic numeric operand. */
@@ -18,13 +26,35 @@ public class Num extends Operand {
 		assert wellformed(name);
 		this.name = name.substring(1);
 		this.value = -1;
+		this.label = null;
+	}
+
+	/** Constructs a label-based numeric operand. */
+	public Num(Label label) {
+		super(Type.NUM);
+		this.label = label;
+		this.value = -1;
+		this.name = null;
 	}
 
 	/** Indicates if this parameter is a literal value.
 	 * If not, it is a named symbolic constant.
 	 */
 	public boolean isLit() {
-		return this.name == null;
+		return this.name == null && this.label == null;
+	}
+
+	/** Indicates if this parameter is label-based.
+	 * If not, it is a named symbolic constant.
+	 */
+	public boolean isLabel() {
+		return this.label != null;
+	}
+
+	/** Returns the label on which this parameter is based, 
+	 * if it is label-based. */
+	public Label getLabel() {
+		return this.label;
 	}
 
 	/** Returns the value of this numeric operand, if it is a literal. */
@@ -32,23 +62,21 @@ public class Num extends Operand {
 		return this.value;
 	}
 
-	private final int value;
-
 	/** Returns the name of this numeric operand, if it is a constant. */
 	public String getName() {
 		return this.name;
 	}
 
-	private final String name;
-
 	@Override
 	public String toString() {
-		return isLit() ? "" + this.value : '@' + getName();
+		return isLit() ? "" + this.value : isLabel() ? getLabel().toString()
+				: '@' + getName();
 	}
 
 	@Override
 	public int hashCode() {
-		return isLit() ? 31 * getValue() : getName().hashCode();
+		return isLit() ? 31 * getValue() : isLabel() ? getLabel().hashCode()
+				: getName().hashCode();
 	}
 
 	@Override
@@ -64,13 +92,16 @@ public class Num extends Operand {
 			return false;
 		}
 		if (isLit()) {
-			if (getValue() != other.getValue()) {
-				return false;
-			}
-		} else {
-			if (!getName().equals(other.getName())) {
-				return false;
-			}
+			return getValue() == other.getValue();
+		}
+		if (isLabel() != other.isLabel()) {
+			return false;
+		}
+		if (isLabel()) {
+			return getLabel().equals(other.getLabel());
+		}
+		if (!getName().equals(other.getName())) {
+			return false;
 		}
 		return true;
 	}

@@ -26,71 +26,6 @@ public class TopDownCFGBuilder extends FragmentBaseListener {
         exits = new ParseTreeProperty<>();
     }
 
-    /**
-     * Builds the CFG for a program contained in a given file.
-     */
-    public Graph build(File file) {
-        Graph result = null;
-        ErrorListener listener = new ErrorListener();
-        try {
-            CharStream chars = new ANTLRInputStream(new FileReader(file));
-            Lexer lexer = new FragmentLexer(chars);
-            lexer.removeErrorListeners();
-            lexer.addErrorListener(listener);
-            TokenStream tokens = new CommonTokenStream(lexer);
-            FragmentParser parser = new FragmentParser(tokens);
-            parser.removeErrorListeners();
-            parser.addErrorListener(listener);
-            ParseTree tree = parser.program();
-            if (listener.hasErrors()) {
-                System.out.printf("Parse errors in %s:%n", file.getPath());
-                for (String error : listener.getErrors()) {
-                    System.err.println(error);
-                }
-            } else {
-                result = build(tree);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-
-    /**
-     * Builds the CFG for a program given as an ANTLR parse tree.
-     */
-    public Graph build(ParseTree tree) {
-        graph = new Graph();
-        ParseTreeWalker walker = new ParseTreeWalker();
-        walker.walk(this, tree);
-        return graph;
-    }
-
-    /**
-     * Adds a node to he CGF, based on a given parse tree node.
-     * Gives the CFG node a meaningful ID, consisting of line number and
-     * a further indicator.
-     */
-    private Node addNode(ParserRuleContext node, String text) {
-        return graph.addNode(node.getStart().getLine() + ": " + text);
-    }
-
-    /**
-     * Main method to build and print the CFG of a simple Java program.
-     */
-    public static void main(String[] args) {
-        if (args.length == 0) {
-            System.err.println("Usage: [filename]+");
-            return;
-        }
-        TopDownCFGBuilder builder = new TopDownCFGBuilder();
-        for (String filename : args) {
-            File file = new File(filename);
-            System.out.println(filename);
-            System.out.println(builder.build(file));
-        }
-    }
-
     @Override
     public void enterAssignStat(@NotNull FragmentParser.AssignStatContext ctx) {
         entrances.get(ctx).addEdge(exits.get(ctx));
@@ -187,4 +122,62 @@ public class TopDownCFGBuilder extends FragmentBaseListener {
     public void enterBreakStat(@NotNull FragmentParser.BreakStatContext ctx) {
         // not implemented
     }
+
+	/** Builds the CFG for a program contained in a given file. */
+	public Graph build(File file) {
+        Graph result = null;
+        ErrorListener listener = new ErrorListener();
+        try {
+            CharStream chars = new ANTLRInputStream(new FileReader(file));
+            Lexer lexer = new FragmentLexer(chars);
+            lexer.removeErrorListeners();
+            lexer.addErrorListener(listener);
+            TokenStream tokens = new CommonTokenStream(lexer);
+            FragmentParser parser = new FragmentParser(tokens);
+            parser.removeErrorListeners();
+            parser.addErrorListener(listener);
+            ParseTree tree = parser.program();
+            if (listener.hasErrors()) {
+                System.out.printf("Parse errors in %s:%n", file.getPath());
+                for (String error : listener.getErrors()) {
+                    System.err.println(error);
+                }
+            } else {
+                result = build(tree);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+	}
+
+	/** Builds the CFG for a program given as an ANTLR parse tree. */
+	public Graph build(ParseTree tree) {
+        graph = new Graph();
+        ParseTreeWalker walker = new ParseTreeWalker();
+        walker.walk(this, tree);
+        return graph;
+	}
+
+	/** Adds a node to he CGF, based on a given parse tree node.
+	 * Gives the CFG node a meaningful ID, consisting of line number and 
+	 * a further indicator.
+	 */
+	private Node addNode(ParserRuleContext node, String text) {
+		return this.graph.addNode(node.getStart().getLine() + ": " + text);
+	}
+
+	/** Main method to build and print the CFG of a simple Java program. */
+	public static void main(String[] args) {
+		if (args.length == 0) {
+			System.err.println("Usage: [filename]+");
+			return;
+		}
+		TopDownCFGBuilder builder = new TopDownCFGBuilder();
+		for (String filename : args) {
+			File file = new File(filename);
+			System.out.println(filename);
+			System.out.println(builder.build(file));
+		}
+	}
 }

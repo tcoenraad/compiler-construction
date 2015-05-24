@@ -1,4 +1,4 @@
-// Generated from C:/Users/Jip/Documents/compiler-construction/block-4/pp/block4/cc/iloc\Calc.g4 by ANTLR 4.5
+// Generated from /Users/twancoenraad/Code/compiler-construction/block-4/pp/block4/cc/iloc/Calc.g4 by ANTLR 4.5
 package pp.block4.cc.iloc;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;

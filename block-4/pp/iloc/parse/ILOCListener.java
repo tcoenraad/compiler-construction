@@ -1,4 +1,4 @@
-// Generated from C:/Users/Jip/Documents/compiler-construction/block-4/pp/iloc/parse\ILOC.g4 by ANTLR 4.5
+// Generated from /Users/twancoenraad/Code/compiler-construction/block-4/pp/iloc/parse/ILOC.g4 by ANTLR 4.5
 package pp.iloc.parse;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeListener;

@@ -34,6 +34,95 @@ public class Checker extends SimplePascalBaseListener {
 		return this.result;
 	}
 
+	// Override the listener methods for the statement nodes
+	@Override
+	public void exitBoolExpr(BoolExprContext ctx) {
+		checkType(ctx.expr(0), Type.BOOL);
+		checkType(ctx.expr(1), Type.BOOL);
+		setType(ctx, Type.BOOL);
+		setEntry(ctx, entry(ctx.expr(0)));
+	}
+
+	@Override
+	public void exitBoolType(BoolTypeContext ctx) {
+		setType(ctx, Type.BOOL);
+	}
+
+	@Override
+	public void exitCompExpr(CompExprContext ctx) {
+		checkType(ctx.expr(0), Type.INT);
+		checkType(ctx.expr(1), Type.INT);
+		setType(ctx, Type.BOOL);
+		setEntry(ctx, entry(ctx.expr(0)));
+	}
+
+	@Override
+	public void exitFalseExpr(FalseExprContext ctx) {
+		setType(ctx, Type.BOOL);
+		setEntry(ctx, ctx);
+	}
+
+	@Override
+	public void exitIdExpr(IdExprContext ctx) {
+		String id = ctx.ID().getText();
+		Type type = this.scope.type(id);
+		if (type == null) {
+			addError(ctx, "Variable '%s' not declared", id);
+		} else {
+			setType(ctx, type);
+			setOffset(ctx, this.scope.offset(id));
+			setEntry(ctx, ctx);
+		}
+	}
+
+	@Override
+	public void exitMultExpr(MultExprContext ctx) {
+		checkType(ctx.expr(0), Type.INT);
+		checkType(ctx.expr(1), Type.INT);
+		setType(ctx, Type.INT);
+		setEntry(ctx, entry(ctx.expr(0)));
+	}
+
+	@Override
+	public void exitNumExpr(NumExprContext ctx) {
+		setType(ctx, Type.INT);
+		setEntry(ctx, ctx);
+	}
+
+	@Override
+	public void exitParExpr(ParExprContext ctx) {
+		setType(ctx, getType(ctx.expr()));
+		setEntry(ctx, entry(ctx.expr()));
+	}
+
+	@Override
+	public void exitPlusExpr(PlusExprContext ctx) {
+		checkType(ctx.expr(0), Type.INT);
+		checkType(ctx.expr(1), Type.INT);
+		setType(ctx, Type.INT);
+		setEntry(ctx, entry(ctx.expr(0)));
+	}
+
+	@Override
+	public void exitPrfExpr(PrfExprContext ctx) {
+		Type type;
+		if (ctx.prfOp().MINUS() != null) {
+			type = Type.INT;
+		} else {
+			assert ctx.prfOp().NOT() != null;
+			type = Type.BOOL;
+		}
+		checkType(ctx.expr(), type);
+		setType(ctx, type);
+		setEntry(ctx, entry(ctx.expr()));
+	}
+
+	@Override
+	public void exitTrueExpr(TrueExprContext ctx) {
+		setType(ctx, Type.BOOL);
+		setEntry(ctx, ctx);
+	}
+
 	/** Indicates if any errors were encountered in this tree listener. */
 	public boolean hasErrors() {
 		return !getErrors().isEmpty();
@@ -42,6 +131,21 @@ public class Checker extends SimplePascalBaseListener {
 	/** Returns the list of errors collected in this tree listener. */
 	public List<String> getErrors() {
 		return this.errors;
+	}
+
+	/** Checks the inferred type of a given parse tree,
+	 * and adds an error if it does not correspond to the expected type.
+	 */
+	private void checkType(ParserRuleContext node, Type expected) {
+		Type actual = getType(node);
+		if (actual == null) {
+			throw new IllegalArgumentException("Missing inferred type of "
+					+ node.getText());
+		}
+		if (!actual.equals(expected)) {
+			addError(node, "Expected type '%s' but found '%s'", expected,
+					actual);
+		}
 	}
 
 	/** Records an error at a given parse tree node.

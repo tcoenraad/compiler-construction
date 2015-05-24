@@ -1,4 +1,4 @@
-// Generated from C:/Users/Jip/Documents/compiler-construction/block-4/pp/iloc/parse\ILOC.g4 by ANTLR 4.5
+// Generated from /Users/twancoenraad/Code/compiler-construction/block-4/pp/iloc/parse/ILOC.g4 by ANTLR 4.5
 package pp.iloc.parse;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -18,7 +18,7 @@ public class ILOCParser extends Parser {
 		new PredictionContextCache();
 	public static final int
 		T__0=1, MINUS=2, COMMA=3, SEMI=4, LSQ=5, RSQ=6, DARROW=7, ARROW=8, ID=9, 
-		SYMB=10, NUM=11, STR=12, COMMENT=13, WS=14;
+		SYMB=10, LAB=11, NUM=12, STR=13, COMMENT=14, WS=15;
 	public static final int
 		RULE_program = 0, RULE_instr = 1, RULE_op = 2, RULE_sources = 3, RULE_targets = 4, 
 		RULE_label = 5, RULE_opCode = 6, RULE_operand = 7;
@@ -31,7 +31,7 @@ public class ILOCParser extends Parser {
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
 		null, null, "MINUS", "COMMA", "SEMI", "LSQ", "RSQ", "DARROW", "ARROW", 
-		"ID", "SYMB", "NUM", "STR", "COMMENT", "WS"
+		"ID", "SYMB", "LAB", "NUM", "STR", "COMMENT", "WS"
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
@@ -594,6 +594,7 @@ public class ILOCParser extends Parser {
 		public TerminalNode ID() { return getToken(ILOCParser.ID, 0); }
 		public TerminalNode NUM() { return getToken(ILOCParser.NUM, 0); }
 		public TerminalNode SYMB() { return getToken(ILOCParser.SYMB, 0); }
+		public TerminalNode LAB() { return getToken(ILOCParser.LAB, 0); }
 		public TerminalNode STR() { return getToken(ILOCParser.STR, 0); }
 		public OperandContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -618,7 +619,7 @@ public class ILOCParser extends Parser {
 			{
 			setState(79);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << ID) | (1L << SYMB) | (1L << NUM) | (1L << STR))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << ID) | (1L << SYMB) | (1L << LAB) | (1L << NUM) | (1L << STR))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			consume();
@@ -636,22 +637,22 @@ public class ILOCParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\20T\4\2\t\2\4\3\t"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\21T\4\2\t\2\4\3\t"+
 		"\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\3\2\6\2\24\n\2\r\2"+
 		"\16\2\25\3\3\3\3\3\3\5\3\33\n\3\3\3\3\3\3\3\3\3\5\3!\n\3\3\3\3\3\6\3%"+
 		"\n\3\r\3\16\3&\3\3\3\3\5\3+\n\3\3\4\3\4\3\4\3\4\3\4\5\4\62\n\4\3\4\5\4"+
 		"\65\n\4\3\4\5\48\n\4\5\4:\n\4\3\5\3\5\3\5\7\5?\n\5\f\5\16\5B\13\5\5\5"+
 		"D\n\5\3\6\3\6\3\6\7\6I\n\6\f\6\16\6L\13\6\3\7\3\7\3\b\3\b\3\t\3\t\3\t"+
-		"\2\2\n\2\4\6\b\n\f\16\20\2\4\3\2\t\n\3\2\13\16W\2\23\3\2\2\2\4*\3\2\2"+
+		"\2\2\n\2\4\6\b\n\f\16\20\2\4\3\2\t\n\3\2\13\17W\2\23\3\2\2\2\4*\3\2\2"+
 		"\2\69\3\2\2\2\bC\3\2\2\2\nE\3\2\2\2\fM\3\2\2\2\16O\3\2\2\2\20Q\3\2\2\2"+
 		"\22\24\5\4\3\2\23\22\3\2\2\2\24\25\3\2\2\2\25\23\3\2\2\2\25\26\3\2\2\2"+
 		"\26\3\3\2\2\2\27\30\5\f\7\2\30\31\7\3\2\2\31\33\3\2\2\2\32\27\3\2\2\2"+
 		"\32\33\3\2\2\2\33\34\3\2\2\2\34+\5\6\4\2\35\36\5\f\7\2\36\37\7\3\2\2\37"+
 		"!\3\2\2\2 \35\3\2\2\2 !\3\2\2\2!\"\3\2\2\2\"$\7\7\2\2#%\5\6\4\2$#\3\2"+
 		"\2\2%&\3\2\2\2&$\3\2\2\2&\'\3\2\2\2\'(\3\2\2\2()\7\b\2\2)+\3\2\2\2*\32"+
-		"\3\2\2\2* \3\2\2\2+\5\3\2\2\2,:\7\17\2\2-.\5\16\b\2.\61\5\b\5\2/\60\t"+
+		"\3\2\2\2* \3\2\2\2+\5\3\2\2\2,:\7\20\2\2-.\5\16\b\2.\61\5\b\5\2/\60\t"+
 		"\2\2\2\60\62\5\n\6\2\61/\3\2\2\2\61\62\3\2\2\2\62\64\3\2\2\2\63\65\7\6"+
-		"\2\2\64\63\3\2\2\2\64\65\3\2\2\2\65\67\3\2\2\2\668\7\17\2\2\67\66\3\2"+
+		"\2\2\64\63\3\2\2\2\64\65\3\2\2\2\65\67\3\2\2\2\668\7\20\2\2\67\66\3\2"+
 		"\2\2\678\3\2\2\28:\3\2\2\29,\3\2\2\29-\3\2\2\2:\7\3\2\2\2;@\5\20\t\2<"+
 		"=\7\5\2\2=?\5\20\t\2><\3\2\2\2?B\3\2\2\2@>\3\2\2\2@A\3\2\2\2AD\3\2\2\2"+
 		"B@\3\2\2\2C;\3\2\2\2CD\3\2\2\2D\t\3\2\2\2EJ\5\20\t\2FG\7\5\2\2GI\5\20"+

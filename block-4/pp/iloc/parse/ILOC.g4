@@ -32,7 +32,7 @@ label: ID;
 opCode: ID;
 
 /** Operand: ID (label or register), number or string. */
-operand : ID | NUM | SYMB | STR;
+operand : ID | NUM | SYMB | LAB | STR;
  
 MINUS:  '-';
 COMMA:  ',';
@@ -46,11 +46,13 @@ ARROW:  '->';
 ID: LETTER (LETTER|DIGIT|[\-_])*;
 /** Symbolic name. */
 SYMB: '@' ID;
+/** Label used as numeric parameter. */
+LAB: '#' ID;
 /** Number. */
 NUM: MINUS? DIGIT+;
 /** String with optional escaped double quotes. */
 STR : '"' (~["\n\r] | '\\"')* '"';
 /** Java-style comment: // to end of line */
-COMMENT: '//' ~[\r\n]* [\r\n][\r\n]?;
+COMMENT: '//' ~[\r\n]*;
 /** Whitespace. */
 WS : [ \t\r\n]+ -> skip;
