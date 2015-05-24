@@ -123,8 +123,8 @@ public class TopDownCFGBuilder extends FragmentBaseListener {
         // not implemented
     }
 
-	/** Builds the CFG for a program contained in a given file. */
-	public Graph build(File file) {
+    /** Builds the CFG for a program contained in a given file. */
+    public Graph build(File file) {
         Graph result = null;
         ErrorListener listener = new ErrorListener();
         try {
@@ -149,35 +149,35 @@ public class TopDownCFGBuilder extends FragmentBaseListener {
             e.printStackTrace();
         }
         return result;
-	}
+    }
 
-	/** Builds the CFG for a program given as an ANTLR parse tree. */
-	public Graph build(ParseTree tree) {
+    /** Builds the CFG for a program given as an ANTLR parse tree. */
+    public Graph build(ParseTree tree) {
         graph = new Graph();
         ParseTreeWalker walker = new ParseTreeWalker();
         walker.walk(this, tree);
         return graph;
-	}
+    }
 
-	/** Adds a node to he CGF, based on a given parse tree node.
-	 * Gives the CFG node a meaningful ID, consisting of line number and 
-	 * a further indicator.
-	 */
-	private Node addNode(ParserRuleContext node, String text) {
-		return this.graph.addNode(node.getStart().getLine() + ": " + text);
-	}
+    /** Adds a node to he CGF, based on a given parse tree node.
+     * Gives the CFG node a meaningful ID, consisting of line number and
+     * a further indicator.
+     */
+    private Node addNode(ParserRuleContext node, String text) {
+        return this.graph.addNode(node.getStart().getLine() + ": " + text);
+    }
 
-	/** Main method to build and print the CFG of a simple Java program. */
-	public static void main(String[] args) {
-		if (args.length == 0) {
-			System.err.println("Usage: [filename]+");
-			return;
-		}
-		TopDownCFGBuilder builder = new TopDownCFGBuilder();
-		for (String filename : args) {
-			File file = new File(filename);
-			System.out.println(filename);
-			System.out.println(builder.build(file));
-		}
-	}
+    /** Main method to build and print the CFG of a simple Java program. */
+    public static void main(String[] args) {
+        if (args.length == 0) {
+            System.err.println("Usage: [filename]+");
+            return;
+        }
+        TopDownCFGBuilder builder = new TopDownCFGBuilder();
+        for (String filename : args) {
+            File file = new File(filename);
+            System.out.println(filename);
+            System.out.println(builder.build(file));
+        }
+    }
 }
