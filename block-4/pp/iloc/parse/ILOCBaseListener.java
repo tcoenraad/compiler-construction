@@ -17,7 +17,19 @@ public class ILOCBaseListener implements ILOCListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterProgram(@NotNull ILOCParser.ProgramContext ctx) { }
+	@Override public void enterDecl(@NotNull ILOCParser.DeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDecl(@NotNull ILOCParser.DeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterSources(@NotNull ILOCParser.SourcesContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

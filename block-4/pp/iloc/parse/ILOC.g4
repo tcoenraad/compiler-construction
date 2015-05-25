@@ -6,8 +6,11 @@ fragment LETTER: [a-zA-Z];
 fragment DIGIT: [0-9];
 
 /** Full ILOC program. */
-program: instr+;
+program: decl* instr+;
 
+decl: ID ASS NUM
+    ;
+    
 /** Instruction: single op or []-bracketed non-empty op sequence. */
 instr
     : (label ':')? op           #singleInstr
@@ -41,6 +44,7 @@ LSQ:    '[';
 RSQ:    ']';
 DARROW: '=>';
 ARROW:  '->';
+ASS:    '<-';
 
 /** Identifier. */
 ID: LETTER (LETTER|DIGIT|[\-_])*;

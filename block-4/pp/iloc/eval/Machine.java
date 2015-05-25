@@ -32,7 +32,7 @@ public class Machine {
 	/** Mapping from register names to register numbers. */
 	private final Map<String, Integer> registers;
 	/** Mapping from symbolic constants to actual values. */
-	private final Map<String, Integer> constants;
+	private final Map<Num, Integer> symbMap;
 	/** Memory of the machine. */
 	private final Memory memory;
 	/** Counter of reserved memory cells. */
@@ -43,7 +43,7 @@ public class Machine {
 	/** Constructs a new, initially empty machine 
 	 * with default-sized memory. */
 	public Machine() {
-		this.constants = new HashMap<>();
+		this.symbMap = new HashMap<>();
 		this.memory = new Memory();
 		this.registers = new HashMap<>();
 		clear();
@@ -83,7 +83,7 @@ public class Machine {
 	 * @throws IllegalArgumentException if the symbolic name is known
 	 */
 	public int alloc(String cst, int length) {
-		if (this.constants.get(cst) != null) {
+		if (this.symbMap.get(cst) != null) {
 			throw new IllegalArgumentException("Duplicate symbolic name '"
 					+ cst + "'");
 		}
@@ -103,7 +103,7 @@ public class Machine {
 	 * @throws IllegalArgumentException if the symbolic name is known
 	 */
 	public int init(String cst, int... vals) {
-		if (this.constants.get(cst) != null) {
+		if (this.symbMap.get(cst) != null) {
 			throw new IllegalArgumentException("Duplicate symbolic name '"
 					+ cst + "'");
 		}
@@ -147,36 +147,33 @@ public class Machine {
 	}
 
 	/** Sets the value of a given named symbolic constant.
-	 * @throws IllegalArgumentException if the name is already declared 
+	 * @param name symbolic name, without '@'-prefix
+	 * @throws IllegalArgumentException if the name is already declared
 	 */
 	public void setNum(String name, int val) {
-		Integer oldVal = this.constants.put(name, val);
+		Num symbol = new Num(name);
+		Integer oldVal = this.symbMap.put(symbol, val);
 		if (oldVal != null) {
-			throw new IllegalArgumentException("Duplicate constant '" + name
+			throw new IllegalArgumentException("Duplicate symbol '" + symbol
 					+ "': values " + oldVal + " and " + val);
 		}
 	}
 
-	/** Returns the value of a given {@link Num} operand.
-	 * This can be either a literal or a symbolic constant.
-	 * @throws IllegalArgumentException if the num is not declared 
+	/** Returns the value of a given symbolic numeric value.
+	 * @return the corresponding value, or <code>null</code> if
+	 * the symbol is not defined.
 	 */
-	public int getNum(Num num) {
-		assert !num.isLabel() : "Label-based numeric operand '" + num
-				+ "'should not be looked up in the VM";
-		return num.isLit() ? num.getValue() : getNum(num.getName());
+	public Integer getNum(Num symb) {
+		return this.symbMap.get(symb);
 	}
 
-	/** Returns the value of a given symbolic constant.
+	/** Convenience method to returns the value of a given symbolic constant.
+	 * @param name symbolic name without '@'-prefix
 	 * @throws IllegalArgumentException if the name is not declared 
+	 * @see #getNum(Num)
 	 */
-	public int getNum(String name) {
-		Integer result = this.constants.get(name);
-		if (result == null) {
-			throw new IllegalArgumentException("Unknown constant '" + name
-					+ "'");
-		}
-		return result;
+	public Integer getNum(String name) {
+		return getNum(new Num(name));
 	}
 
 	/** Returns the integer value starting at a given memory location.
@@ -224,7 +221,7 @@ public class Machine {
 	/** Clears the registers, constants, memory and PC. */
 	public void clear() {
 		this.registers.clear();
-		this.constants.clear();
+		this.symbMap.clear();
 		this.memory.clear();
 		this.pc = 0;
 		setReg(ARP_REG, 0);
@@ -234,6 +231,6 @@ public class Machine {
 	@Override
 	public String toString() {
 		return String.format("Registers: %s%nConstants: %s%nMemory: %s%n",
-				this.registers, this.constants, this.memory);
+				this.registers, this.symbMap, this.memory);
 	}
 }

@@ -37,6 +37,7 @@ import pp.iloc.parse.ILOCBaseListener;
 import pp.iloc.parse.ILOCLexer;
 import pp.iloc.parse.ILOCParser;
 import pp.iloc.parse.ILOCParser.CommentContext;
+import pp.iloc.parse.ILOCParser.DeclContext;
 import pp.iloc.parse.ILOCParser.InstrContext;
 import pp.iloc.parse.ILOCParser.InstrListContext;
 import pp.iloc.parse.ILOCParser.OpCodeContext;
@@ -110,21 +111,50 @@ public class Assembler {
 	private static final Assembler INSTANCE = new Assembler();
 
 	private static class ILOCWalker extends ILOCBaseListener {
+		/** The program to be built. */
+		private Program program;
+		/** Instructions associated with @{code instr} parse nodes. */
+		private ParseTreeProperty<Instr> instrs;
+		/** Operations associated with @{code op} parse nodes. */
+		private ParseTreeProperty<Op> ops;
+		/** Operands associated with @{code operand} parse nodes. */
+		private ParseTreeProperty<Operand> operands;
+		/** Operand lists associated with @{code sources} parse nodes. */
+		private ParseTreeProperty<List<Operand>> sources;
+		/** Operand lists associated with targets parse nodes. */
+		private ParseTreeProperty<List<Operand>> targets;
+		/** Mapping of labels to place of declaration. */
+		private Map<Label, Token> labelMap;
+		/** Mapping of symbolic constants to place of initialisation. */
+		private Map<Num, Token> symbolMap;
+		/** The error listener of this walker. */
+		private ErrorListener errors;
+
 		public Program walk(ParseTree tree) throws FormatException {
 			// initialise the data structures
-			this.program = null;
+			this.program = new Program();
 			this.instrs = new ParseTreeProperty<>();
 			this.ops = new ParseTreeProperty<>();
 			this.operands = new ParseTreeProperty<>();
 			this.sources = new ParseTreeProperty<>();
 			this.targets = new ParseTreeProperty<>();
 			this.labelMap = new HashMap<>();
+			this.symbolMap = new HashMap<>();
 			this.errors = new ErrorListener();
 			new ParseTreeWalker().walk(this, tree);
 			if (this.errors.hasErrors()) {
 				throw new FormatException(this.errors.getErrors());
 			}
 			return this.program;
+		}
+
+		@Override
+		public void exitDecl(DeclContext ctx) {
+			Num symbol = new Num(ctx.ID().getText());
+			if (addSymbol(ctx.getStart(), symbol)) {
+				this.program.setSymb(symbol,
+						Integer.parseInt(ctx.NUM().getText()));
+			}
 		}
 
 		@Override
@@ -242,14 +272,12 @@ public class Assembler {
 
 		@Override
 		public void exitProgram(ProgramContext ctx) {
-			Program program = new Program();
 			for (InstrContext instr : ctx.instr()) {
 				Instr i = getInstr(instr);
 				if (i != null) {
-					program.addInstr(i);
+					this.program.addInstr(i);
 				}
 			}
-			this.program = program;
 		}
 
 		@Override
@@ -280,16 +308,15 @@ public class Assembler {
 			} else if (ctx.NUM() != null) {
 				result = new Num(Integer.parseInt(ctx.NUM().getText()));
 			} else if (ctx.SYMB() != null) {
-				result = new Num(ctx.SYMB().getText());
+				result = new Num(ctx.SYMB().getText().substring(1));
 			} else if (ctx.LAB() != null) {
-				result = new Num(new Label(ctx.LAB().getText().substring(1)));
+				result = new Num(
+						new Label(ctx.LAB().getText().substring(1)));
 			} else {
 				result = new Label(ctx.ID().getText());
 			}
 			addOperand(ctx, result);
 		}
-
-		private Program program = null;
 
 		/** Sets the instruction attribute of a given node. */
 		private void addInstr(ParseTree node, Instr instr) {
@@ -301,8 +328,6 @@ public class Assembler {
 			return this.instrs.get(node);
 		}
 
-		private ParseTreeProperty<Instr> instrs = new ParseTreeProperty<>();
-
 		/** Sets the operation attribute of a given node. */
 		private void addOp(ParseTree node, Op op) {
 			this.ops.put(node, op);
@@ -312,8 +337,6 @@ public class Assembler {
 		private Op getOp(ParseTree node) {
 			return this.ops.get(node);
 		}
-
-		private ParseTreeProperty<Op> ops = new ParseTreeProperty<>();
 
 		/** Sets the operand attribute of a given node. */
 		private void addOperand(ParseTree node, Operand operand) {
@@ -325,8 +348,6 @@ public class Assembler {
 			return this.operands.get(node);
 		}
 
-		private ParseTreeProperty<Operand> operands;
-
 		/** Sets the source operand list attribute of a given node. */
 		private void addSources(ParseTree node, List<Operand> sources) {
 			this.sources.put(node, sources);
@@ -337,8 +358,6 @@ public class Assembler {
 			return this.sources.get(node);
 		}
 
-		private ParseTreeProperty<List<Operand>> sources;
-
 		/** Sets the target operand list attribute of a given node. */
 		private void addTargets(ParseTree node, List<Operand> targets) {
 			this.targets.put(node, targets);
@@ -348,8 +367,6 @@ public class Assembler {
 		private List<Operand> getTargets(ParseTree node) {
 			return this.targets.get(node);
 		}
-
-		private ParseTreeProperty<List<Operand>> targets;
 
 		/** Registers label definition. Signals an error if the label
 		 * was already defined.
@@ -365,9 +382,18 @@ public class Assembler {
 			return oldToken == null;
 		}
 
-		private Map<Label, Token> labelMap;
-
-		/** The error listener of this walker. */
-		private ErrorListener errors;
+		/** Registers a symbol initialisation. Signals an error if the 
+		 * symbol was already initialised.
+		 * @return {@code true} if the symbol was new
+		 */
+		private boolean addSymbol(Token token, Num symbol) {
+			Token oldToken = this.symbolMap.put(symbol, token);
+			if (oldToken != null) {
+				this.errors.visitError(token,
+						"Symbolic constant '%s' already defined at line %d",
+						symbol, oldToken.getLine());
+			}
+			return oldToken == null;
+		}
 	}
 }
