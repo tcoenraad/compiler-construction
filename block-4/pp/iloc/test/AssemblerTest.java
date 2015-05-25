@@ -24,14 +24,6 @@ public class AssemblerTest {
 	}
 
 	@Test
-	public void testFig13Init() {
-		Program p = parse("fig1-3-init");
-		assertEquals(ints(0, 5, 6, 7, 8, 9), p.getRegLines().get("r_a"));
-		assertEquals(ints(1, 5), p.getRegLines().get("r_2"));
-		assertEquals(ints(0, 9), p.getSymbLines().get("a"));
-	}
-
-	@Test
 	public void testFig13Stack() {
 		Program p = parse("fig1-3-stack");
 		assertEquals(ints(0, 2, 3, 4, 6, 7, 8, 10, 11, 13, 14, 15), p
