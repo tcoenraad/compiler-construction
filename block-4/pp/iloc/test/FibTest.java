@@ -23,12 +23,12 @@ public class FibTest {
     @Test
     public void testAssemblerRegister() {
         Program p = parse("fib_reg");
-        assertEquals(ints(0, 5, 10), p.getRegMap().get("r_n"));
-        assertEquals(ints(1, 7, 8), p.getRegMap().get("r_x"));
-        assertEquals(ints(2, 7, 8, 9), p.getRegMap().get("r_y"));
-        assertEquals(ints(3, 7, 9, 12), p.getRegMap().get("r_z"));
-        assertEquals(ints(4, 5, 10), p.getRegMap().get("r_1"));
-        assertEquals(ints(5, 6), p.getRegMap().get("r_cmp"));
+        assertEquals(ints(0, 5, 10), p.getRegLines().get("r_n"));
+        assertEquals(ints(1, 7, 8), p.getRegLines().get("r_x"));
+        assertEquals(ints(2, 7, 8, 9), p.getRegLines().get("r_y"));
+        assertEquals(ints(3, 7, 9, 12), p.getRegLines().get("r_z"));
+        assertEquals(ints(4, 5, 10), p.getRegLines().get("r_1"));
+        assertEquals(ints(5, 6), p.getRegLines().get("r_cmp"));
     }
 
     @Test
@@ -48,9 +48,9 @@ public class FibTest {
     @Test
     public void testAssemblerMemory() {
         Program p = parse("fib_mem");
-        assertEquals(ints(0, 3, 5, 8, 9, 10, 14, 16, 17), p.getRegMap().get("r_a"));
-        assertEquals(ints(2, 3, 6, 8, 9, 11, 13, 15, 16), p.getRegMap().get("r_b"));
-        assertEquals(ints(1, 7, 8, 11, 12, 19), p.getRegMap().get("r_c"));
+        assertEquals(ints(0, 3, 5, 8, 9, 10, 14, 16, 17), p.getRegLines().get("r_a"));
+        assertEquals(ints(2, 3, 6, 8, 9, 11, 13, 15, 16), p.getRegLines().get("r_b"));
+        assertEquals(ints(1, 7, 8, 11, 12, 19), p.getRegLines().get("r_c"));
     }
 
     @Test

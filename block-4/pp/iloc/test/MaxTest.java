@@ -23,11 +23,11 @@ public class MaxTest {
     @Test
     public void testAssembler() {
         Program p = parse("max");
-        assertEquals(ints(0, 9, 11, 14), p.getRegMap().get("r_max"));
-        assertEquals(ints(1, 3, 5, 12), p.getRegMap().get("r_i"));
-        assertEquals(ints(2, 3), p.getRegMap().get("r_len"));
-        assertEquals(ints(3, 4, 9, 10), p.getRegMap().get("r_cmp"));
-        assertEquals(ints(5, 6, 7, 8), p.getRegMap().get("r_a"));
+        assertEquals(ints(0, 9, 11, 14), p.getRegLines().get("r_max"));
+        assertEquals(ints(1, 3, 5, 12), p.getRegLines().get("r_i"));
+        assertEquals(ints(2, 3), p.getRegLines().get("r_len"));
+        assertEquals(ints(3, 4, 9, 10), p.getRegLines().get("r_cmp"));
+        assertEquals(ints(5, 6, 7, 8), p.getRegLines().get("r_a"));
     }
 
     @Test(timeout = 1000)
