@@ -77,7 +77,7 @@ public class CalcCompiler extends CalcBaseListener {
         addNewRegister(ctx);
 
         Reg expr = registers.get(ctx.expr());
-        emit(OpCode.rsubI, new Num(0), expr, registers.get(ctx));
+        emit(OpCode.rsubI, expr, new Num(0), registers.get(ctx));
     }
 
     @Override
