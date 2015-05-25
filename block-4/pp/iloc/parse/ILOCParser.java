@@ -19,10 +19,6 @@ public class ILOCParser extends Parser {
 	public static final int
 		T__0=1, MINUS=2, COMMA=3, SEMI=4, LSQ=5, RSQ=6, DARROW=7, ARROW=8, ASS=9, 
 		ID=10, SYMB=11, LAB=12, NUM=13, STR=14, COMMENT=15, WS=16;
-	public static final String[] tokenNames = {
-		"<INVALID>", "':'", "'-'", "','", "';'", "'['", "']'", "'=>'", "'->'", 
-		"'<-'", "ID", "SYMB", "LAB", "NUM", "STR", "COMMENT", "WS"
-	};
 	public static final int
 		RULE_program = 0, RULE_decl = 1, RULE_instr = 2, RULE_op = 3, RULE_sources = 4, 
 		RULE_targets = 5, RULE_label = 6, RULE_opCode = 7, RULE_operand = 8;
@@ -32,11 +28,11 @@ public class ILOCParser extends Parser {
 	};
 
 	private static final String[] _LITERAL_NAMES = {
-		null, "':'", "'-'", "','", "';'", "'['", "']'", "'=>'", "'->'"
+		null, "':'", "'-'", "','", "';'", "'['", "']'", "'=>'", "'->'", "'<-'"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
 		null, null, "MINUS", "COMMA", "SEMI", "LSQ", "RSQ", "DARROW", "ARROW", 
-		"ID", "SYMB", "LAB", "NUM", "STR", "COMMENT", "WS"
+		"ASS", "ID", "SYMB", "LAB", "NUM", "STR", "COMMENT", "WS"
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
@@ -88,14 +84,11 @@ public class ILOCParser extends Parser {
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 	public static class ProgramContext extends ParserRuleContext {
-		public DeclContext decl(int i) {
-			return getRuleContext(DeclContext.class,i);
-		}
 		public List<DeclContext> decl() {
 			return getRuleContexts(DeclContext.class);
 		}
-		public InstrContext instr(int i) {
-			return getRuleContext(InstrContext.class,i);
+		public DeclContext decl(int i) {
+			return getRuleContext(DeclContext.class,i);
 		}
 		public List<InstrContext> instr() {
 			return getRuleContexts(InstrContext.class);
@@ -132,7 +125,8 @@ public class ILOCParser extends Parser {
 				if ( _alt==1 ) {
 					{
 					{
-					setState(18); decl();
+					setState(18); 
+					decl();
 					}
 					} 
 				}
@@ -146,7 +140,8 @@ public class ILOCParser extends Parser {
 			do {
 				{
 				{
-				setState(24); instr();
+				setState(24); 
+				instr();
 				}
 				}
 				setState(27); 
@@ -168,8 +163,8 @@ public class ILOCParser extends Parser {
 
 	public static class DeclContext extends ParserRuleContext {
 		public TerminalNode ID() { return getToken(ILOCParser.ID, 0); }
-		public TerminalNode NUM() { return getToken(ILOCParser.NUM, 0); }
 		public TerminalNode ASS() { return getToken(ILOCParser.ASS, 0); }
+		public TerminalNode NUM() { return getToken(ILOCParser.NUM, 0); }
 		public DeclContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -190,9 +185,12 @@ public class ILOCParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(29); match(ID);
-			setState(30); match(ASS);
-			setState(31); match(NUM);
+			setState(29); 
+			match(ID);
+			setState(30); 
+			match(ASS);
+			setState(31); 
+			match(NUM);
 			}
 		}
 		catch (RecognitionException re) {
@@ -272,12 +270,15 @@ public class ILOCParser extends Parser {
 				switch ( getInterpreter().adaptivePredict(_input,2,_ctx) ) {
 				case 1:
 					{
-					setState(33); label();
-					setState(34); match(T__0);
+					setState(33); 
+					label();
+					setState(34); 
+					match(T__0);
 					}
 					break;
 				}
-				setState(38); op();
+				setState(38); 
+				op();
 				}
 				break;
 			case 2:
@@ -288,26 +289,31 @@ public class ILOCParser extends Parser {
 				_la = _input.LA(1);
 				if (_la==ID) {
 					{
-					setState(39); label();
-					setState(40); match(T__0);
+					setState(39); 
+					label();
+					setState(40); 
+					match(T__0);
 					}
 				}
 
-				setState(44); match(LSQ);
+				setState(44); 
+				match(LSQ);
 				setState(46); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				do {
 					{
 					{
-					setState(45); op();
+					setState(45); 
+					op();
 					}
 					}
 					setState(48); 
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				} while ( _la==ID || _la==COMMENT );
-				setState(50); match(RSQ);
+				setState(50); 
+				match(RSQ);
 				}
 				break;
 			}
@@ -382,15 +388,18 @@ public class ILOCParser extends Parser {
 				_localctx = new CommentContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(54); match(COMMENT);
+				setState(54); 
+				match(COMMENT);
 				}
 				break;
 			case ID:
 				_localctx = new RealOpContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(55); opCode();
-				setState(56); sources();
+				setState(55); 
+				opCode();
+				setState(56); 
+				sources();
 				setState(59);
 				_la = _input.LA(1);
 				if (_la==DARROW || _la==ARROW) {
@@ -401,7 +410,8 @@ public class ILOCParser extends Parser {
 					_errHandler.recoverInline(this);
 					}
 					consume();
-					setState(58); targets();
+					setState(58); 
+					targets();
 					}
 				}
 
@@ -409,7 +419,8 @@ public class ILOCParser extends Parser {
 				_la = _input.LA(1);
 				if (_la==SEMI) {
 					{
-					setState(61); match(SEMI);
+					setState(61); 
+					match(SEMI);
 					}
 				}
 
@@ -417,7 +428,8 @@ public class ILOCParser extends Parser {
 				switch ( getInterpreter().adaptivePredict(_input,8,_ctx) ) {
 				case 1:
 					{
-					setState(64); match(COMMENT);
+					setState(64); 
+					match(COMMENT);
 					}
 					break;
 				}
@@ -474,15 +486,18 @@ public class ILOCParser extends Parser {
 			switch ( getInterpreter().adaptivePredict(_input,11,_ctx) ) {
 			case 1:
 				{
-				setState(69); operand();
+				setState(69); 
+				operand();
 				setState(74);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				while (_la==COMMA) {
 					{
 					{
-					setState(70); match(COMMA);
-					setState(71); operand();
+					setState(70); 
+					match(COMMA);
+					setState(71); 
+					operand();
 					}
 					}
 					setState(76);
@@ -537,15 +552,18 @@ public class ILOCParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(79); operand();
+			setState(79); 
+			operand();
 			setState(84);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==COMMA) {
 				{
 				{
-				setState(80); match(COMMA);
-				setState(81); operand();
+				setState(80); 
+				match(COMMA);
+				setState(81); 
+				operand();
 				}
 				}
 				setState(86);
@@ -587,7 +605,8 @@ public class ILOCParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(87); match(ID);
+			setState(87); 
+			match(ID);
 			}
 		}
 		catch (RecognitionException re) {
@@ -623,7 +642,8 @@ public class ILOCParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(89); match(ID);
+			setState(89); 
+			match(ID);
 			}
 		}
 		catch (RecognitionException re) {
@@ -640,7 +660,6 @@ public class ILOCParser extends Parser {
 	public static class OperandContext extends ParserRuleContext {
 		public TerminalNode ID() { return getToken(ILOCParser.ID, 0); }
 		public TerminalNode NUM() { return getToken(ILOCParser.NUM, 0); }
-		public TerminalNode LAB() { return getToken(ILOCParser.LAB, 0); }
 		public TerminalNode SYMB() { return getToken(ILOCParser.SYMB, 0); }
 		public TerminalNode LAB() { return getToken(ILOCParser.LAB, 0); }
 		public TerminalNode STR() { return getToken(ILOCParser.STR, 0); }

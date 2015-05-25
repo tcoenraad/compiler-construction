@@ -23,22 +23,17 @@ public class ILOCLexer extends Lexer {
 		"DEFAULT_MODE"
 	};
 
-	public static final String[] tokenNames = {
-		"'\\u0000'", "'\\u0001'", "'\\u0002'", "'\\u0003'", "'\\u0004'", "'\\u0005'", 
-		"'\\u0006'", "'\\u0007'", "'\b'", "'\t'", "'\n'", "'\\u000B'", "'\f'", 
-		"'\r'", "'\\u000E'", "'\\u000F'", "'\\u0010'"
-	};
 	public static final String[] ruleNames = {
 		"T__0", "LETTER", "DIGIT", "MINUS", "COMMA", "SEMI", "LSQ", "RSQ", "DARROW", 
 		"ARROW", "ASS", "ID", "SYMB", "LAB", "NUM", "STR", "COMMENT", "WS"
 	};
 
 	private static final String[] _LITERAL_NAMES = {
-		null, "':'", "'-'", "','", "';'", "'['", "']'", "'=>'", "'->'"
+		null, "':'", "'-'", "','", "';'", "'['", "']'", "'=>'", "'->'", "'<-'"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
 		null, null, "MINUS", "COMMA", "SEMI", "LSQ", "RSQ", "DARROW", "ARROW", 
-		"ID", "SYMB", "LAB", "NUM", "STR", "COMMENT", "WS"
+		"ASS", "ID", "SYMB", "LAB", "NUM", "STR", "COMMENT", "WS"
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 

@@ -9,6 +9,16 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface ILOCListener extends ParseTreeListener {
 	/**
+	 * Enter a parse tree produced by {@link ILOCParser#program}.
+	 * @param ctx the parse tree
+	 */
+	void enterProgram(@NotNull ILOCParser.ProgramContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ILOCParser#program}.
+	 * @param ctx the parse tree
+	 */
+	void exitProgram(@NotNull ILOCParser.ProgramContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link ILOCParser#decl}.
 	 * @param ctx the parse tree
 	 */
@@ -18,16 +28,6 @@ public interface ILOCListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitDecl(@NotNull ILOCParser.DeclContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ILOCParser#sources}.
-	 * @param ctx the parse tree
-	 */
-	void enterProgram(@NotNull ILOCParser.ProgramContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ILOCParser#program}.
-	 * @param ctx the parse tree
-	 */
-	void exitProgram(@NotNull ILOCParser.ProgramContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code singleInstr}
 	 * labeled alternative in {@link ILOCParser#instr}.
