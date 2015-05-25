@@ -38,13 +38,13 @@ public enum OpCode {
 	/** Subtraction (reg - num => reg). */
 	subI(2, REG, NUM, REG),
 	/** Subtraction (num - reg => reg). */
-	rsubI(2, NUM, REG, REG),
+	rsubI(2, REG, NUM, REG),
 	/** Multiplication (reg * num => reg). */
 	multI(2, REG, NUM, REG),
 	/** Division (reg / num => reg). */
 	divI(2, REG, NUM, REG),
 	/** Division (num / reg => reg). */
-	rdivI(2, NUM, REG, REG),
+	rdivI(2, REG, NUM, REG),
 
 	// Shifts (register + immediate)
 	/** Left-shift (reg << reg => reg). */

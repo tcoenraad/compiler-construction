@@ -9,6 +9,16 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface ILOCListener extends ParseTreeListener {
 	/**
+	 * Enter a parse tree produced by {@link ILOCParser#decl}.
+	 * @param ctx the parse tree
+	 */
+	void enterDecl(@NotNull ILOCParser.DeclContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ILOCParser#decl}.
+	 * @param ctx the parse tree
+	 */
+	void exitDecl(@NotNull ILOCParser.DeclContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link ILOCParser#sources}.
 	 * @param ctx the parse tree
 	 */

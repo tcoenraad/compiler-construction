@@ -6,6 +6,7 @@ import java.io.PrintStream;
 import java.util.Scanner;
 
 import pp.iloc.eval.Machine;
+import pp.iloc.model.Label;
 import pp.iloc.model.Num;
 import pp.iloc.model.Op;
 import pp.iloc.model.OpClaz;
@@ -286,15 +287,31 @@ public class Simulator {
 		 */
 		public int num(int numIx) {
 			Num num = this.op.num(numIx);
-			if (num.isLabel()) {
-				int line = getProgram().getLine(num.getLabel());
+			switch (num.getKind()) {
+			case LAB:
+				Label label = num.getLabel();
+				int line = getProgram().getLine(label);
 				if (line < 0) {
-					System.err.println("Label '" + num.getLabel()
+					System.err.println("Label '" + label
 							+ "' does not occur in program");
 				}
 				return line;
-			} else {
-				return getVM().getNum(num);
+			case LIT:
+				return num.getValue();
+			case SYMB:
+				Integer result = getVM().getNum(num);
+				if (result == null) {
+					result = getProgram().getSymb(num);
+					if (result == null) {
+						System.err.println("Symbolic constant '"
+								+ num.getName()
+								+ "' not initialised in VM or program");
+					}
+				}
+				return result;
+			default:
+				assert false;
+				return 0;
 			}
 		}
 
