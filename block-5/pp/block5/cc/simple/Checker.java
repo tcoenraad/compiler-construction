@@ -150,7 +150,7 @@ public class Checker extends SimplePascalBaseListener {
 	}
 
 	/** Records an error at a given parse tree node.
-	 * @param ctx the parse tree node at which the error occurred
+	 * @param node the parse tree node at which the error occurred
 	 * @param message the error message
 	 * @param args arguments for the message, see {@link String#format}
 	 */
