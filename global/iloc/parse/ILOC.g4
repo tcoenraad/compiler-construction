@@ -6,15 +6,22 @@ fragment LETTER: [a-zA-Z];
 fragment DIGIT: [0-9];
 
 /** Full ILOC program. */
-program: decl* instr+;
+program: decl* instr (EOL+ instr)* EOL* EOF;
 
-decl: ID ASS NUM
+decl: ID ASS NUM COMMENT? EOL+
     ;
     
 /** Instruction: single op or []-bracketed non-empty op sequence. */
 instr
-    : (label ':')? op           #singleInstr
-    | (label ':')? LSQ op+ RSQ  #instrList
+    : (label ':')?
+      op           #singleInstr
+    | (label ':')?
+      LSQ
+      EOL*
+      op
+      (EOL+ op)*
+      EOL*
+      RSQ          #instrList
     ;
 
 /** Single operation. */
@@ -59,4 +66,5 @@ STR : '"' (~["\n\r] | '\\"')* '"';
 /** Java-style comment: // to end of line */
 COMMENT: '//' ~[\r\n]*;
 /** Whitespace. */
-WS : [ \t\r\n]+ -> skip;
+WS  : [ \t]+ -> skip;
+EOL : [\r\n]+;
