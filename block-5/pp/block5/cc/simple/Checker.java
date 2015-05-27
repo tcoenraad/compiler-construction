@@ -1,15 +1,16 @@
 package pp.block5.cc.simple;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
-
 import pp.block5.cc.ParseException;
 import pp.block5.cc.pascal.SimplePascalBaseListener;
+import pp.block5.cc.pascal.SimplePascalParser.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /** Class to type check and calculate flow entries and variable offsets. */
 public class Checker extends SimplePascalBaseListener {
 	/** Result of the latest call of {@link #check}. */
