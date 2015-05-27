@@ -114,6 +114,11 @@ public class SimplePascalParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof SimplePascalListener ) ((SimplePascalListener)listener).exitProgram(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SimplePascalVisitor ) return ((SimplePascalVisitor<? extends T>)visitor).visitProgram(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final ProgramContext program() throws RecognitionException {
@@ -166,6 +171,11 @@ public class SimplePascalParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof SimplePascalListener ) ((SimplePascalListener)listener).exitBody(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SimplePascalVisitor ) return ((SimplePascalVisitor<? extends T>)visitor).visitBody(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -237,6 +247,11 @@ public class SimplePascalParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof SimplePascalListener ) ((SimplePascalListener)listener).exitVarDecl(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SimplePascalVisitor ) return ((SimplePascalVisitor<? extends T>)visitor).visitVarDecl(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final DeclContext decl() throws RecognitionException {
@@ -302,6 +317,11 @@ public class SimplePascalParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof SimplePascalListener ) ((SimplePascalListener)listener).exitVar(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SimplePascalVisitor ) return ((SimplePascalVisitor<? extends T>)visitor).visitVar(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -371,6 +391,11 @@ public class SimplePascalParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof SimplePascalListener ) ((SimplePascalListener)listener).exitBlock(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SimplePascalVisitor ) return ((SimplePascalVisitor<? extends T>)visitor).visitBlock(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -444,6 +469,11 @@ public class SimplePascalParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof SimplePascalListener ) ((SimplePascalListener)listener).exitAssStat(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SimplePascalVisitor ) return ((SimplePascalVisitor<? extends T>)visitor).visitAssStat(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 	public static class IfStatContext extends StatContext {
 		public TerminalNode IF() { return getToken(SimplePascalParser.IF, 0); }
@@ -467,6 +497,11 @@ public class SimplePascalParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof SimplePascalListener ) ((SimplePascalListener)listener).exitIfStat(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SimplePascalVisitor ) return ((SimplePascalVisitor<? extends T>)visitor).visitIfStat(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 	public static class BlockStatContext extends StatContext {
 		public BlockContext block() {
@@ -480,6 +515,11 @@ public class SimplePascalParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof SimplePascalListener ) ((SimplePascalListener)listener).exitBlockStat(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SimplePascalVisitor ) return ((SimplePascalVisitor<? extends T>)visitor).visitBlockStat(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class OutStatContext extends StatContext {
@@ -500,6 +540,11 @@ public class SimplePascalParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof SimplePascalListener ) ((SimplePascalListener)listener).exitOutStat(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SimplePascalVisitor ) return ((SimplePascalVisitor<? extends T>)visitor).visitOutStat(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 	public static class InStatContext extends StatContext {
 		public TerminalNode IN() { return getToken(SimplePascalParser.IN, 0); }
@@ -519,6 +564,11 @@ public class SimplePascalParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof SimplePascalListener ) ((SimplePascalListener)listener).exitInStat(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SimplePascalVisitor ) return ((SimplePascalVisitor<? extends T>)visitor).visitInStat(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 	public static class WhileStatContext extends StatContext {
 		public TerminalNode WHILE() { return getToken(SimplePascalParser.WHILE, 0); }
@@ -537,6 +587,11 @@ public class SimplePascalParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof SimplePascalListener ) ((SimplePascalListener)listener).exitWhileStat(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SimplePascalVisitor ) return ((SimplePascalVisitor<? extends T>)visitor).visitWhileStat(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -678,6 +733,11 @@ public class SimplePascalParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof SimplePascalListener ) ((SimplePascalListener)listener).exitIdTarget(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SimplePascalVisitor ) return ((SimplePascalVisitor<? extends T>)visitor).visitIdTarget(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final TargetContext target() throws RecognitionException {
@@ -728,6 +788,11 @@ public class SimplePascalParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof SimplePascalListener ) ((SimplePascalListener)listener).exitParExpr(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SimplePascalVisitor ) return ((SimplePascalVisitor<? extends T>)visitor).visitParExpr(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 	public static class TrueExprContext extends ExprContext {
 		public TerminalNode TRUE() { return getToken(SimplePascalParser.TRUE, 0); }
@@ -739,6 +804,11 @@ public class SimplePascalParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof SimplePascalListener ) ((SimplePascalListener)listener).exitTrueExpr(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SimplePascalVisitor ) return ((SimplePascalVisitor<? extends T>)visitor).visitTrueExpr(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class CompExprContext extends ExprContext {
@@ -760,6 +830,11 @@ public class SimplePascalParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof SimplePascalListener ) ((SimplePascalListener)listener).exitCompExpr(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SimplePascalVisitor ) return ((SimplePascalVisitor<? extends T>)visitor).visitCompExpr(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 	public static class PrfExprContext extends ExprContext {
 		public PrfOpContext prfOp() {
@@ -777,6 +852,11 @@ public class SimplePascalParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof SimplePascalListener ) ((SimplePascalListener)listener).exitPrfExpr(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SimplePascalVisitor ) return ((SimplePascalVisitor<? extends T>)visitor).visitPrfExpr(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 	public static class FalseExprContext extends ExprContext {
 		public TerminalNode FALSE() { return getToken(SimplePascalParser.FALSE, 0); }
@@ -788,6 +868,11 @@ public class SimplePascalParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof SimplePascalListener ) ((SimplePascalListener)listener).exitFalseExpr(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SimplePascalVisitor ) return ((SimplePascalVisitor<? extends T>)visitor).visitFalseExpr(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class BoolExprContext extends ExprContext {
@@ -809,6 +894,11 @@ public class SimplePascalParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof SimplePascalListener ) ((SimplePascalListener)listener).exitBoolExpr(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SimplePascalVisitor ) return ((SimplePascalVisitor<? extends T>)visitor).visitBoolExpr(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 	public static class MultExprContext extends ExprContext {
 		public List<ExprContext> expr() {
@@ -829,6 +919,11 @@ public class SimplePascalParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof SimplePascalListener ) ((SimplePascalListener)listener).exitMultExpr(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SimplePascalVisitor ) return ((SimplePascalVisitor<? extends T>)visitor).visitMultExpr(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 	public static class NumExprContext extends ExprContext {
 		public TerminalNode NUM() { return getToken(SimplePascalParser.NUM, 0); }
@@ -840,6 +935,11 @@ public class SimplePascalParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof SimplePascalListener ) ((SimplePascalListener)listener).exitNumExpr(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SimplePascalVisitor ) return ((SimplePascalVisitor<? extends T>)visitor).visitNumExpr(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class PlusExprContext extends ExprContext {
@@ -861,6 +961,11 @@ public class SimplePascalParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof SimplePascalListener ) ((SimplePascalListener)listener).exitPlusExpr(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SimplePascalVisitor ) return ((SimplePascalVisitor<? extends T>)visitor).visitPlusExpr(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 	public static class IdExprContext extends ExprContext {
 		public TerminalNode ID() { return getToken(SimplePascalParser.ID, 0); }
@@ -872,6 +977,11 @@ public class SimplePascalParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof SimplePascalListener ) ((SimplePascalListener)listener).exitIdExpr(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SimplePascalVisitor ) return ((SimplePascalVisitor<? extends T>)visitor).visitIdExpr(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1051,6 +1161,11 @@ public class SimplePascalParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof SimplePascalListener ) ((SimplePascalListener)listener).exitPrfOp(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SimplePascalVisitor ) return ((SimplePascalVisitor<? extends T>)visitor).visitPrfOp(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final PrfOpContext prfOp() throws RecognitionException {
@@ -1093,6 +1208,11 @@ public class SimplePascalParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof SimplePascalListener ) ((SimplePascalListener)listener).exitMultOp(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SimplePascalVisitor ) return ((SimplePascalVisitor<? extends T>)visitor).visitMultOp(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1137,6 +1257,11 @@ public class SimplePascalParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof SimplePascalListener ) ((SimplePascalListener)listener).exitPlusOp(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SimplePascalVisitor ) return ((SimplePascalVisitor<? extends T>)visitor).visitPlusOp(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final PlusOpContext plusOp() throws RecognitionException {
@@ -1179,6 +1304,11 @@ public class SimplePascalParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof SimplePascalListener ) ((SimplePascalListener)listener).exitBoolOp(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SimplePascalVisitor ) return ((SimplePascalVisitor<? extends T>)visitor).visitBoolOp(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1226,6 +1356,11 @@ public class SimplePascalParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof SimplePascalListener ) ((SimplePascalListener)listener).exitCompOp(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SimplePascalVisitor ) return ((SimplePascalVisitor<? extends T>)visitor).visitCompOp(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1277,6 +1412,11 @@ public class SimplePascalParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof SimplePascalListener ) ((SimplePascalListener)listener).exitIntType(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SimplePascalVisitor ) return ((SimplePascalVisitor<? extends T>)visitor).visitIntType(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 	public static class BoolTypeContext extends TypeContext {
 		public TerminalNode BOOLEAN() { return getToken(SimplePascalParser.BOOLEAN, 0); }
@@ -1288,6 +1428,11 @@ public class SimplePascalParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof SimplePascalListener ) ((SimplePascalListener)listener).exitBoolType(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SimplePascalVisitor ) return ((SimplePascalVisitor<? extends T>)visitor).visitBoolType(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
