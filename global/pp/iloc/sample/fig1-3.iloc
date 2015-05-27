@@ -1,0 +1,10 @@
+loadAI r_arp,@a => r_a // load 'a'
+loadI 2 => r_2 // constant 2 into r_2
+loadAI r_arp,@b => r_b // load 'b'
+loadAI r_arp,@c => r_c // load 'c'
+loadAI r_arp,@d => r_d // load 'd'
+mult r_a,r_2 => r_a // r_a <- a * 2
+mult r_a,r_b => r_a // r_a <- (a * 2) * b * c
+mult r_a,r_c => r_a // r_a <- (a * 2 * b) * c
+mult r_a,r_d => r_a // r_a <- (a * 2 * b * c) * d
+storeAI r_a => r_arp,@a // write r_a back to 'a'
