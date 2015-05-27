@@ -79,7 +79,6 @@ public class NumWordProcessor extends NumWordBaseVisitor<Integer> {
         if (args.length == 0) {
             process(grouper, "1sock2shoes 3 holes");
             process(grouper, "3 strands 10 blocks 11 weeks 15 credits");
-            process(grouper, "1 2 3");
         } else {
             for (String text : args) {
                 process(grouper, text);
