@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.antlr.v4.runtime.tree.TerminalNode;
 import pp.block5.cc.ParseException;
 import pp.block5.cc.pascal.SimplePascalBaseListener;
 import pp.block5.cc.pascal.SimplePascalParser.*;
@@ -35,6 +36,21 @@ public class Checker extends SimplePascalBaseListener {
         return this.result;
     }
 
+    @Override
+    public void exitAssStat(AssStatContext ctx) {
+        setEntry(ctx, getEntry(ctx.expr()));
+    }
+
+    @Override
+    public void exitBlock(BlockContext ctx) {
+        setEntry(ctx, getEntry(ctx.stat(0)));
+    }
+
+    @Override
+    public void exitBlockStat(BlockStatContext ctx) {
+        setEntry(ctx, getEntry(ctx.block()));
+    }
+
     // Override the listener methods for the statement nodes
     @Override
     public void exitBoolExpr(BoolExprContext ctx) {
@@ -61,6 +77,25 @@ public class Checker extends SimplePascalBaseListener {
     public void exitFalseExpr(FalseExprContext ctx) {
         setType(ctx, Type.BOOL);
         setEntry(ctx, ctx);
+    }
+
+    @Override
+    public void exitIdTarget(IdTargetContext ctx) {
+        setOffset(ctx, scope.offset(ctx.getText()));
+        setType(ctx, scope.type(ctx.getText()));
+        setEntry(ctx, ctx);
+    }
+
+    @Override
+    public void exitIfStat(IfStatContext ctx) {
+        checkType(ctx.expr(), Type.BOOL);
+
+        setEntry(ctx, getEntry(ctx.expr()));
+    }
+
+    @Override
+    public void exitInStat(InStatContext ctx) {
+        setEntry(ctx, getEntry(ctx.target()));
     }
 
     @Override
@@ -96,6 +131,11 @@ public class Checker extends SimplePascalBaseListener {
     }
 
     @Override
+    public void exitOutStat(OutStatContext ctx) {
+        setEntry(ctx, getEntry(ctx.expr()));
+    }
+
+    @Override
     public void exitParExpr(ParExprContext ctx) {
         setType(ctx, getType(ctx.expr()));
         setEntry(ctx, getEntry(ctx.expr()));
@@ -127,6 +167,25 @@ public class Checker extends SimplePascalBaseListener {
     public void exitTrueExpr(TrueExprContext ctx) {
         setType(ctx, Type.BOOL);
         setEntry(ctx, ctx);
+    }
+
+    @Override
+    public void exitVar(VarContext ctx) {
+        Type type = getType(ctx.type());
+
+        for (TerminalNode id : ctx.ID()) {
+            if (!this.scope.put(id.getSymbol().getText(), type)) {
+                addError(ctx, "Already declared '%s'", type);
+            }
+        }
+        setEntry(ctx, ctx);
+    }
+
+    @Override
+    public void exitWhileStat(WhileStatContext ctx) {
+        checkType(ctx.expr(), Type.BOOL);
+
+        setEntry(ctx, getEntry(ctx.expr()));
     }
 
     /** Indicates if any errors were encountered in this tree listener. */
