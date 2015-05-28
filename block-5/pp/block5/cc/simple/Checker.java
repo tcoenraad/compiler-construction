@@ -41,7 +41,7 @@ public class Checker extends SimplePascalBaseListener {
         checkType(ctx.expr(0), Type.BOOL);
         checkType(ctx.expr(1), Type.BOOL);
         setType(ctx, Type.BOOL);
-        setEntry(ctx, entry(ctx.expr(0)));
+        setEntry(ctx, getEntry(ctx.expr(0)));
     }
 
     @Override
@@ -54,7 +54,7 @@ public class Checker extends SimplePascalBaseListener {
         checkType(ctx.expr(0), Type.INT);
         checkType(ctx.expr(1), Type.INT);
         setType(ctx, Type.BOOL);
-        setEntry(ctx, entry(ctx.expr(0)));
+        setEntry(ctx, getEntry(ctx.expr(0)));
     }
 
     @Override
@@ -86,7 +86,7 @@ public class Checker extends SimplePascalBaseListener {
         checkType(ctx.expr(0), Type.INT);
         checkType(ctx.expr(1), Type.INT);
         setType(ctx, Type.INT);
-        setEntry(ctx, entry(ctx.expr(0)));
+        setEntry(ctx, getEntry(ctx.expr(0)));
     }
 
     @Override
@@ -98,7 +98,7 @@ public class Checker extends SimplePascalBaseListener {
     @Override
     public void exitParExpr(ParExprContext ctx) {
         setType(ctx, getType(ctx.expr()));
-        setEntry(ctx, entry(ctx.expr()));
+        setEntry(ctx, getEntry(ctx.expr()));
     }
 
     @Override
@@ -106,7 +106,7 @@ public class Checker extends SimplePascalBaseListener {
         checkType(ctx.expr(0), Type.INT);
         checkType(ctx.expr(1), Type.INT);
         setType(ctx, Type.INT);
-        setEntry(ctx, entry(ctx.expr(0)));
+        setEntry(ctx, getEntry(ctx.expr(0)));
     }
 
     @Override
@@ -120,7 +120,7 @@ public class Checker extends SimplePascalBaseListener {
         }
         checkType(ctx.expr(), type);
         setType(ctx, type);
-        setEntry(ctx, entry(ctx.expr()));
+        setEntry(ctx, getEntry(ctx.expr()));
     }
 
     @Override
@@ -200,8 +200,8 @@ public class Checker extends SimplePascalBaseListener {
         this.result.setEntry(node, entry);
     }
 
-    /** Returns the flow graph entry of a given expression or statement. */
-    private ParserRuleContext entry(ParseTree node) {
+    /** Returns the flow graph getEntry of a given expression or statement. */
+    private ParserRuleContext getEntry(ParseTree node) {
         return this.result.getEntry(node);
     }
 }
