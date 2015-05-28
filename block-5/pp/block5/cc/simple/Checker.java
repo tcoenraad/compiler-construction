@@ -81,9 +81,15 @@ public class Checker extends SimplePascalBaseListener {
 
     @Override
     public void exitIdTarget(IdTargetContext ctx) {
-        setOffset(ctx, scope.offset(ctx.getText()));
-        setType(ctx, scope.type(ctx.getText()));
-        setEntry(ctx, ctx);
+        String id = ctx.ID().getText();
+        Type type = this.scope.type(id);
+        if (type == null) {
+            addError(ctx, "Variable '%s' not declared", id);
+        } else {
+            setType(ctx, type);
+            setOffset(ctx, this.scope.offset(id));
+            setEntry(ctx, ctx);
+        }
     }
 
     @Override
@@ -174,7 +180,7 @@ public class Checker extends SimplePascalBaseListener {
         Type type = getType(ctx.type());
 
         for (TerminalNode id : ctx.ID()) {
-            if (!this.scope.put(id.getSymbol().getText(), type)) {
+            if (!this.scope.put(id.getText(), type)) {
                 addError(ctx, "Already declared '%s'", type);
             }
         }
