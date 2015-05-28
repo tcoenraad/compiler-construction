@@ -30,7 +30,6 @@ public class SimpleCheckerTest {
         assertEquals(0, result.getOffset(assX.getChild(0)));
 
         assertEquals(Type.INT, result.getType(assX.getChild(0)));
-        assertEquals(Type.INT, result.getType(assX.getChild(0)));
         assertEquals(Type.INT, result.getType(assX.getChild(2)));
 
         assertEquals(assX.getChild(2), result.getEntry(body));
