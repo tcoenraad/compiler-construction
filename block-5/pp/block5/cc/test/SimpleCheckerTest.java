@@ -1,22 +1,21 @@
 package pp.block5.cc.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import java.io.File;
-import java.io.IOException;
-
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Test;
-
 import pp.block5.cc.ParseException;
 import pp.block5.cc.SimplePascalCompiler;
 import pp.block5.cc.simple.Result;
 import pp.block5.cc.simple.Type;
 
+import java.io.File;
+import java.io.IOException;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 @SuppressWarnings("javadoc")
 public class SimpleCheckerTest {
-	private final static String BASE_DIR = "pp/block5/cc/sample";
+	private final static String BASE_DIR = "block-5/pp/block5/cc/sample";
 	private final static String EXT = ".pascal";
 	private final SimplePascalCompiler compiler = SimplePascalCompiler
 			.instance();
