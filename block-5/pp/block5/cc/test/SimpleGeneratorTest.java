@@ -1,23 +1,21 @@
 package pp.block5.cc.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.junit.Test;
+import pp.block5.cc.ParseException;
+import pp.block5.cc.SimplePascalCompiler;
+import pp.iloc.Simulator;
+import pp.iloc.model.Program;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
-import org.junit.Test;
-
-import pp.block5.cc.ParseException;
-import pp.block5.cc.SimplePascalCompiler;
-import pp.iloc.Simulator;
-import pp.iloc.model.Program;
+import static org.junit.Assert.assertEquals;
 
 @SuppressWarnings("javadoc")
 public class SimpleGeneratorTest {
-	private final static String BASE_DIR = "pp/block5/cc/sample";
+	private final static String BASE_DIR = "block-5/pp/block5/cc/sample";
 	private final static String EXT = ".pascal";
 	private final SimplePascalCompiler compiler = SimplePascalCompiler
 			.instance();
