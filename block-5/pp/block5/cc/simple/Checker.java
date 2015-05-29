@@ -38,6 +38,8 @@ public class Checker extends SimplePascalBaseListener {
 
     @Override
     public void exitAssStat(AssStatContext ctx) {
+        checkType(ctx.expr(), getType(ctx.target()));
+
         setEntry(ctx, getEntry(ctx.expr()));
     }
 
@@ -88,7 +90,6 @@ public class Checker extends SimplePascalBaseListener {
         } else {
             setType(ctx, type);
             setOffset(ctx, this.scope.getOffset(id));
-            setEntry(ctx, ctx);
         }
     }
 
@@ -101,7 +102,7 @@ public class Checker extends SimplePascalBaseListener {
 
     @Override
     public void exitInStat(InStatContext ctx) {
-        setEntry(ctx, getEntry(ctx.target()));
+        setEntry(ctx, ctx);
     }
 
     @Override
@@ -138,7 +139,7 @@ public class Checker extends SimplePascalBaseListener {
 
     @Override
     public void exitOutStat(OutStatContext ctx) {
-        setEntry(ctx, getEntry(ctx.expr()));
+        setEntry(ctx, ctx);
     }
 
     @Override
@@ -184,7 +185,6 @@ public class Checker extends SimplePascalBaseListener {
                 addError(ctx, "Already declared '%s'", type);
             }
         }
-        setEntry(ctx, ctx);
     }
 
     @Override
