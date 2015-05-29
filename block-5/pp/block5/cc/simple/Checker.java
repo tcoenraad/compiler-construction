@@ -44,11 +44,6 @@ public class Checker extends SimplePascalBaseListener {
 	}
 
 	@Override
-	public void exitBoolType(BoolTypeContext ctx) {
-		setType(ctx, Type.BOOL);
-	}
-
-	@Override
 	public void exitCompExpr(CompExprContext ctx) {
 		checkType(ctx.expr(0), Type.INT);
 		checkType(ctx.expr(1), Type.INT);

@@ -22,15 +22,31 @@ public class SimpleCheckerTest {
 			.instance();
 
 	@Test
-	public void testBasic() throws IOException, ParseException {
+	public void testBasicTypes() throws IOException, ParseException {
 		ParseTree tree = parse("basic");
 		Result result = check(tree);
 		ParseTree body = tree.getChild(3).getChild(1);
 		ParseTree assX = body.getChild(1);
-		assertEquals(assX.getChild(2), result.getEntry(body));
-		assertEquals(assX.getChild(2), result.getEntry(assX));
 		assertEquals(Type.INT, result.getType(assX.getChild(0)));
 		assertEquals(Type.INT, result.getType(assX.getChild(2)));
+	}
+
+	@Test
+	public void testBasicEntries() throws IOException, ParseException {
+		ParseTree tree = parse("basic");
+		Result result = check(tree);
+		ParseTree body = tree.getChild(3).getChild(1);
+		ParseTree assX = body.getChild(1);
+		assertEquals(assX.getChild(2), result.getEntry(assX));
+		assertEquals(assX.getChild(2), result.getEntry(body));
+	}
+
+	@Test
+	public void testBasicOffsets() throws IOException, ParseException {
+		ParseTree tree = parse("basic");
+		Result result = check(tree);
+		ParseTree body = tree.getChild(3).getChild(1);
+		ParseTree assX = body.getChild(1);
 		assertEquals(0, result.getOffset(assX.getChild(0)));
 	}
 
