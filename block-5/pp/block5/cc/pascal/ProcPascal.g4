@@ -27,7 +27,7 @@ stat: target ASS expr                #assStat
     ;
 
  /** Arguments of a call. */   
-args: LPAR expr (COMMA expr)* RPAR
+args: LPAR (expr (COMMA expr)*)? RPAR
     ;
 
 /** Expression. 
@@ -37,7 +37,7 @@ expr: prfOp expr        #prfExpr
     | expr boolOp expr  #boolExpr
     | expr compOp expr  #compExpr
     | LPAR expr RPAR    #parExpr
-    | ID LPAR args RPAR #callExpr
+    | ID args           #callExpr
     | ID                #idExpr
     | NUM               #numExpr
     | TRUE              #trueExpr

@@ -4,7 +4,7 @@ grammar SimplePascal;
 
 /** Pascal program. */
 program
-    : PROGRAM ID SEMI body DOT
+    : PROGRAM ID SEMI body DOT EOF
     ;
 
 /** Body of a program, procedure or function. */

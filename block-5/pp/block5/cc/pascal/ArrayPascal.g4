@@ -23,7 +23,7 @@ expr: prfOp expr        #prfExpr
     | TRUE              #trueExpr
     | FALSE             #falseExpr
     | ID LSQ expr RSQ   #indexExpr
-    | RSQ (expr (COMMA expr)*)? RSQ
+    | LSQ (expr (COMMA expr)*)? RSQ
                         #arrayExpr
     ;
 
@@ -31,7 +31,7 @@ expr: prfOp expr        #prfExpr
  * Extends the imported rule with array types. */
 type: INTEGER  #intType
     | BOOLEAN  #boolType
-    | ARRAY LSQ bound DOTDOT bound NUM RSQ OF type
+    | ARRAY LSQ bound DOTDOT bound RSQ OF type
                #arrayType
     ;
 
