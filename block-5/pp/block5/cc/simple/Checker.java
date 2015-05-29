@@ -38,7 +38,7 @@ public class Checker extends SimplePascalBaseListener {
 
     @Override
     public void exitAssStat(AssStatContext ctx) {
-        checkType(ctx.expr(), getType(ctx.target()));
+        checkType(ctx.target(), getType(ctx.expr()));
 
         setEntry(ctx, getEntry(ctx.expr()));
     }
