@@ -60,6 +60,7 @@ public class Checker extends SimplePascalBaseListener {
         checkType(ctx.expr(1), Type.BOOL);
         setType(ctx, Type.BOOL);
         setEntry(ctx, getEntry(ctx.expr(0)));
+        setEntry(ctx, getEntry(ctx.expr(1)));
     }
 
     @Override
@@ -73,6 +74,7 @@ public class Checker extends SimplePascalBaseListener {
         checkType(ctx.expr(1), Type.INT);
         setType(ctx, Type.BOOL);
         setEntry(ctx, getEntry(ctx.expr(0)));
+        setEntry(ctx, getEntry(ctx.expr(1)));
     }
 
     @Override
@@ -129,6 +131,7 @@ public class Checker extends SimplePascalBaseListener {
         checkType(ctx.expr(1), Type.INT);
         setType(ctx, Type.INT);
         setEntry(ctx, getEntry(ctx.expr(0)));
+        setEntry(ctx, getEntry(ctx.expr(1)));
     }
 
     @Override
@@ -154,6 +157,7 @@ public class Checker extends SimplePascalBaseListener {
         checkType(ctx.expr(1), Type.INT);
         setType(ctx, Type.INT);
         setEntry(ctx, getEntry(ctx.expr(0)));
+        setEntry(ctx, getEntry(ctx.expr(1)));
     }
 
     @Override
