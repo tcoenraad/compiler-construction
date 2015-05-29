@@ -5,9 +5,9 @@ start:  loadI 2 => r_2
 for:    cmp_LT r_i, r_len => r_cmp
         cbr r_cmp -> if, end
 if:     i2i r_i => r_a             // compute address of a[i]
-        multI r_a, 4 => r_a         // multiply by size of int
-        addI r_a, @a => r_a         // add a's base offset
-        loadAO r_arp, r_a => r_ai   // r_ai <- a[i]
+        multI r_a, 4 => r_a        // multiply by size of int
+        addI r_a, @a => r_a        // add a's base offset
+        loadAO r_arp, r_a => r_ai  // r_ai <- a[i]
         cmp_EQ r_ai, r_x => r_cmp
         cbr r_cmp -> end, forEnd
 forEnd: loadI 1 => r_1
