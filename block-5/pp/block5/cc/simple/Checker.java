@@ -87,7 +87,7 @@ public class Checker extends SimplePascalBaseListener {
             addError(ctx, "Variable '%s' not declared", id);
         } else {
             setType(ctx, type);
-            setOffset(ctx, this.scope.offset(id));
+            setOffset(ctx, this.scope.getOffset(id));
             setEntry(ctx, ctx);
         }
     }
@@ -117,7 +117,7 @@ public class Checker extends SimplePascalBaseListener {
             addError(ctx, "Variable '%s' not declared", id);
         } else {
             setType(ctx, type);
-            setOffset(ctx, this.scope.offset(id));
+            setOffset(ctx, this.scope.getOffset(id));
             setEntry(ctx, ctx);
         }
     }

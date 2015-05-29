@@ -50,7 +50,7 @@ public class Scope {
 	  * with respect to the beginning of this scope's activation record.
 	  * Offsets are assigned in order of declaration. 
 	  */
-	public Integer offset(String id) {
+	public Integer getOffset(String id) {
 		return this.offsets.get(id);
 	}
 }
