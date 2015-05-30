@@ -103,6 +103,7 @@ public class Checker extends SimplePascalBaseListener {
     @Override
     public void exitInStat(InStatContext ctx) {
         setEntry(ctx, ctx);
+        setOffset(ctx, this.scope.getOffset(ctx.target().getText()));
     }
 
     @Override
