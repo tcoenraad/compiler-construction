@@ -9,6 +9,7 @@ import static pp.iloc.model.Operand.Type.REG;
 import static pp.iloc.model.Operand.Type.STR;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,130 +20,135 @@ import java.util.Map;
  */
 public enum OpCode {
 	// Placeholder
-	/** Placeholder. */
+	/** Placeholder (no operation). */
 	nop(0),
 
 	// Register arithmetic
-	/** Addition (reg + reg => reg). */
+	/** Addition (reg0 + reg1 => reg2). */
 	add(2, REG, REG, REG),
-	/** Subtraction (reg - reg => reg). */
+	/** Subtraction (reg0 - reg1 => reg2). */
 	sub(2, REG, REG, REG),
-	/** Multiplication (reg * reg => reg). */
+	/** Multiplication (reg0 * reg1 => reg2). */
 	mult(2, REG, REG, REG),
-	/** Division (reg / reg => reg). */
+	/** Division (reg0 / reg1 => reg2). */
 	div(2, REG, REG, REG),
 
 	// Immediate arithmetic
-	/** Addition (reg + num => reg). */
+	/** Addition of immediate value (reg0 + num1 => reg2). */
 	addI(2, REG, NUM, REG),
-	/** Subtraction (reg - num => reg). */
+	/** Subtraction of immediate value (reg0 - num1 => reg2). */
 	subI(2, REG, NUM, REG),
-	/** Subtraction (num - reg => reg). */
+	/** Subtraction from immediate value (num1 - reg0 => reg2). */
 	rsubI(2, REG, NUM, REG),
-	/** Multiplication (reg * num => reg). */
+	/** Multiplication by immediate value (reg0 * num1 => reg2). */
 	multI(2, REG, NUM, REG),
-	/** Division (reg / num => reg). */
+	/** Division by immediate value (reg0 / num1 => reg2). */
 	divI(2, REG, NUM, REG),
-	/** Division (num / reg => reg). */
+	/** Division of immediate value (num1 / reg0 => reg2). */
 	rdivI(2, REG, NUM, REG),
 
 	// Shifts (register + immediate)
-	/** Left-shift (reg << reg => reg). */
+	/** Left-shift (reg0 << reg1 => reg2). */
 	lshift(2, REG, REG, REG),
-	/** Left-shift (reg << num => reg). */
+	/** Left-shift immediate value (reg0 << num1 => reg2). */
 	lshiftI(2, REG, NUM, REG),
-	/** Right-shift (reg >> reg => reg). */
+	/** Right-shift (reg0 >> reg1 => reg2). */
 	rshift(2, REG, REG, REG),
-	/** Right-shift (reg >> num => reg). */
+	/** Right-shift immediate value (reg0 >> num1 => reg2). */
 	rshiftI(2, REG, NUM, REG),
 
-	// Other bit operations
-	/** Bitwise OR (reg | reg => reg). */
+	// Other bitwise operations
+	/** Bitwise OR (reg0 | reg1 => reg2). */
 	or(2, REG, REG, REG),
-	/** Bitwise or (reg | num => reg). */
+	/** Bitwise OR with immediate value (reg0 | num1 => reg2). */
 	orI(2, REG, NUM, REG),
-	/** Bitwise AND (reg & reg => reg). */
+	/** Bitwise AND (reg0 & reg1 => reg2). */
 	and(2, REG, REG, REG),
-	/** Bitwise AND (reg & num => reg). */
+	/** Bitwise AND with immediate value (reg0 & num1 => reg2). */
 	andI(2, REG, NUM, REG),
-	/** Bitwise XOR (reg ^ reg => reg). */
+	/** Bitwise XOR (reg0 ^ reg1 => reg2). */
 	xor(2, REG, REG, REG),
-	/** Bitwise XOR (reg ^ num => reg). */
+	/** Bitwise XOR with immediate value (reg0 ^ num1 => reg2). */
 	xorI(2, REG, NUM, REG),
 
 	// Memory operations
-	/** Immediat load (reg => reg). */
+	/** Load immediate (num0 => reg1). */
 	loadI(1, NUM, REG),
-	/** Load (reg => reg). */
+	/** Load (mem(reg0) => reg1). */
 	load(1, REG, REG),
-	/** Load (reg + num => reg). */
+	/** Load address + immediate (mem(reg0 + num1) => reg2). */
 	loadAI(2, REG, NUM, REG),
-	/** Load (reg + reg => reg). */
+	/** Load address + offset (mem(reg0 + reg1) => reg2). */
 	loadAO(2, REG, REG, REG),
-	/** Character load (reg => reg). */
+	/** Character load (mem(reg0) => reg1). */
 	cload(1, REG, REG),
-	/** Character load (reg + num => reg). */
+	/** Character load address + immediate (mem(reg0 + num1) => reg1). */
 	cloadAI(2, REG, NUM, REG),
-	/** Character load (reg + reg => reg). */
+	/** Character load address + offset (mem(reg0 + reg1) => reg2). */
 	cloadAO(2, REG, REG, REG),
-	/** Store (reg => reg). */
+	/** Store (reg0 => mem(reg1)). */
 	store(1, REG, REG),
-	/** Store (reg => reg + num). */
+	/** Store (reg0 => mem(reg1 + num2)). */
 	storeAI(1, REG, REG, NUM),
-	/** Store (reg => reg + reg). */
+	/** Store (reg0 => mem(reg1 + reg2)). */
 	storeAO(1, REG, REG, REG),
-	/** Character store (reg => reg). */
+	/** Character store (reg0 => mem(reg)). */
 	cstore(1, REG, REG),
-	/** Character store (reg => reg + num). */
+	/** Character store (reg0 => mem(reg1 + num2)). */
 	cstoreAI(1, REG, REG, NUM),
-	/** Character store (reg => reg + reg). */
+	/** Character store (reg0 => mem(reg1 + reg2)). */
 	cstoreAO(1, REG, REG, REG),
 
 	// Copy operations
-	/** Integer-to-integer copy (reg => reg). */
+	/** Integer-to-integer copy (reg0 => reg1). */
 	i2i(1, REG, REG),
-	/** Character-to-character copy (reg => reg). */
+	/** Character-to-character copy (reg0 => reg1). */
 	c2c(1, REG, REG),
-	/** Character-to-integer conversion (reg => reg). */
+	/** Character-to-integer conversion (reg0 => reg1). */
 	c2i(1, REG, REG),
-	/** Integer-to-character conversion (reg => reg). */
+	/** Integer-to-character conversion (reg0 => reg1). */
 	i2c(1, REG, REG),
 
 	// Comparison operations
-	/** Less-than comparison (reg < reg => reg). */
+	/** Less-than comparison (reg0 < reg1 => reg2). */
 	cmp_LT(2, REG, REG, REG),
-	/** Less-or-equal comparison (reg <= reg => reg). */
+	/** Less-or-equal comparison (reg0 <= reg1 => reg2). */
 	cmp_LE(2, REG, REG, REG),
-	/** Equals comparison (reg == reg => reg). */
+	/** Equals comparison (reg0 == reg1 => reg2). */
 	cmp_EQ(2, REG, REG, REG),
-	/** Greater-or-equal comparison (reg >= reg => reg). */
+	/** Greater-or-equal comparison (reg0 >= reg1 => reg2). */
 	cmp_GE(2, REG, REG, REG),
-	/** Greater-than comparison (reg > reg => reg). */
+	/** Greater-than comparison (reg0 > reg1 => reg2). */
 	cmp_GT(2, REG, REG, REG),
-	/** Not-equals comparison (reg != reg => reg). */
+	/** Not-equals comparison (reg0 != reg1 => reg2). */
 	cmp_NE(2, REG, REG, REG),
 
 	// Jump operations
-	/** Conditional branch. */
+	/** Conditional branch (reg0 == 0 ? #label0 : #label1 => pc). */
 	cbr(CONTROL, 1, REG, LABEL, LABEL),
-	/** Immediate jump. */
+	/** Immediate jump (#label0 => pc). */
 	jumpI(CONTROL, 0, LABEL),
-	/** Register jump. */
+	/** Register jump (mem(reg0) => pc). */
 	jump(CONTROL, 0, REG),
 	/** Pseudo-op to record labels of a register jump. */
 	tbl(2, REG, LABEL),
 
 	// Extra ops for stack manipulation
-	/** Push the value of a register onto the stack. */
+	/** Push the value of a register onto the stack. 
+	 * Not official ILOC. */
 	push(1, REG),
-	/** Pop the stack top into a register. */
+	/** Pop the stack top into a register.
+	 * Not official ILOC. */
 	pop(0, REG),
 	// Extra ops for simulation and debugging
-	/** Value input (str => reg). */
+	/** Value input (str0 => reg1).
+	 * Not official ILOC. */
 	in(1, STR, REG),
-	/** Value output (str, reg =>). */
+	/** Value output (str0 + reg1 =>).
+	 * Not official ILOC. */
 	out(2, STR, REG),
-	/** Stand-alone program comment; effect = nop. */
+	/** Stand-alone program comment; effect = nop.
+	 * Not official ILOC. */
 	comment(COMMENT, 0);
 
 
@@ -154,6 +160,9 @@ public enum OpCode {
 
 	/** The target operand types. */
 	private final List<Operand.Type> targetSig;
+
+	/** The operand types. */
+	private final List<Operand.Type> sig;
 
 	private OpCode(int sourceCount, Operand.Type... sig) {
 		this(NORMAL, sourceCount, sig);
@@ -169,6 +178,7 @@ public enum OpCode {
 		for (int i = sourceCount; i < sig.length; i++) {
 			this.targetSig.add(sig[i]);
 		}
+		this.sig = new ArrayList<>(Arrays.asList(sig));
 	}
 
 	/** Returns the class of this opcode (normal or control flow). */
@@ -176,9 +186,29 @@ public enum OpCode {
 		return this.claz;
 	}
 
+	/** Returns the number of operands. */
+	public int getSigSize() {
+		return getSourceCount() + getTargetCount();
+	}
+
+	/** Returns the list of expected operand types. */
+	public List<Operand.Type> getSig() {
+		return this.sig;
+	}
+
+	/** Returns the number of source operands. */
+	public int getSourceCount() {
+		return getSourceSig().size();
+	}
+
 	/** Returns the list of expected source operand types. */
 	public List<Operand.Type> getSourceSig() {
 		return this.sourceSig;
+	}
+
+	/** Returns the number of target operands. */
+	public int getTargetCount() {
+		return getTargetSig().size();
 	}
 
 	/** Returns the list of expected target operand types. */

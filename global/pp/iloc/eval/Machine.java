@@ -83,7 +83,7 @@ public class Machine {
 	 * @throws IllegalArgumentException if the symbolic name is known
 	 */
 	public int alloc(String cst, int length) {
-		if (this.symbMap.get(cst) != null) {
+		if (this.symbMap.get(new Num(cst)) != null) {
 			throw new IllegalArgumentException("Duplicate symbolic name '"
 					+ cst + "'");
 		}
@@ -103,7 +103,7 @@ public class Machine {
 	 * @throws IllegalArgumentException if the symbolic name is known
 	 */
 	public int init(String cst, int... vals) {
-		if (this.symbMap.get(cst) != null) {
+		if (this.symbMap.get(new Num(cst)) != null) {
 			throw new IllegalArgumentException("Duplicate symbolic name '"
 					+ cst + "'");
 		}
@@ -189,6 +189,12 @@ public class Machine {
 		return result;
 	}
 
+	/** Returns the byte value at a given memory location.
+	 */
+	public byte loadC(int loc) {
+		return this.memory.get(loc);
+	}
+
 	/** Stores an integer value in memory, starting at a given location.
 	 * The value is stored at the four successive bytes starting
 	 * at that location (most significant first).
@@ -198,6 +204,13 @@ public class Machine {
 			this.memory.set(loc + i - 1, (byte) val);
 			val >>= BYTE_SIZE;
 		}
+	}
+
+	/** Stores the least significant byte of an integer in memory,
+	 * at a given location.
+	 */
+	public void storeC(int val, int loc) {
+		this.memory.set(loc, (byte) val);
 	}
 
 	/** Returns the current program counter value. */
