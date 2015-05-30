@@ -127,7 +127,7 @@ public class Program {
 		List<String> messages = new ArrayList<>();
 		for (Instr instr : getInstr()) {
 			for (Op op : instr) {
-				messages.addAll(checkOpnds(op.getLine(), op.getOpnds()));
+				messages.addAll(checkOpnds(op.getLine(), op.getArgs()));
 			}
 		}
 		if (!messages.isEmpty()) {
@@ -155,7 +155,7 @@ public class Program {
 	public Map<String, Set<Integer>> getRegLines() {
 		Map<String, Set<Integer>> result = new LinkedHashMap<>();
 		for (Op op : this.opList) {
-			for (Operand opnd : op.getOpnds()) {
+			for (Operand opnd : op.getArgs()) {
 				if (opnd.getType() == Type.REG) {
 					Set<Integer> ops = result.get(((Reg) opnd).getName());
 					if (ops == null) {
@@ -176,7 +176,7 @@ public class Program {
 	public Map<String, Set<Integer>> getSymbLines() {
 		Map<String, Set<Integer>> result = new LinkedHashMap<>();
 		for (Op op : this.opList) {
-			for (Operand opnd : op.getOpnds()) {
+			for (Operand opnd : op.getArgs()) {
 				if (!(opnd instanceof Num)) {
 					continue;
 				}
@@ -233,6 +233,7 @@ public class Program {
 	 */
 	public String prettyPrint() {
 		StringBuilder result = new StringBuilder();
+		// first print the symbolic declaration map
 		int idSize = 0;
 		for (Num symb : this.symbMap.keySet()) {
 			idSize = Math.max(idSize, symb.getName().length());
@@ -244,6 +245,7 @@ public class Program {
 		if (idSize > 0) {
 			result.append('\n');
 		}
+		// then print the instructions
 		int labelSize = 0;
 		int sourceSize = 0;
 		int targetSize = 0;
