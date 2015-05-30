@@ -90,7 +90,6 @@ public class Checker extends SimplePascalBaseListener {
         } else {
             setType(ctx, type);
             setOffset(ctx, this.scope.getOffset(id));
-            setEntry(ctx, ctx);
         }
     }
 
