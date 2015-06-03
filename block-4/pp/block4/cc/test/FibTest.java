@@ -1,4 +1,4 @@
-package pp.iloc.test;
+package pp.block4.cc.test;
 
 import org.junit.Test;
 import pp.iloc.Assembler;
@@ -17,7 +17,7 @@ import static org.junit.Assert.fail;
 
 @SuppressWarnings("javadoc")
 public class FibTest {
-    private final static String BASE_DIR = "block-4/pp/iloc/sample/";
+    private final static String BASE_DIR = "block-4/pp/block4/cc/iloc/";
     private final static boolean SHOW = false;
 
     @Test
