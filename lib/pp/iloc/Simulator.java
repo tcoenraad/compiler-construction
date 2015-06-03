@@ -1,5 +1,7 @@
 package pp.iloc;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -12,6 +14,7 @@ import pp.iloc.model.Op;
 import pp.iloc.model.OpClaz;
 import pp.iloc.model.OpCode;
 import pp.iloc.model.Program;
+import pp.iloc.parse.FormatException;
 
 /**
  * ILOC program simulator
@@ -22,6 +25,21 @@ public class Simulator {
 	public static final int TRUE = -1;
 	/** Representation of <code>false</code>. */
 	public static final int FALSE = 0;
+	/** Flag controlling debug mode. */
+	public static boolean DEBUG = false;
+
+	static public void main(String[] args) {
+		if (args.length == 0) {
+			System.err.println("Usage: filename.iloc");
+			return;
+		}
+		try {
+			Program prog = Assembler.instance().assemble(new File(args[0]));
+			new Simulator(prog).run();
+		} catch (FormatException | IOException exc) {
+			exc.printStackTrace();
+		}
+	}
 
 	/** The simulated program. */
 	private final Program prg;
@@ -83,6 +101,10 @@ public class Simulator {
 		Op o = this.prg.getOpAt(this.vm.getPC());
 		OPContext c = new OPContext(o);
 		Machine vm = this.vm;
+		if (DEBUG) {
+			System.out.printf("Op %d: %s%n", vm.getPC(), o);
+			System.out.println(vm);
+		}
 		switch (o.getOpCode()) {
 		case nop:
 			// do nothing
