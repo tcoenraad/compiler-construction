@@ -1,0 +1,36 @@
+start:      in "Argument? " => r_arg
+            loadI #fib_end => r_return_address
+            push r_return_address
+            push r_arg
+            jumpI -> fib
+fib:        pop => r_arg_copy
+            push r_arg_copy
+            loadI 1 => r_cmp
+            cmp_LE r_arg_copy, r_cmp => r_cmp
+            cbr r_cmp -> fib_if, fib_else_1
+fib_if:     pop => r_dummy
+            pop => r_return_address
+            loadI 1 => r_return_value
+            push r_return_value
+            jump -> r_return_address
+fib_else_1: subI r_arg_copy, 1 => r_arg_copy
+            loadI #fib_else_2 => r_return_address
+            push r_return_address
+            push r_arg_copy
+            jumpI -> fib
+fib_else_2: pop => r_return_value
+            pop => r_arg_copy
+            subI r_arg_copy, 2 => r_arg_copy
+            loadI #fib_else_3 => r_return_address
+            push r_return_value
+            push r_return_address
+            push r_arg_copy
+            jumpI -> fib
+fib_else_3: pop => r_fib_n_2
+            pop => r_fib_n_1
+            add r_fib_n_1, r_fib_n_2 => r_return_value
+            pop => r_return_address
+            push r_return_value
+            jump -> r_return_address
+fib_end:    pop => r_return_value
+            out "Result: ", r_return_value
