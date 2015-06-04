@@ -1,36 +1,38 @@
 start:      in "Argument? " => r_arg
             loadI #fib_end => r_return_address
-            push r_return_address
-            push r_arg
-            jumpI -> fib
-fib:        pop => r_arg_copy
-            push r_arg_copy
-            loadI 1 => r_cmp
-            cmp_LE r_arg_copy, r_cmp => r_cmp
-            cbr r_cmp -> fib_if, fib_else_1
-fib_if:     pop => r_dummy
+            push r_return_address // push #fib_end as return address
+            push r_arg // push arg
+            jumpI -> fib // call `fib`
+fib:        pop => r_arg_copy // copy arg to register
+            push r_arg_copy // push arg back
+fib_if:     loadI 1 => r_cmp // load intermediate value
+            cmp_LE r_arg_copy, r_cmp => r_cmp // (1 <= arg)
+            cbr r_cmp -> fib_then, fib_else_1
+fib_then:   pop => r_null // dump arg, not needed for `then`
             pop => r_return_address
             loadI 1 => r_return_value
-            push r_return_value
-            jump -> r_return_address
-fib_else_1: subI r_arg_copy, 1 => r_arg_copy
-            loadI #fib_else_2 => r_return_address
-            push r_return_address
+            push r_return_value // push result `1`
+            jump -> r_return_address // jump back
+fib_else_1: pop => r_arg_copy
             push r_arg_copy
-            jumpI -> fib
-fib_else_2: pop => r_return_value
-            pop => r_arg_copy
+            subI r_arg_copy, 1 => r_arg_copy
+            loadI #fib_else_2 => r_return_address
+            push r_return_address // push #fib_else_2 as return address
+            push r_arg_copy // push `n - 1` back
+            jumpI -> fib // call `fib` recursively
+fib_else_2: pop => r_return_value // return value is on top: return from fib_then or fib_else_3
+            pop => r_arg_copy // copy arg to register
             subI r_arg_copy, 2 => r_arg_copy
             loadI #fib_else_3 => r_return_address
-            push r_return_value
-            push r_return_address
+            push r_return_value // reorder stack to have arg on top
+            push r_return_address // push #fib_else_3 as return address
             push r_arg_copy
-            jumpI -> fib
+            jumpI -> fib // call `fib` recursively
 fib_else_3: pop => r_fib_n_2
             pop => r_fib_n_1
             add r_fib_n_1, r_fib_n_2 => r_return_value
             pop => r_return_address
             push r_return_value
-            jump -> r_return_address
+            jump -> r_return_address // jump back
 fib_end:    pop => r_return_value
             out "Result: ", r_return_value
