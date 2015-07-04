@@ -124,7 +124,7 @@ public enum OpCode {
 	cmp_NE(2, REG, REG, REG),
 
 	// Jump operations
-	/** Conditional branch (reg0 == 0 ? #label0 : #label1 => pc). */
+	/** Conditional branch (reg0 != 0 ? #label0 : #label1 => pc). */
 	cbr(CONTROL, 1, REG, LABEL, LABEL),
 	/** Immediate jump (#label0 => pc). */
 	jumpI(CONTROL, 0, LABEL),
@@ -134,19 +134,33 @@ public enum OpCode {
 	tbl(2, REG, LABEL),
 
 	// Extra ops for stack manipulation
-	/** Push the value of a register onto the stack. 
+	/** Push the (4-byte integer) value of a register onto the stack. 
 	 * Not official ILOC. */
 	push(1, REG),
-	/** Pop the stack top into a register.
+	/** Pop the (4-byte integer) stack top into a register.
 	 * Not official ILOC. */
 	pop(0, REG),
+	/** Push the (1-byte character) value of a register onto the stack. 
+	 * Not official ILOC. */
+	cpush(1, REG),
+	/** Pop the (1-byte character) stack top into a register.
+	 * Not official ILOC. */
+	cpop(0, REG),
 	// Extra ops for simulation and debugging
-	/** Value input (str0 => reg1).
+	/** Value input (str0 => stdout and stdin => reg1).
 	 * Not official ILOC. */
 	in(1, STR, REG),
-	/** Value output (str0 + reg1 =>).
+	/** Value output (str0 + reg1 => stdout).
 	 * Not official ILOC. */
 	out(2, STR, REG),
+	/** String input (str0 => stdout and stdin => stack).
+	 * The string is represented as length + chars (first char on top).
+	 * Not official ILOC. */
+	cin(1, STR),
+	/** Value output (str0 + stack => stdout).
+	 * The string is represented as length + chars (first char on top).
+	 * Not official ILOC. */
+	cout(1, STR),
 	/** Stand-alone program comment; effect = nop.
 	 * Not official ILOC. */
 	comment(COMMENT, 0);

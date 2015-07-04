@@ -18,7 +18,7 @@ public class ErrorListener extends BaseErrorListener {
 			Object offendingSymbol, int line, int charPositionInLine,
 			String msg, RecognitionException e) {
 		this.errors.add(String.format("Line %d:%d - %s", line,
-				charPositionInLine, offendingSymbol, msg));
+				charPositionInLine, msg));
 	}
 
 	/** Adds an error message during the tree visit stage. */

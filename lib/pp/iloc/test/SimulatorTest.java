@@ -3,6 +3,8 @@ package pp.iloc.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
@@ -46,8 +48,7 @@ public class SimulatorTest {
 		assertEquals(240, c.load(a));
 	}
 
-	@Test
-	//(timeout = 1000)
+	@Test(timeout = 1000)
 	public void testFig13Init() {
 		Program p = parse("fig1-3-init");
 		Machine c = new Machine();
@@ -61,6 +62,36 @@ public class SimulatorTest {
 			System.out.println(p.prettyPrint());
 		}
 		assertEquals(240, c.load(p.getSymb("a")));
+	}
+
+	@Test(timeout = 1000)
+	public void testString() {
+		Program p = parse("string");
+		Simulator sim = new Simulator(p);
+		sim.setIn(new ByteArrayInputStream("abc".getBytes()));
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		sim.setOut(out);
+		sim.run();
+		if (SHOW) {
+			System.out.println(p.prettyPrint());
+		}
+		assertEquals("Doubled: abcabc", out.toString().trim());
+	}
+
+	@Test
+	//(timeout = 1000)
+	public void testStringChar4() {
+		Program p = parse("string4");
+		Simulator sim = new Simulator(p);
+		sim.getVM().setCharSize(4);
+		sim.setIn(new ByteArrayInputStream("abc".getBytes()));
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		sim.setOut(out);
+		sim.run();
+		if (SHOW) {
+			System.out.println(p.prettyPrint());
+		}
+		assertEquals("Doubled: abcabc", out.toString().trim());
 	}
 
 	Program parse(String filename) {
