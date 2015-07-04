@@ -1,17 +1,20 @@
 package pp.iloc.test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+
 import org.junit.Test;
+
 import pp.iloc.Assembler;
 import pp.iloc.Simulator;
 import pp.iloc.eval.Machine;
 import pp.iloc.model.Program;
 import pp.iloc.parse.FormatException;
-
-import java.io.File;
-import java.io.IOException;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 @SuppressWarnings("javadoc")
 public class SimulatorTest {
@@ -45,8 +48,7 @@ public class SimulatorTest {
 		assertEquals(240, c.load(a));
 	}
 
-	@Test
-	//(timeout = 1000)
+	@Test(timeout = 1000)
 	public void testFig13Init() {
 		Program p = parse("fig1-3-init");
 		Machine c = new Machine();
@@ -62,6 +64,36 @@ public class SimulatorTest {
 		assertEquals(240, c.load(p.getSymb("a")));
 	}
 
+	@Test(timeout = 1000)
+	public void testString() {
+		Program p = parse("string");
+		Simulator sim = new Simulator(p);
+		sim.setIn(new ByteArrayInputStream("abc".getBytes()));
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		sim.setOut(out);
+		sim.run();
+		if (SHOW) {
+			System.out.println(p.prettyPrint());
+		}
+		assertEquals("Doubled: abcabc", out.toString().trim());
+	}
+
+	@Test
+	//(timeout = 1000)
+	public void testStringChar4() {
+		Program p = parse("string4");
+		Simulator sim = new Simulator(p);
+		sim.getVM().setCharSize(4);
+		sim.setIn(new ByteArrayInputStream("abc".getBytes()));
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		sim.setOut(out);
+		sim.run();
+		if (SHOW) {
+			System.out.println(p.prettyPrint());
+		}
+		assertEquals("Doubled: abcabc", out.toString().trim());
+	}
+
 	Program parse(String filename) {
 		File file = new File(filename + ".iloc");
 		if (!file.exists()) {
@@ -75,6 +107,6 @@ public class SimulatorTest {
 		}
 	}
 
-	private final static String BASE_DIR = "block-4/pp/iloc/sample/";
+	private final static String BASE_DIR = "pp/iloc/sample/";
 	private final static boolean SHOW = true;
 }

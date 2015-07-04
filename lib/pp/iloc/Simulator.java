@@ -230,7 +230,7 @@ public class Simulator {
 			c.setReg(2, c.reg(0) == c.reg(1));
 			break;
 		case cmp_GE:
-			c.setReg(2, c.reg(0) < c.reg(1));
+			c.setReg(2, c.reg(0) >= c.reg(1));
 			break;
 		case cmp_GT:
 			c.setReg(2, c.reg(0) > c.reg(1));
@@ -255,14 +255,16 @@ public class Simulator {
 			// do nothing
 			break;
 		case push:
-			int sp = this.vm.getReg(Machine.SP) - 4;
-			this.vm.setReg(Machine.SP, sp);
-			this.vm.store(c.reg(0), sp);
+			push(c.reg(0));
 			break;
 		case pop:
-			sp = this.vm.getReg(Machine.SP);
-			c.setReg(0, this.vm.load(sp));
-			this.vm.setReg(Machine.SP, sp + 4);
+			c.setReg(0, pop());
+			break;
+		case cpush:
+			pushC(c.reg(0));
+			break;
+		case cpop:
+			c.setReg(0, popC());
 			break;
 		case in:
 			String message = o.str(0).getText();
@@ -278,7 +280,8 @@ public class Simulator {
 					// try again
 					if (this.stdIn) {
 						this.out.printf("Input '%s' should be a number%n", in);
-						in = System.console().readLine(message);
+						this.out.print(message);
+						in = this.in.nextLine();
 					} else {
 						throw new IllegalArgumentException(String.format(
 								"Input '%s' should be a number%n", in));
@@ -290,6 +293,18 @@ public class Simulator {
 		case out:
 			this.out.print(o.str(0).getText());
 			this.out.println(c.reg(1));
+			break;
+		case cin:
+			message = o.str(0).getText();
+			if (this.stdIn) {
+				this.out.print(message);
+			}
+			in = this.in.nextLine();
+			pushString(in);
+			break;
+		case cout:
+			this.out.print(o.str(0).getText());
+			this.out.println(popString());
 			break;
 		case comment:
 			// do nothing
@@ -304,6 +319,60 @@ public class Simulator {
 		if (o.getClaz() != OpClaz.CONTROL) {
 			this.vm.incPC();
 		}
+	}
+
+	/** Pushes a 4-byte integer onto the stack. */
+	private void push(int val) {
+		int sp = this.vm.getReg(Machine.SP) - 4;
+		this.vm.setReg(Machine.SP, sp);
+		this.vm.store(val, sp);
+	}
+
+	/** Pushes a character onto the stack. */
+	private void pushC(int val) {
+		int sp = this.vm.getReg(Machine.SP) - this.vm.getCharSize();
+		this.vm.setReg(Machine.SP, sp);
+		this.vm.storeC(val, sp);
+	}
+
+	/** Pushes a string onto the stack.
+	 * The string is represented by an integer length followed
+	 * by the chars of the string, with first char on top .
+	 */
+	private void pushString(String text) {
+		for (int i = text.length() - 1; i >= 0; i--) {
+			pushC(text.charAt(i));
+		}
+		push(text.length());
+	}
+
+	/** Pops a 4-byte integer from the stack. */
+	private int pop() {
+		int sp = this.vm.getReg(Machine.SP);
+		int result = this.vm.load(sp);
+		this.vm.setReg(Machine.SP, sp + 4);
+		return result;
+	}
+
+	/** Pops a character from the stack. */
+	private char popC() {
+		int sp = this.vm.getReg(Machine.SP);
+		char result = this.vm.loadC(sp);
+		this.vm.setReg(Machine.SP, sp + this.vm.getCharSize());
+		return result;
+	}
+
+	/** Pops a string from the stack.
+	 * The string should be represented by an integer length followed
+	 * by the chars of the string, with first char on top.
+	 */
+	private String popString() {
+		StringBuilder result = new StringBuilder();
+		int len = pop();
+		for (int i = 0; i < len; i++) {
+			result.append(popC());
+		}
+		return result.toString();
 	}
 
 	/** Operation context.

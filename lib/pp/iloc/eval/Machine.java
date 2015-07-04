@@ -13,9 +13,13 @@ import pp.iloc.model.Reg;
 public class Machine {
 	/** Size of an integer values (in bytes). */
 	public static final int INT_SIZE = 4;
+	/** Default size of a char value (in bytes).
+	 * The actual size used in a particular Machine instance
+	 * can be set using 
+	 */
+	public static final int DEFAULT_CHAR_SIZE = 1;
 	/** Size of an integer values (in bits). */
 	public static final int BYTE_SIZE = 8;
-
 	/** Name of the allocation pointer register.
 	 * This is initialised to start at address 0.
 	 */
@@ -29,6 +33,13 @@ public class Machine {
 	/** The stack pointer register (see {@link #SP}). */
 	public static final Reg SP_REG = new Reg(SP);
 
+	/** The actual size of a char value in this machine.
+	 * Typically, either 1 (as per {@link #DEFAULT_CHAR_SIZE})
+	 * or 4 (the same as {@link #INT_SIZE}).
+	 * This affects the implementation of {@link #loadC} and
+	 * {@link #storeC}.
+	 */
+	private int charSize;
 	/** Mapping from register names to register numbers. */
 	private final Map<String, Integer> registers;
 	/** Mapping from symbolic constants to actual values. */
@@ -46,6 +57,7 @@ public class Machine {
 		this.symbMap = new HashMap<>();
 		this.memory = new Memory();
 		this.registers = new HashMap<>();
+		this.charSize = DEFAULT_CHAR_SIZE;
 		clear();
 	}
 
@@ -56,6 +68,25 @@ public class Machine {
 	public void setSize(int size) {
 		this.memory.setSize(size);
 		setReg(SP_REG, size);
+	}
+
+	/** Sets the size used to store a char value. 
+	 * @param charSize the number of bytes used to store a char
+	 * value; between 1 and 4 (inclusive)
+	 */
+	public void setCharSize(int charSize) {
+		if (charSize < 1 || charSize > 4) {
+			throw new IllegalArgumentException("Illegal character size: "
+					+ charSize);
+		}
+		this.charSize = charSize;
+	}
+
+	/** Returns the size used to store a char value.
+	 * This is equal to {@link #DEFAULT_CHAR_SIZE} unless
+	 * changed by a call to {@link #setCharSize} */
+	public int getCharSize() {
+		return this.charSize;
 	}
 
 	/** Reserves a memory segment of given length.
@@ -181,18 +212,29 @@ public class Machine {
 	 * at that location (most significant first).
 	 */
 	public int load(int loc) {
+		return load(loc, INT_SIZE);
+	}
+
+	/** Returns the char value at a given memory location.
+	 * This consists of a number of successive bytes determined
+	 * by #getCharSize().
+	 */
+	public char loadC(int loc) {
+		return (char) load(loc, getCharSize());
+	}
+
+	/** Returns the integer value starting at a given memory location,
+	 * consisting of 1 through 4 consecutive bytes.
+	 * The value is computed from the successive bytes starting
+	 * at that location (most significant first).
+	 */
+	private int load(int loc, int size) {
 		int result = 0;
-		for (int i = 0; i < INT_SIZE; i++) {
+		for (int i = 0; i < size; i++) {
 			result <<= BYTE_SIZE;
 			result += 0xFF & this.memory.get(loc + i);
 		}
 		return result;
-	}
-
-	/** Returns the byte value at a given memory location.
-	 */
-	public byte loadC(int loc) {
-		return this.memory.get(loc);
 	}
 
 	/** Stores an integer value in memory, starting at a given location.
@@ -200,17 +242,26 @@ public class Machine {
 	 * at that location (most significant first).
 	 */
 	public void store(int val, int loc) {
-		for (int i = INT_SIZE; i > 0; i--) {
-			this.memory.set(loc + i - 1, (byte) val);
-			val >>= BYTE_SIZE;
-		}
+		store(val, loc, INT_SIZE);
 	}
 
-	/** Stores the least significant byte of an integer in memory,
+	/** Stores a character in memory,
 	 * at a given location.
+	 * The number of bytes used is determined by {@link #getCharSize()}.
 	 */
 	public void storeC(int val, int loc) {
-		this.memory.set(loc, (byte) val);
+		store((char) val, loc, getCharSize());
+	}
+
+	/** Stores an integer value in memory, starting at a given location.
+	 * The value is stored at the 1-4 successive bytes starting
+	 * at that location (most significant first).
+	 */
+	private void store(int val, int loc, int len) {
+		for (int i = len - 1; i >= 0; i--) {
+			this.memory.set(loc + i, (byte) val);
+			val >>= BYTE_SIZE;
+		}
 	}
 
 	/** Returns the current program counter value. */
